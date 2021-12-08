@@ -49,6 +49,7 @@
 (require 'init-org)
 (require 'init-auctex)
 (require 'init-prog)
+(require 'init-windows)
 
 ; make the existing emacs process as a server
 (add-hook 'after-init-hook
