@@ -203,6 +203,9 @@
 (define-key input-decode-map (kbd "C-i") (kbd "H-i"))
 (global-set-key (kbd "H-i") 'dabbrev-expand)
 
+(use-package company
+:ensure t
+)
 (global-company-mode) 
 (global-set-key (kbd "M-i") 'company-complete)
 (setq company-dabbrev-downcase nil) ;make completion case sensitive
