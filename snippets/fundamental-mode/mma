@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: expand mma
+# key: mma
+# --
+Mathematica $0 
