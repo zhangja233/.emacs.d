@@ -43,6 +43,14 @@
 ;(add-to-list 'package-archives '("melpa" . "http://elpa.emacs-china.org/melpa/") t)
 ;(add-to-list 'package-archives '("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/") t) ; see https://mirror.tuna.tsinghua.edu.cn/help/elpa/ for more
 (package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents)
+)
+
+; install use-package if it's not installed
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package)
+  )
 
 (require 'init-general-editing)
 (require 'init-help)

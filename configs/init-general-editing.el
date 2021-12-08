@@ -9,6 +9,9 @@
 (global-set-key (kbd "C-9") 'recenter-top-bottom)
 
 ;; avy-mode
+(use-package avy
+  :ensure t
+  )
 (global-set-key (kbd "C-l") 'avy-goto-word-1)
 (global-set-key (kbd "C-z g") 'avy-goto-line)
 (global-set-key (kbd "M-f") 'avy-goto-char-in-line)
