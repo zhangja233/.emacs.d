@@ -82,10 +82,13 @@
  (define-key LaTeX-mode-map (kbd "C-c C-r")  'insert-rm)  
  
  (defun mark-inline-equation()
+ "mark the content inside an inline equation"
    (interactive) 
    (search-forward "$")
+   (backward-char)
    (push-mark nil t t)
-   (search-backward "$" nil nil 2)
+   (search-backward "$" nil nil 1)
+   (forward-char)
    )
  (define-key LaTeX-mode-map (kbd "C-c $") 'mark-inline-equation)
  (define-key LaTeX-mode-map (kbd "S-<tab>") 'outline-show-subtree)
