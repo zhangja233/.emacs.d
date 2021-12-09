@@ -57,6 +57,7 @@
 (require 'init-org)
 (require 'init-auctex)
 (require 'init-prog)
+(require 'init-magit)
 (require 'init-windows)
 
 ; make the existing emacs process as a server
