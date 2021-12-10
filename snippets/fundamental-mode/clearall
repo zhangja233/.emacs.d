@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: clearall
+# key: cl
+# --
+ClearAll["Global`*"]
