@@ -14,7 +14,7 @@
   )
 (global-set-key (kbd "C-l") 'avy-goto-word-1)
 (global-set-key (kbd "C-z g") 'avy-goto-line)
-(global-set-key (kbd "M-f") 'avy-goto-char-in-line)
+(global-set-key (kbd "C-M-l") 'avy-goto-char-in-line)
 
 (global-set-key (kbd "M-a") 'beginning-of-buffer)
 (global-set-key (kbd "M-e") 'end-of-buffer)
