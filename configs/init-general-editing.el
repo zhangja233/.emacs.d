@@ -93,8 +93,8 @@
   :init
   (smartparens-global-mode)
 
-  (define-key smartparens-mode-map (kbd "C-M-f") 'sp-forward-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-sexp)
+  (define-key smartparens-mode-map (kbd "M-f") 'sp-forward-sexp)
+  (define-key smartparens-mode-map (kbd "M-b") 'sp-backward-sexp)
   ; down a level
   (define-key smartparens-mode-map (kbd "C-M-n") 'sp-down-sexp)
   (define-key smartparens-mode-map (kbd "C-M-p") 'sp-backward-down-sexp)
@@ -163,9 +163,7 @@
 :ensure t
 
 :config
-;(define-key yas-minor-mode-map (kbd "<tab>") nil)
-;(define-key yas-minor-mode-map (kbd "TAB") nil)
-(global-set-key (kbd "C-,") 'yas-expand)
+;(global-set-key (kbd "C-,") 'yas-expand)
 (yas-global-mode)
 )
 (use-package yasnippet-snippets
@@ -190,7 +188,7 @@
   ;;   (t "locate %s")))
 
   (global-set-key (kbd "M-x") 'helm-M-x)
-  
+  (global-set-key (kbd "C-,") 'helm-buffers-list)
   (global-set-key (kbd "C-z C-f") 'helm-locate)
   (global-set-key (kbd "C-z y") 'helm-show-kill-ring)
   )
@@ -241,7 +239,7 @@
 (global-set-key (kbd "C-z s") 'find-scratch)
 (global-set-key (kbd "C-z N") 'make-frame)
 
-(global-set-key (kbd "M-b") 'helm-buffers-list)
+
 
 (defun save-all-buffers()
   (interactive)
