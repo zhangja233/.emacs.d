@@ -322,6 +322,8 @@
   )
 (global-set-key (kbd "C-z f") 'find-my-info)
 
+;; interact with the world outside emacs
+
 ; to open file browser from emacs
 (defun browse-file-directory ()
   "Open the current file's directory however the OS would."
@@ -331,6 +333,12 @@
     (error "No `default-directory' to open")))
 (global-set-key (kbd "C-z b") 'browse-file-directory)
 
+(use-package google-this
+:ensure t  
+:init
+(global-set-key (kbd "C-z <RET>") 'google-this-mode-submap)
+  )
+
 (use-package exec-path-from-shell
 :ensure t
 :init
@@ -338,7 +346,5 @@
   (exec-path-from-shell-initialize) ;get $PATH from shell 
 )
   )
-
-
 
 (provide 'init-general-editing)

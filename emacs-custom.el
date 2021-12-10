@@ -4,8 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(valign yasnippet-snippets yasnippet easy-kill paredit smartparens use-package htmlize org-bullets auctex openwith ox-reveal keyfreq json-mode elpy pyim-basedict browse-kill-ring ace-window company counsel magit helm mu4e-maildirs-extension ivy avy ess markdown-mode pdf-tools pyim auctex-cluttex exec-path-from-shell csv-mode gnu-elpa-keyring-update))
- )
+   '(google-this valign yasnippet-snippets yasnippet easy-kill paredit smartparens use-package htmlize org-bullets auctex openwith ox-reveal keyfreq json-mode elpy pyim-basedict browse-kill-ring ace-window company counsel magit helm mu4e-maildirs-extension ivy avy ess markdown-mode pdf-tools pyim auctex-cluttex exec-path-from-shell csv-mode gnu-elpa-keyring-update)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
