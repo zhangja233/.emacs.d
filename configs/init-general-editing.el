@@ -134,7 +134,6 @@
   (define-key smartparens-mode-map (kbd "H-\[") 'sp-select-previous-thing)  
   (define-key smartparens-mode-map (kbd "C-M-i") 'sp-change-enclosing)
   (define-key smartparens-mode-map (kbd "C-M-r") 'sp-rewrap-sexp)
-  (define-key smartparens-mode-map (kbd "M-k") 'sp-kill-sexp)
   (defun my-sp-kill-sexp (&optional arg)
     "make C-u sp-kill-sexp behave as killing inner"
     (interactive "P")
