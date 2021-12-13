@@ -2,17 +2,19 @@
 (global-set-key (kbd "C-q") 'backward-word)
 (global-set-key (kbd "C-t") 'forward-word)
 
-(defun my-beginning-of-line()
-  (interactive)
-  (push-mark)
-  (beginning-of-line)
+(defun my-beginning-of-line(&optional arg)
+  "save mark when using beginning-of-line"
+  (interactive "^p")
+  (or (consp arg) (region-active-p) (push-mark))
+  (beginning-of-line arg)
   )
 (define-key my-mode-map (kbd "C-a") 'my-beginning-of-line)
 
-(defun my-end-of-line()
-  (interactive)
-  (push-mark)
-  (end-of-line)
+(defun my-end-of-line(&optional arg)
+  "save mark when using end-of-line"
+  (interactive "^p")
+  (or (consp arg) (region-active-p) (push-mark))
+  (end-of-line arg)
   )
 (define-key my-mode-map (kbd "C-e") 'my-end-of-line)
 
@@ -160,10 +162,7 @@
 	  (sp-kill-sexp 0)
 	(sp-kill-sexp arg))
       ))
-  ;; (defun sp-kill-whole-sexp()
-  ;;   (interactive)
-  ;;   ()
-  ;;   )
+
   (define-key smartparens-mode-map (kbd "M-k") 'my-sp-kill-sexp)
   (define-key smartparens-mode-map (kbd "C-M-k") 'sp-unwrap-sexp)
   :config
