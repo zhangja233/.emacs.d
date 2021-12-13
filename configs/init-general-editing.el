@@ -2,6 +2,21 @@
 (global-set-key (kbd "C-q") 'backward-word)
 (global-set-key (kbd "C-t") 'forward-word)
 
+(defun my-beginning-of-line()
+  (interactive)
+  (push-mark)
+  (beginning-of-line)
+  )
+(define-key my-mode-map (kbd "C-a") 'my-beginning-of-line)
+
+(defun my-end-of-line()
+  (interactive)
+  (push-mark)
+  (end-of-line)
+  )
+(define-key my-mode-map (kbd "C-e") 'my-end-of-line)
+
+
 (global-set-key (kbd "C-S-b") 'backward-sentence)
 (global-set-key (kbd "C-S-f") 'forward-sentence)
 (setq sentence-end-double-space nil) ;make backward-sentence and forward-sentence behave as in fundamental mode
