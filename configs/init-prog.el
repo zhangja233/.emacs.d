@@ -3,6 +3,8 @@
     )
 (global-set-key (kbd "C-z C-z") 'my-compile)
 
+(global-set-key (kbd "C-z C-s") 'shell-command)
+
 ;; cpp
 ;(require 'company-c-headers)
 ;(add-to-list 'company-backends 'company-c-headers)

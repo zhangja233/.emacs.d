@@ -206,10 +206,6 @@
   (global-set-key (kbd "C-z y") 'helm-show-kill-ring)
   )
 
-;;; macros
-(global-set-key (kbd "M-.") 'kmacro-start-macro)
-(global-set-key (kbd "C-.") 'kmacro-end-or-call-macro)
-
 ;;; completion
 (define-key input-decode-map (kbd "C-i") (kbd "H-i"))
 (global-set-key (kbd "H-i") 'dabbrev-expand)
@@ -230,7 +226,7 @@
 (global-set-key (kbd "C-<left>") 'mac-previous-tab)
 (global-set-key (kbd "C-<right>") 'mac-next-tab)
 
-(global-set-key (kbd "M-<tab>") 'other-window)
+(global-set-key (kbd "C-<tab>") 'other-window)
 (global-set-key (kbd "C-1") 'delete-other-windows)
 
 ;; dired mode
