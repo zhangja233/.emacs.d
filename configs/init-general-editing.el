@@ -6,7 +6,10 @@
   "save mark when using beginning-of-line"
   (interactive "^p")
   (or (consp arg) (region-active-p) (push-mark))
-  (beginning-of-line arg)
+  (if (eq major-mode 'org-mode) 
+      (org-beginning-of-line arg)
+    (beginning-of-line arg)
+  )
   )
 (define-key my-mode-map (kbd "C-a") 'my-beginning-of-line)
 
@@ -14,7 +17,10 @@
   "save mark when using end-of-line"
   (interactive "^p")
   (or (consp arg) (region-active-p) (push-mark))
-  (end-of-line arg)
+  (if (eq major-mode 'org-mode) 
+      (org-end-of-line arg)
+    (end-of-line arg)
+  )
   )
 (define-key my-mode-map (kbd "C-e") 'my-end-of-line)
 
