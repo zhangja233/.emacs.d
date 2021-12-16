@@ -192,14 +192,13 @@
   :init
   :config
   (helm-mode 1) ;turn on helm-mode at startup
-  (setq helm-locate-command "mdfind -name %s %s") ;; mdfind seems to work way better than locate in os x 
-  ;; (case system-type
-  ;;   ('gnu/linux "locate -i -r %s")
-  ;;   ('berkeley-unix "locate -i %s")
-  ;;   ('windows-nt "es %s")
-  ;;   ('darwin "mdfind -name %s %s")
-  ;;   (t "locate %s")))
-
+  (setq helm-locate-command  
+    (cl-case system-type
+      ('gnu/linux "locate -i -r %s")
+      ('windows-nt "es %s -sort run-count -p -n 50 %s") ;; commandline interface for Everything.exe, from voidtools
+      ('darwin "mdfind -name %s %s") ;; mdfind seems to work way better than locate in os x 
+      (t "locate %s")))
+  
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "C-,") 'helm-buffers-list)
   (global-set-key (kbd "C-z C-f") 'helm-locate)
