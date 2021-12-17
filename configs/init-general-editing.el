@@ -184,7 +184,7 @@
 :ensure t
 
 :config
-;(global-set-key (kbd "C-,") 'yas-expand)
+(global-set-key (kbd "C-z <tab>") 'yas-expand)
 (yas-global-mode)
 )
 (use-package yasnippet-snippets
@@ -209,8 +209,10 @@
   
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "C-,") 'helm-buffers-list)
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
   (global-set-key (kbd "C-z C-f") 'helm-locate)
   (global-set-key (kbd "C-z y") 'helm-show-kill-ring)
+  (global-set-key (kbd "C-x r b") 'helm-filter-bookmarks)
   )
 
 ;;; completion
@@ -233,7 +235,7 @@
 (global-set-key (kbd "C-<left>") 'mac-previous-tab)
 (global-set-key (kbd "C-<right>") 'mac-next-tab)
 
-(global-set-key (kbd "C-<tab>") 'other-window)
+(global-set-key (kbd "C-.") 'other-window)
 (global-set-key (kbd "C-1") 'delete-other-windows)
 
 ;; dired mode
