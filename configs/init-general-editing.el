@@ -88,8 +88,10 @@
 
 ;; delete, kill, copy and paste
 (global-set-key (kbd "C-<escape>") 'kill-word)
-(define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
-(global-set-key (kbd "C-h") (kbd "<backspace>"))
+(unless (eq system-type 'darwin)
+  (define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
+  (global-set-key (kbd "C-h") (kbd "<backspace>")) 
+)
 
 (delete-selection-mode) ; using C-d to delete a selected region
 (setq delete-active-region 'kill) ; kill the selected region while using delete and backspace. Note that you can still use C-d to delete a region.
