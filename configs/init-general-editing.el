@@ -365,14 +365,4 @@
 )
   )
 
-(use-package pdf-tools
-  :ensure t
-  :mode  ("\\.pdf\\'" . pdf-view-mode)
-  :config
-  (setq pdf-view-use-scaling t)
-  (pdf-tools-install :no-query)
-  )
-
-
-
 (provide 'init-general-editing)
