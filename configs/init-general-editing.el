@@ -42,8 +42,6 @@
 (global-set-key (kbd "M-a") 'beginning-of-buffer)
 (global-set-key (kbd "M-e") 'end-of-buffer)
 
-(global-set-key (kbd "M-s") 'isearch-forward-regexp)
-
 (setq set-mark-command-repeat-pop t) ; repeat pop by C-SPC after C-u C-SPC
 
 ; simple editing
