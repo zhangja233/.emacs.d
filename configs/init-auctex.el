@@ -39,6 +39,7 @@
 	(?' "prime ")
 	(?| "bigg|")
 	("SPC" "quad ")
+	("C-SPC" (lambda() (interactive) (insert " &= ")))
 	("C-b" insert-bra "" nil)
 	("C-k" insert-ket "" nil)
 	("DEL" insert-hline "" nil)
