@@ -88,6 +88,12 @@
 ;(define-key org-mode-map (kbd "S-<left>") nil) ; override org-mode key binding
 (define-key org-mode-map (kbd "M-a") 'beginning-of-buffer)
 (define-key org-mode-map (kbd "M-e") 'end-of-buffer)
+
+; table
+(define-key org-mode-map (kbd "C-c n") 'org-table-next-row)
+(define-key org-mode-map (kbd "C-c p") 'org-table-insert-row)
+(define-key org-mode-map (kbd "C-c b") 'org-table-insert-column)
+
 ; clock
 (global-set-key (kbd "C-z i") 'org-clock-in)
 (global-set-key (kbd "C-z o") 'org-clock-out)
@@ -95,7 +101,6 @@
 (setq org-clock-mode-line-total 'today)
 (define-key org-mode-map (kbd "C-;") 'org-ctrl-c-ctrl-c)
 (define-key org-mode-map (kbd "C-c a") 'org-metaleft)
-(define-key org-mode-map (kbd "C-c n") 'org-table-next-row)
 (define-key org-mode-map (kbd "C-c c") 'org-insert-todo-heading)
 (define-key org-mode-map (kbd "C-c d") 'org-metaright)
 (define-key org-mode-map (kbd "C-c r") 'org-clock-report)
