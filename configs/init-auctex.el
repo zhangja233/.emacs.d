@@ -60,13 +60,17 @@
  (setq LaTeX-section-label nil)
 ; (setq TeX-quote-after-quote t)
  (setq TeX-insert-macro-default-style 'mandatory-args-only)
- ; several key bindings
+
 
  (define-key LaTeX-mode-map (kbd "\"")  (lambda() (interactive) (insert "\"\"") (backward-char))) ; prevent latex quote 
-; (define-key LaTeX-mode-map (kbd "C-'")  (lambda()(interactive)(insert "{}") (backward-char))) 
-;  (define-key LaTeX-mode-map (kbd "C-<return>")  (lambda()(interactive)(insert "}")))
+ 
+ ;; easier outline keybindings
  (define-key LaTeX-mode-map (kbd "C-c <tab>") 'outline-show-subtree)
- (define-key LaTeX-mode-map (kbd "C-c SPC") 'outline-hide-body) 
+ (define-key LaTeX-mode-map (kbd "C-c SPC") 'outline-hide-body)
+ 
+ (define-key LaTeX-mode-map (kbd "M-<left>") 'outline-promote)
+ (define-key LaTeX-mode-map (kbd "M-<right>") 'outline-demote)
+ 
  (defun insert-begin()
     (interactive) (insert "\\begin{}") (backward-char)
    )
