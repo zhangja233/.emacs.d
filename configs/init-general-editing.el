@@ -94,6 +94,13 @@
 (delete-selection-mode) ; using C-d to delete a selected region
 (setq delete-active-region 'kill) ; kill the selected region while using delete and backspace. Note that you can still use C-d to delete a region.
 
+(defun delete-line()
+  "equivalence of kill-line without affecting kill-ring"
+  (interactive)
+  (delete-region (point) (line-end-position))
+  )
+(global-set-key (kbd "C-S-k") 'delete-line)
+
 ; copy to clipboard when M-w
 (setq x-select-enable-clipboard t)
 
