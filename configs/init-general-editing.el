@@ -85,7 +85,20 @@
 
 
 ;; delete, kill, copy and paste
+(defun backward-kill-word-or-kill-region(&optional arg)
+  "backward kill word if region is not active, otherwise kill region"
+  (interactive "p")
+  (if (region-active-p)
+      (kill-region (mark) (point) 'region)
+      (backward-kill-word arg)
+    )
+)
+ 
+(define-key my-mode-map (kbd "C-w") 'backward-kill-word-or-kill-region)
+
+
 (global-set-key (kbd "C-<escape>") 'kill-word)
+
 (unless (eq system-type 'darwin)
   (define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
   (global-set-key (kbd "C-h") (kbd "<backspace>")) 
