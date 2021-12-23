@@ -8,7 +8,6 @@
   (defun insert-backslash() 
     (interactive)(insert "\\")
     )
- ; (define-key LaTeX-mode-map (kbd "C-;")  'insert-backslash)
   (bind-keys* 
    :map LaTeX-mode-map
    ("C-;" . insert-backslash)
@@ -50,7 +49,7 @@
 (add-hook 'outline-minor-mode-hook
 	  (lambda () (local-set-key "\C-c\C-c"
 				    outline-mode-prefix-map)))
-;(add-hook 'LaTeX-mode-hook 'outline-hide-body)
+
 (eval-after-load "LaTeX"  
 '(progn
  (outline-minor-mode)
@@ -58,28 +57,33 @@
 	     (append '((company-math-symbols-latex company-latex-commands))
 		     company-backends))
  (setq LaTeX-section-label nil)
-; (setq TeX-quote-after-quote t)
  (setq TeX-insert-macro-default-style 'mandatory-args-only)
 
 
  (define-key LaTeX-mode-map (kbd "\"")  (lambda() (interactive) (insert "\"\"") (backward-char))) ; prevent latex quote 
  
  ;; easier outline keybindings
- (define-key LaTeX-mode-map (kbd "C-c <tab>") 'outline-show-subtree)
- (define-key LaTeX-mode-map (kbd "C-c SPC") 'outline-hide-body)
+ (define-key LaTeX-mode-map (kbd "C-c C-c") 'outline-show-subtree)
+ (define-key LaTeX-mode-map (kbd "C-c C-SPC") 'outline-hide-body)
+ (define-key LaTeX-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
+ (define-key LaTeX-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading)
+ (define-key LaTeX-mode-map (kbd "C-c C-u") 'outline-up-heading)
+ (define-key LaTeX-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
+ (define-key LaTeX-mode-map (kbd "C-c C-b") 'outline-backward-same-level)
+ 
  
  (define-key LaTeX-mode-map (kbd "M-<left>") 'outline-promote)
  (define-key LaTeX-mode-map (kbd "M-<right>") 'outline-demote)
- 
- (defun insert-begin()
-    (interactive) (insert "\\begin{}") (backward-char)
-   )
- (define-key LaTeX-mode-map (kbd "C-c b")  'insert-begin) ; entering \begin faster
+
+ (define-key LaTeX-mode-map (kbd "C-c N") 'TeX-normal-mode)
+
+ (define-key LaTeX-mode-map (kbd "C-c <return>") 'LaTeX-insert-item)
+ (define-key LaTeX-mode-map (kbd "C-c C-j") 'TeX-insert-macro)
 
   (defun insert-bold()
     (interactive) (insert "\\b{}") (backward-char)
    )
- (define-key LaTeX-mode-map (kbd "C-c C-b")  'insert-bold)
+ (define-key LaTeX-mode-map (kbd "C-c b")  'insert-bold)
 
    (defun insert-rm()
     (interactive) (insert "\\r{}") (backward-char)
@@ -96,9 +100,7 @@
    (forward-char)
    )
  (define-key LaTeX-mode-map (kbd "C-c $") 'mark-inline-equation)
- (define-key LaTeX-mode-map (kbd "S-<tab>") 'outline-show-subtree)
-; (define-key LaTeX-mode-map (kbd "C-c h") 'outline-hide-body)
-; (define-key LaTeX-mode-map (kbd "C-c s") 'outline-show-entry)
+ 
  (defun insert-latex-env(env-name)
    (interactive)
    (insert (concat "\\begin{" env-name "}")) (newline-and-indent) (newline) (insert (concat "\\end{" env-name "}")) (previous-line)
