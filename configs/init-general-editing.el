@@ -386,5 +386,10 @@
   (exec-path-from-shell-initialize) ;get $PATH from shell 
 )
   )
+(use-package disable-mouse
+:ensure t
+:config
+(global-disable-mouse-mode) ; in case I move the mouse accidentally
+  )
 
 (provide 'init-general-editing)
