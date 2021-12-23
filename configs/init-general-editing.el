@@ -260,6 +260,10 @@
 (require 'dired-x)
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
 (global-set-key (kbd "C-x j") 'dired-jump)
+
+(define-key dired-mode-map (kbd "SPC") 'browse-url-of-dired-file)
+(define-key dired-mode-map (kbd "e") 'wdired-change-to-wdired-mode)
+
 ;(setq insert-directory-program "gls" dired-use-ls-dired t)
 
 ; a trick to make dired be able to access ~/Downloads and folders alike
