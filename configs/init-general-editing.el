@@ -202,7 +202,8 @@
 :ensure t
 
 :config
-(global-set-key (kbd "C-z <tab>") 'yas-expand)
+(global-set-key (kbd "C-z <tab>") 'yas-expand) ; sometimes <tab> is redefined in certain modes, use this as a backup solution
+(global-set-key (kbd "C-z R") 'yas/reload-all)
 (yas-global-mode)
 )
 (use-package yasnippet-snippets
