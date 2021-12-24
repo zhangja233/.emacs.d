@@ -46,13 +46,9 @@
 ))
 
 (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
-(add-hook 'outline-minor-mode-hook
-	  (lambda () (local-set-key "\C-c\C-c"
-				    outline-mode-prefix-map)))
 
 (eval-after-load "LaTeX"  
 '(progn
- (outline-minor-mode)
   (setq-local company-backends
 	     (append '((company-math-symbols-latex company-latex-commands))
 		     company-backends))
@@ -76,6 +72,7 @@
  (define-key LaTeX-mode-map (kbd "M-<right>") 'outline-demote)
 
  (define-key LaTeX-mode-map (kbd "C-c N") 'TeX-normal-mode)
+ (define-key LaTeX-mode-map (kbd "<f5>") 'TeX-font)
 
  (define-key LaTeX-mode-map (kbd "C-c <return>") 'LaTeX-insert-item)
  (define-key LaTeX-mode-map (kbd "C-c C-j") 'TeX-insert-macro)
@@ -90,6 +87,7 @@
    )
  (define-key LaTeX-mode-map (kbd "C-c C-r")  'insert-rm)  
  
+ ;; setting marks
  (defun mark-inline-equation()
  "mark the content inside an inline equation"
    (interactive) 
@@ -100,6 +98,7 @@
    (forward-char)
    )
  (define-key LaTeX-mode-map (kbd "C-c $") 'mark-inline-equation)
+ (define-key LaTeX-mode-map (kbd "C-c @") 'LaTeX-mark-section)
  
  (defun insert-latex-env(env-name)
    (interactive)
