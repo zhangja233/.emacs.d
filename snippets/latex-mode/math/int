@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: int
+# group: math
+# key: iii
+# --
+\int_{-\infty}^{\infty}
