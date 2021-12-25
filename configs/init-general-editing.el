@@ -278,6 +278,9 @@
 (setq dired-listing-switches "-al --group-directories-first")
 ;(setq dired-listing-switches "-AlBGh  --group-directories-first")
 
+(setq dired-deletion-confirmer #'y-or-n-p) 
+
+
 (global-set-key (kbd "C-z C-v") 'find-file-other-window)
 
 (defun find-scratch()
