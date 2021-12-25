@@ -58,4 +58,11 @@
   (setq electric-indent-chars (delq 10 electric-indent-chars)))
 
 (add-hook 'emacs-lisp-mode-hook #'electric-indent-mode-configure)
+
+(use-package json-mode
+  :ensure t
+  :config
+  (define-key json-mode-map (kbd "C-;") 'json-pretty-print-buffer)
+  )
+
 (provide 'init-prog)
