@@ -303,6 +303,7 @@
   (save-buffers-kill-terminal)
   )
 (global-set-key (kbd "C-x C-c")  'my-quit-emacs)
+(setq confirm-kill-emacs 'y-or-n-p)
 
 ;; setup of minibuffer
 (define-key minibuffer-local-map (kbd "C-p") 'previous-history-element) ; for the rare case to go to the previous line just use the arrow key
