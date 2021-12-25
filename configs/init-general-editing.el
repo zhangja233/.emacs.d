@@ -231,9 +231,13 @@
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "C-,") 'helm-buffers-list)
   (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (global-set-key (kbd "M-s o") 'helm-occur)
+  (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)
+  (global-set-key (kbd "C-x r b") 'helm-filter-bookmarks)
+
   (global-set-key (kbd "C-z C-f") 'helm-locate)
   (global-set-key (kbd "C-z y") 'helm-show-kill-ring)
-  (global-set-key (kbd "C-x r b") 'helm-filter-bookmarks)
+  (global-set-key (kbd "C-z SPC") 'helm-all-mark-rings)
   )
 
 ;;; completion
