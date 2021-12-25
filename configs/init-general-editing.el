@@ -337,6 +337,8 @@
   )
 (global-set-key (kbd "C-z C") 'set-chinese)
 
+(setq-default ispell-program-name "aspell")
+
 ;; fly
 ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 (use-package flyspell
