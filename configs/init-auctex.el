@@ -132,11 +132,7 @@
    (backward-char)
    )
  (define-key LaTeX-mode-map (kbd "C-c d") 'insert-definition)
-
- (defun insert-frac()
-   (interactive)
-   (insert "\\frac{}{}") (backward-char 3)
-)
+ 
  (defun insert-frac()
    (interactive)
    (yas-expand-snippet (yas-lookup-snippet "frac"))

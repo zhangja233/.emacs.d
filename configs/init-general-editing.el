@@ -34,13 +34,15 @@
 ;; avy-mode
 (use-package avy
   :ensure t
-  )
+  :config
 (global-set-key (kbd "C-l") 'avy-goto-word-1)
 (global-set-key (kbd "C-z g") 'avy-goto-line)
-(global-set-key (kbd "C-M-l") 'avy-goto-char-in-line)
+(global-set-key (kbd "C-S-l") 'avy-goto-char-in-line)
+  )
 
-(global-set-key (kbd "M-a") 'beginning-of-buffer)
-(global-set-key (kbd "M-e") 'end-of-buffer)
+
+(define-key my-mode-map (kbd "M-a") 'beginning-of-buffer)
+(define-key my-mode-map (kbd "M-e") 'end-of-buffer)
 
 (setq set-mark-command-repeat-pop t) ; repeat pop by C-SPC after C-u C-SPC
 
