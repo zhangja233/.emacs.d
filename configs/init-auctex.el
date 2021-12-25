@@ -137,6 +137,10 @@
    (interactive)
    (insert "\\frac{}{}") (backward-char 3)
 )
+ (defun insert-frac()
+   (interactive)
+   (yas-expand-snippet (yas-lookup-snippet "frac"))
+)
 
  (define-key LaTeX-mode-map (kbd "C-c f") 'insert-frac)
  
