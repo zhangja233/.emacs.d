@@ -60,6 +60,8 @@
 (use-package diminish
   :ensure t
   :config
+  (diminish 'my-mode)
+  (diminish 'eldoc-mode)
   )
 
 (defun set-font-size(size)

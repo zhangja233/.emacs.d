@@ -45,8 +45,6 @@
 	))
 ))
 
-(add-hook 'LaTeX-mode-hook #'outline-minor-mode)
-
 (eval-after-load "LaTeX"  
 '(progn
   (setq-local company-backends
@@ -55,8 +53,13 @@
  (setq LaTeX-section-label nil)
  (setq TeX-insert-macro-default-style 'mandatory-args-only)
 
+ 
 
  (define-key LaTeX-mode-map (kbd "\"")  (lambda() (interactive) (insert "\"\"") (backward-char))) ; prevent latex quote 
+
+ (outline-minor-mode)
+ (setq outline-minor-mode-prefix nil)
+ (diminish outline-minor-mode)
  
  ;; easier outline keybindings
  (define-key LaTeX-mode-map (kbd "C-c C-c") 'outline-show-subtree)
@@ -173,13 +176,6 @@
 ;(defun LaTeX-label (name &optional type no-insert)) ; make LaTeX-label function do nothing
 ;(setq TeX-auto-private '("~/lib/auto/" ) )
 
-
-
-
-
-;(setq latex-run-command "xelatex")
-
-
 ; some plain text environments or macros
 (setq LaTeX-verbatim-environments-local '("Verbatim" "lstlisting" ))
 
@@ -215,4 +211,3 @@
 ;(setq font-latex-fontify-sectioning 'color)
 
 (provide 'init-auctex)
-;; 

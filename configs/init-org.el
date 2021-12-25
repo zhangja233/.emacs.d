@@ -17,6 +17,7 @@
 ; minor modes
 (use-package valign ; visual alignment for org tables when using Chinese
 :ensure t
+:diminish valign-mode
 )
 (add-hook 'org-mode-hook #'valign-mode)
 

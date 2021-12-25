@@ -207,7 +207,9 @@
 (global-set-key (kbd "C-z <tab>") 'yas-expand) ; sometimes <tab> is redefined in certain modes, use this as a backup solution
 (global-set-key (kbd "C-z R") 'yas/reload-all)
 (yas-global-mode)
+:diminish yas-minor-mode
 )
+
 (use-package yasnippet-snippets
 :ensure t
 
@@ -218,7 +220,7 @@
 ;;; helm-mode
 (use-package helm
   :ensure t
-  :init
+  :diminish helm-mode
   :config
   (helm-mode 1) ;turn on helm-mode at startup
   (setq helm-locate-command  
@@ -246,15 +248,14 @@
 
 (use-package company
 :ensure t
-)
+:diminish company-mode
+:config
 (global-company-mode) 
 (global-set-key (kbd "M-i") 'company-complete)
 (setq company-dabbrev-downcase nil) ;make completion case sensitive
 (setq company-idle-delay nil) ; do not give suggestions unless invoked manually
 (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
-
-
-
+)
 
 ;;; buffer, window, frame and file management
 (global-set-key (kbd "C-<left>") 'mac-previous-tab)
@@ -349,6 +350,7 @@
 :init
   (setq flyspell-mode-map (make-sparse-keymap)) ; prevent flyspell from overriding existing keybindings
 :config
+:diminish flyspell-mode
    )
 
 ;(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e") ;load mu4e in case emacs can not find it
@@ -401,6 +403,7 @@
   )
 (use-package disable-mouse
 :ensure t
+:diminish disable-mouse-global-mode
 :config
 (global-disable-mouse-mode) ; in case I move the mouse accidentally
   )
