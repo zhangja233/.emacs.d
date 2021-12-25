@@ -18,13 +18,9 @@
      ("C-b" insert-bra "" nil)
      ("C-k" insert-ket "" nil)
      ("DEL" insert-hline "" nil)))
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(google-this valign yasnippet-snippets yasnippet easy-kill paredit smartparens use-package htmlize org-bullets auctex openwith ox-reveal keyfreq json-mode elpy pyim-basedict browse-kill-ring ace-window company counsel magit helm mu4e-maildirs-extension ivy avy ess markdown-mode pdf-tools pyim auctex-cluttex exec-path-from-shell csv-mode gnu-elpa-keyring-update))
+   '(spacemacs-theme diminish disable-mouse ggtags google-this valign yasnippet-snippets yasnippet easy-kill paredit smartparens use-package htmlize org-bullets auctex openwith ox-reveal keyfreq json-mode elpy pyim-basedict browse-kill-ring ace-window company counsel magit helm mu4e-maildirs-extension ivy avy ess markdown-mode pdf-tools pyim auctex-cluttex exec-path-from-shell csv-mode gnu-elpa-keyring-update))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 
