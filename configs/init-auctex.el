@@ -172,6 +172,8 @@
   (save-some-buffers 1) (TeX-command-master nil)
   )
 (define-key LaTeX-mode-map (kbd "C-x C-s") 'latex-save-and-compile) ; compile tex file every time hit C-x C-s, thus making it up to date.
+(define-key LaTeX-mode-map (kbd "C-'") 'latex-save-and-compile) 
+
 (load "~/lib/el/preamble.el" nil t t) ; let auctex parse the auto style file
 ;(defun LaTeX-label (name &optional type no-insert)) ; make LaTeX-label function do nothing
 ;(setq TeX-auto-private '("~/lib/auto/" ) )

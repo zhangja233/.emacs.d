@@ -297,6 +297,7 @@
   (save-some-buffers 1)
     )
 (global-set-key (kbd "C-x C-s")  'save-all-buffers)
+(global-set-key (kbd "C-'")  'save-all-buffers)
 
 (defun my-quit-emacs()
   (interactive)
