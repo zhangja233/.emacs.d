@@ -317,7 +317,12 @@
 ;; setup of minibuffer
 (define-key minibuffer-local-map (kbd "C-p") 'previous-history-element) ; for the rare case to go to the previous line just use the arrow key
 (define-key minibuffer-local-map (kbd "C-n") 'next-history-element) 
-(define-key minibuffer-local-map (kbd "C-;") (kbd "~"))
+
+(defun insert-tilde()
+  (interactive)
+  (insert "~")
+  )
+(define-key minibuffer-local-map (kbd "C-;") 'insert-tilde)
 
 ;; magit
 (use-package magit
