@@ -91,6 +91,7 @@
 (require 'init-org)
 (require 'init-auctex)
 (require 'init-prog)
+(require 'init-helm)
 (require 'init-magit)
 (require 'init-windows)
 
