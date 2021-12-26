@@ -27,6 +27,10 @@
 
 (global-set-key (kbd "C-S-b") 'backward-sentence)
 (global-set-key (kbd "C-S-f") 'forward-sentence)
+
+(global-set-key (kbd "M-[") 'backward-paragraph)
+(global-set-key (kbd "M-]") 'forward-paragraph)
+
 (setq sentence-end-double-space nil) ;make backward-sentence and forward-sentence behave as in fundamental mode
 
 (global-set-key (kbd "C-9") 'recenter-top-bottom)
