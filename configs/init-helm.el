@@ -18,7 +18,7 @@
   (global-set-key (kbd "C-x r b") 'helm-filter-bookmarks)
 
   (global-set-key (kbd "C-z C-f") 'helm-locate)
-  (global-set-key (kbd "C-z y") 'helm-show-kill-ring)
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
   (global-set-key (kbd "C-z SPC") 'helm-all-mark-rings)
   )
 
