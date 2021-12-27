@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: eg
+# key: eg
+# --
+`(if current-prefix-arg "F" "f")`or example

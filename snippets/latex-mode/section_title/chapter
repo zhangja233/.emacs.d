@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: chapter
+# group: section title
+# key: c
+# --
+\chapter{$0}

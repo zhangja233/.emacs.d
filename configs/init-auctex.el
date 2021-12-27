@@ -8,7 +8,6 @@
   (defun insert-backslash() 
     (interactive)(insert "\\")
     )
- ; (define-key LaTeX-mode-map (kbd "C-;")  'insert-backslash)
   (bind-keys* 
    :map LaTeX-mode-map
    ("C-;" . insert-backslash)
@@ -39,48 +38,59 @@
 	(?' "prime ")
 	(?| "bigg|")
 	("SPC" "quad ")
+	("C-SPC" (lambda() (interactive) (insert " &= ")))
 	("C-b" insert-bra "" nil)
 	("C-k" insert-ket "" nil)
 	("DEL" insert-hline "" nil)
 	))
 ))
 
-(add-hook 'LaTeX-mode-hook #'outline-minor-mode)
-(add-hook 'outline-minor-mode-hook
-	  (lambda () (local-set-key "\C-c\C-c"
-				    outline-mode-prefix-map)))
-;(add-hook 'LaTeX-mode-hook 'outline-hide-body)
 (eval-after-load "LaTeX"  
 '(progn
- (outline-minor-mode)
   (setq-local company-backends
 	     (append '((company-math-symbols-latex company-latex-commands))
 		     company-backends))
  (setq LaTeX-section-label nil)
-; (setq TeX-quote-after-quote t)
  (setq TeX-insert-macro-default-style 'mandatory-args-only)
- ; several key bindings
+
+ 
 
  (define-key LaTeX-mode-map (kbd "\"")  (lambda() (interactive) (insert "\"\"") (backward-char))) ; prevent latex quote 
-; (define-key LaTeX-mode-map (kbd "C-'")  (lambda()(interactive)(insert "{}") (backward-char))) 
-;  (define-key LaTeX-mode-map (kbd "C-<return>")  (lambda()(interactive)(insert "}")))
- (define-key LaTeX-mode-map (kbd "C-c <tab>") 'outline-show-subtree)
- (define-key LaTeX-mode-map (kbd "C-c SPC") 'outline-hide-body) 
- (defun insert-begin()
-    (interactive) (insert "\\begin{}") (backward-char)
-   )
- (define-key LaTeX-mode-map (kbd "C-c b")  'insert-begin) ; entering \begin faster
+
+ (outline-minor-mode)
+ (setq outline-minor-mode-prefix nil)
+ (diminish outline-minor-mode)
+ 
+ ;; easier outline keybindings
+ (define-key LaTeX-mode-map (kbd "C-c C-c") 'outline-show-subtree)
+ (define-key LaTeX-mode-map (kbd "C-c C-SPC") 'outline-hide-body)
+ (define-key LaTeX-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
+ (define-key LaTeX-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading)
+ (define-key LaTeX-mode-map (kbd "C-c C-u") 'outline-up-heading)
+ (define-key LaTeX-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
+ (define-key LaTeX-mode-map (kbd "C-c C-b") 'outline-backward-same-level)
+ 
+ 
+ (define-key LaTeX-mode-map (kbd "M-<left>") 'outline-promote)
+ (define-key LaTeX-mode-map (kbd "M-<right>") 'outline-demote)
+
+ (define-key LaTeX-mode-map (kbd "C-c N") 'TeX-normal-mode)
+ (define-key LaTeX-mode-map (kbd "<f5>") 'TeX-font)
+
+ (define-key LaTeX-mode-map (kbd "C-c <return>") 'LaTeX-insert-item)
+ (define-key LaTeX-mode-map (kbd "C-c C-j") 'TeX-insert-macro)
 
   (defun insert-bold()
     (interactive) (insert "\\b{}") (backward-char)
    )
- (define-key LaTeX-mode-map (kbd "C-c C-b")  'insert-bold)
+ (define-key LaTeX-mode-map (kbd "C-c b")  'insert-bold)
 
    (defun insert-rm()
     (interactive) (insert "\\r{}") (backward-char)
    )
  (define-key LaTeX-mode-map (kbd "C-c C-r")  'insert-rm)  
  
+ ;; setting marks
  (defun mark-inline-equation()
  "mark the content inside an inline equation"
    (interactive) 
@@ -91,9 +101,8 @@
    (forward-char)
    )
  (define-key LaTeX-mode-map (kbd "C-c $") 'mark-inline-equation)
- (define-key LaTeX-mode-map (kbd "S-<tab>") 'outline-show-subtree)
-; (define-key LaTeX-mode-map (kbd "C-c h") 'outline-hide-body)
-; (define-key LaTeX-mode-map (kbd "C-c s") 'outline-show-entry)
+ (define-key LaTeX-mode-map (kbd "C-c @") 'LaTeX-mark-section)
+ 
  (defun insert-latex-env(env-name)
    (interactive)
    (insert (concat "\\begin{" env-name "}")) (newline-and-indent) (newline) (insert (concat "\\end{" env-name "}")) (previous-line)
@@ -126,10 +135,10 @@
    (backward-char)
    )
  (define-key LaTeX-mode-map (kbd "C-c d") 'insert-definition)
-
+ 
  (defun insert-frac()
    (interactive)
-   (insert "\\frac{}{}") (backward-char 3)
+   (yas-expand-snippet (yas-lookup-snippet "frac"))
 )
 
  (define-key LaTeX-mode-map (kbd "C-c f") 'insert-frac)
@@ -163,16 +172,11 @@
   (save-some-buffers 1) (TeX-command-master nil)
   )
 (define-key LaTeX-mode-map (kbd "C-x C-s") 'latex-save-and-compile) ; compile tex file every time hit C-x C-s, thus making it up to date.
+(define-key LaTeX-mode-map (kbd "C-'") 'latex-save-and-compile) 
+
 (load "~/lib/el/preamble.el" nil t t) ; let auctex parse the auto style file
 ;(defun LaTeX-label (name &optional type no-insert)) ; make LaTeX-label function do nothing
 ;(setq TeX-auto-private '("~/lib/auto/" ) )
-
-
-
-
-
-;(setq latex-run-command "xelatex")
-
 
 ; some plain text environments or macros
 (setq LaTeX-verbatim-environments-local '("Verbatim" "lstlisting" ))
@@ -209,4 +213,3 @@
 ;(setq font-latex-fontify-sectioning 'color)
 
 (provide 'init-auctex)
-;; 

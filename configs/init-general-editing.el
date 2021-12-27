@@ -6,7 +6,10 @@
   "save mark when using beginning-of-line"
   (interactive "^p")
   (or (consp arg) (region-active-p) (push-mark))
-  (beginning-of-line arg)
+  (if (eq major-mode 'org-mode) 
+      (org-beginning-of-line arg)
+    (beginning-of-line arg)
+  )
   )
 (define-key my-mode-map (kbd "C-a") 'my-beginning-of-line)
 
@@ -14,13 +17,20 @@
   "save mark when using end-of-line"
   (interactive "^p")
   (or (consp arg) (region-active-p) (push-mark))
-  (end-of-line arg)
+  (if (eq major-mode 'org-mode) 
+      (org-end-of-line arg)
+    (end-of-line arg)
+  )
   )
 (define-key my-mode-map (kbd "C-e") 'my-end-of-line)
 
 
 (global-set-key (kbd "C-S-b") 'backward-sentence)
 (global-set-key (kbd "C-S-f") 'forward-sentence)
+
+(global-set-key (kbd "M-[") 'backward-paragraph)
+(global-set-key (kbd "M-]") 'forward-paragraph)
+
 (setq sentence-end-double-space nil) ;make backward-sentence and forward-sentence behave as in fundamental mode
 
 (global-set-key (kbd "C-9") 'recenter-top-bottom)
@@ -28,15 +38,15 @@
 ;; avy-mode
 (use-package avy
   :ensure t
-  )
+  :config
 (global-set-key (kbd "C-l") 'avy-goto-word-1)
 (global-set-key (kbd "C-z g") 'avy-goto-line)
-(global-set-key (kbd "C-M-l") 'avy-goto-char-in-line)
+(global-set-key (kbd "C-S-l") 'avy-goto-char-in-line)
+  )
 
-(global-set-key (kbd "M-a") 'beginning-of-buffer)
-(global-set-key (kbd "M-e") 'end-of-buffer)
 
-(global-set-key (kbd "M-s") 'isearch-forward-regexp)
+(define-key my-mode-map (kbd "M-a") 'beginning-of-buffer)
+(define-key my-mode-map (kbd "M-e") 'end-of-buffer)
 
 (setq set-mark-command-repeat-pop t) ; repeat pop by C-SPC after C-u C-SPC
 
@@ -81,12 +91,34 @@
 
 
 ;; delete, kill, copy and paste
+(defun backward-kill-word-or-kill-region(&optional arg)
+  "backward kill word if region is not active, otherwise kill region"
+  (interactive "p")
+  (if (region-active-p)
+      (kill-region (mark) (point) 'region)
+      (backward-kill-word arg)
+    )
+)
+ 
+(define-key my-mode-map (kbd "C-w") 'backward-kill-word-or-kill-region)
+
+
 (global-set-key (kbd "C-<escape>") 'kill-word)
-(define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
-(global-set-key (kbd "C-h") (kbd "<backspace>"))
+
+(unless (eq system-type 'darwin)
+  (define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
+  (global-set-key (kbd "C-h") (kbd "<backspace>")) 
+)
 
 (delete-selection-mode) ; using C-d to delete a selected region
 (setq delete-active-region 'kill) ; kill the selected region while using delete and backspace. Note that you can still use C-d to delete a region.
+
+(defun delete-line()
+  "equivalence of kill-line without affecting kill-ring"
+  (interactive)
+  (delete-region (point) (line-end-position))
+  )
+(global-set-key (kbd "C-S-k") 'delete-line)
 
 ; copy to clipboard when M-w
 (setq x-select-enable-clipboard t)
@@ -176,34 +208,17 @@
 :ensure t
 
 :config
-;(global-set-key (kbd "C-,") 'yas-expand)
+(global-set-key (kbd "C-z <tab>") 'yas-expand) ; sometimes <tab> is redefined in certain modes, use this as a backup solution
+(global-set-key (kbd "C-z R") 'yas/reload-all)
 (yas-global-mode)
+:diminish yas-minor-mode
 )
+
 (use-package yasnippet-snippets
 :ensure t
 
 :config
 )
-
-
-;;; helm-mode
-(use-package helm
-  :ensure t
-  :init
-  :config
-  (helm-mode 1) ;turn on helm-mode at startup
-  (setq helm-locate-command  
-    (cl-case system-type
-      ('gnu/linux "locate -i -r %s")
-      ('windows-nt "es %s -sort run-count -p -n 50 %s") ;; commandline interface for Everything.exe, from voidtools
-      ('darwin "mdfind -name %s %s") ;; mdfind seems to work way better than locate in os x 
-      (t "locate %s")))
-  
-  (global-set-key (kbd "M-x") 'helm-M-x)
-  (global-set-key (kbd "C-,") 'helm-buffers-list)
-  (global-set-key (kbd "C-z C-f") 'helm-locate)
-  (global-set-key (kbd "C-z y") 'helm-show-kill-ring)
-  )
 
 ;;; completion
 (define-key input-decode-map (kbd "C-i") (kbd "H-i"))
@@ -211,33 +226,39 @@
 
 (use-package company
 :ensure t
-)
+:diminish company-mode
+:config
 (global-company-mode) 
 (global-set-key (kbd "M-i") 'company-complete)
 (setq company-dabbrev-downcase nil) ;make completion case sensitive
 (setq company-idle-delay nil) ; do not give suggestions unless invoked manually
 (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
-
-
-
+)
 
 ;;; buffer, window, frame and file management
 (global-set-key (kbd "C-<left>") 'mac-previous-tab)
 (global-set-key (kbd "C-<right>") 'mac-next-tab)
 
-(global-set-key (kbd "C-<tab>") 'other-window)
+(global-set-key (kbd "C-.") 'other-window)
 (global-set-key (kbd "C-1") 'delete-other-windows)
 
 ;; dired mode
 (require 'dired-x)
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
 (global-set-key (kbd "C-x j") 'dired-jump)
+
+(define-key dired-mode-map (kbd "SPC") 'browse-url-of-dired-file)
+(define-key dired-mode-map (kbd "e") 'wdired-change-to-wdired-mode)
+
 ;(setq insert-directory-program "gls" dired-use-ls-dired t)
 
 ; a trick to make dired be able to access ~/Downloads and folders alike
 (setq insert-directory-program "gls" dired-use-ls-dired t)
 (setq dired-listing-switches "-al --group-directories-first")
 ;(setq dired-listing-switches "-AlBGh  --group-directories-first")
+
+(setq dired-deletion-confirmer #'y-or-n-p) 
+
 
 (global-set-key (kbd "C-z C-v") 'find-file-other-window)
 
@@ -254,6 +275,7 @@
   (save-some-buffers 1)
     )
 (global-set-key (kbd "C-x C-s")  'save-all-buffers)
+(global-set-key (kbd "C-'")  'save-all-buffers)
 
 (defun my-quit-emacs()
   (interactive)
@@ -264,11 +286,17 @@
   (save-buffers-kill-terminal)
   )
 (global-set-key (kbd "C-x C-c")  'my-quit-emacs)
+(setq confirm-kill-emacs 'y-or-n-p)
 
 ;; setup of minibuffer
 (define-key minibuffer-local-map (kbd "C-p") 'previous-history-element) ; for the rare case to go to the previous line just use the arrow key
 (define-key minibuffer-local-map (kbd "C-n") 'next-history-element) 
-(define-key minibuffer-local-map (kbd "C-;") (kbd "~"))
+
+(defun insert-tilde()
+  (interactive)
+  (insert "~")
+  )
+(define-key minibuffer-local-map (kbd "C-;") 'insert-tilde)
 
 ;; magit
 (use-package magit
@@ -298,12 +326,15 @@
   )
 (global-set-key (kbd "C-z C") 'set-chinese)
 
+(setq-default ispell-program-name "aspell")
+
 ;; fly
 ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 (use-package flyspell
 :init
   (setq flyspell-mode-map (make-sparse-keymap)) ; prevent flyspell from overriding existing keybindings
 :config
+:diminish flyspell-mode
    )
 
 ;(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e") ;load mu4e in case emacs can not find it
@@ -353,6 +384,12 @@
 (unless (eq system-type 'windows-nt)
   (exec-path-from-shell-initialize) ;get $PATH from shell 
 )
+  )
+(use-package disable-mouse
+:ensure t
+:diminish disable-mouse-global-mode
+:config
+(global-disable-mouse-mode) ; in case I move the mouse accidentally
   )
 
 (provide 'init-general-editing)

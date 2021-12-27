@@ -5,6 +5,15 @@
 
 (global-set-key (kbd "C-z C-s") 'shell-command)
 
+(use-package ggtags
+  :ensure t
+  )
+
+(add-hook 'c-mode-common-hook
+    (lambda ()
+      (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+  (ggtags-mode 1))))
+
 ;; cpp
 ;(require 'company-c-headers)
 ;(add-to-list 'company-backends 'company-c-headers)
@@ -58,4 +67,11 @@
   (setq electric-indent-chars (delq 10 electric-indent-chars)))
 
 (add-hook 'emacs-lisp-mode-hook #'electric-indent-mode-configure)
+
+(use-package json-mode
+  :ensure t
+  :config
+  (define-key json-mode-map (kbd "C-;") 'json-pretty-print-buffer)
+  )
+
 (provide 'init-prog)
