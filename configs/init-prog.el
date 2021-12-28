@@ -50,6 +50,10 @@
 ;(add-to-list 'company-backends 'company-jedi)
 ))
 
+(use-package ein
+  :ensure t
+  )
+
 ;; perl
 (fset 'perl-mode 'cperl-mode)
 ;; f90-mode
