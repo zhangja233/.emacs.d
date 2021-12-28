@@ -6,6 +6,10 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Microsoft YaHei Mono" :foundry "outline" :slant normal :weight normal :height 199 :width normal)))))
   (set-language-environment "utf-8")
+  
+  (use-package ahk-mode
+    :ensure t
+    )
 )
 
 (provide 'init-windows)
