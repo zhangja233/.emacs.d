@@ -6,8 +6,10 @@
     )
 (global-set-key (kbd "C-z C-z") 'my-compile)
 
-(define-key compilation-minor-mode-map (kbd "C-;") 'quit-window)
-(define-key compilation-shell-minor-mode-map (kbd "C-;") 'quit-window)
+(unless (eq system-type 'windows-nt)
+  (define-key compilation-minor-mode-map (kbd "C-;") 'quit-window)
+  (define-key compilation-shell-minor-mode-map (kbd "C-;") 'quit-window)
+  )
 
 (global-set-key (kbd "C-z C-s") 'shell-command)
 
