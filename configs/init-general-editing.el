@@ -130,10 +130,13 @@
   :config
   (global-set-key [remap kill-ring-save] #'easy-kill)
   (global-set-key (kbd "M-w") 'easy-kill)
-  (global-set-key [remap mark-sexp] #'easy-mark))
+  (global-set-key (kbd "S-SPC") 'easy-mark)
+  )
 
 ;; About sexps 
 (show-paren-mode 1)
+
+(setq blink-matching-paren nil)
 
 (global-set-key (kbd "C-M-SPC") (lambda() (interactive) (backward-up-list) (mark-sexp)))
 ; smartparens
@@ -200,16 +203,16 @@
   :config
   (require 'smartparens-config)
   (setq sp-navigate-consider-symbols nil) ; don't treat a word as a sexp
+  (setq sp-highlight-pair-overlay nil) ; don't hightlight inner content of a pair
   (advice-remove 'delete-backward-char #'ad-Advice-delete-backward-char) ;prevent smartparens from deleting the whole \right) when using backspace
   :diminish smartparens-mode)
 
 ;;; snippets
 (use-package yasnippet 
 :ensure t
-
 :config
-(global-set-key (kbd "C-z <tab>") 'yas-expand) ; sometimes <tab> is redefined in certain modes, use this as a backup solution
-(global-set-key (kbd "C-z R") 'yas/reload-all)
+(global-set-key (kbd "C-z <tab>") 'yas-expand-from-trigger-key) ; sometimes <tab> is redefined in certain modes, use this as a backup solution
+(global-set-key (kbd "C-z R") 'yas-reload-all)
 (yas-global-mode)
 :diminish yas-minor-mode
 )
