@@ -1,7 +1,13 @@
 (defun my-compile()
-     (interactive) (save-some-buffers 1) (compile compile-command) 
+     (interactive) 
+     (save-some-buffers 1) 
+     (setq current-prefix-arg '(4)) ; to use compile-buffer in comint mode
+     (call-interactively 'compile t (vector compile-command))
     )
 (global-set-key (kbd "C-z C-z") 'my-compile)
+
+(define-key compilation-minor-mode-map (kbd "C-;") 'quit-window)
+(define-key compilation-shell-minor-mode-map (kbd "C-;") 'quit-window)
 
 (global-set-key (kbd "C-z C-s") 'shell-command)
 
