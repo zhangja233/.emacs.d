@@ -51,27 +51,6 @@
             (unless (server-running-p)
               (server-start))))
 
-;; emacs display
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(setq inhibit-startup-screen t) ;do not show welcome page
-(setq visible-bell nil)
-
-(use-package diminish
-  :ensure t
-  :config
-  (diminish 'my-mode)
-  (diminish 'eldoc-mode)
-  )
-
-(defun set-font-size(size)
-  (interactive)
-  (set-face-attribute 'default nil :height size)
-)
-
-(defun font-size-extscreen() (interactive)
-(set-font-size 261))
-
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file)
 
@@ -86,6 +65,7 @@
 
 ; my personal configs
 (add-to-list 'load-path (expand-file-name "configs" user-emacs-directory))
+(require 'display)
 (require 'init-general-editing)
 (require 'init-help)
 (require 'init-org)
