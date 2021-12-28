@@ -21,4 +21,4 @@
 )
 (global-set-key (kbd "C-<f13>") 'font-size-extscreen)
 
-(provide 'display)
+(provide 'init-display)

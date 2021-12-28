@@ -65,7 +65,7 @@
 
 ; my personal configs
 (add-to-list 'load-path (expand-file-name "configs" user-emacs-directory))
-(require 'display)
+(require 'init-display)
 (require 'init-general-editing)
 (require 'init-help)
 (require 'init-org)
