@@ -10,6 +10,7 @@
   (use-package ahk-mode
     :ensure t
     )
+  (global-set-key (kbd "C-x C-c")  'kill-emacs)
 )
 
 (provide 'init-windows)
