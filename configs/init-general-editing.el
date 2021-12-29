@@ -33,7 +33,7 @@
 
 (setq sentence-end-double-space nil) ;make backward-sentence and forward-sentence behave as in fundamental mode
 
-(global-set-key (kbd "C-9") 'recenter-top-bottom)
+
 
 ;; avy-mode
 (use-package avy
@@ -244,6 +244,7 @@
 
 (global-set-key (kbd "C-.") 'other-window)
 (global-set-key (kbd "C-1") 'delete-other-windows)
+(global-set-key (kbd "C-S-r") 'recenter-top-bottom)
 
 ;; dired mode
 (require 'dired-x)
