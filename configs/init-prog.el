@@ -35,29 +35,9 @@
  (define-key c++-mode-map (kbd "C-c c")  'insert-cout)
 ))
 
-
-
-;; python-mode
-(eval-after-load "python"
-'(progn
-  ; (elpy-enable)
-   (remove-hook 'elpy-modules 'elpy-module-flymake)
-   (defun python-insert-comment ()
-     (interactive)
-     (insert "#"))
-   (define-key python-mode-map (kbd "C-;") 'python-insert-comment)
-   (define-key python-mode-map (kbd "C-j") 'newline-and-indent) ; electric-newline-and-maybe-indent does not do what I want
-   (define-key python-mode-map (kbd "C-c p")  (lambda() (interactive) (insert "print()") (backward-char)))
-   (define-key python-mode-map (kbd "C-c jd")  (lambda() (interactive) (insert "import pandas as pd") (newline-and-indent) (insert "import numpy as np") (newline-and-indent) (insert "from matplotlib import pyplot as plt") (newline-and-indent) (newline-and-indent)))
-;(add-to-list 'company-backends 'company-jedi)
-))
-
-(use-package ein
-  :ensure t
-  )
-
 ;; perl
 (fset 'perl-mode 'cperl-mode)
+
 ;; f90-mode
 ;; Set Fortran 90 mode for .F
 (setq auto-mode-alist
