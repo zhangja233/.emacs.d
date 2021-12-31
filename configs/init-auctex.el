@@ -60,6 +60,8 @@
  (outline-minor-mode)
  (setq outline-minor-mode-prefix nil)
  (diminish outline-minor-mode)
+
+ (define-key LaTeX-mode-map (kbd "C-j") 'newline-and-indent)
  
  ;; easier outline keybindings
  (define-key LaTeX-mode-map (kbd "C-c C-c") 'outline-show-subtree)
@@ -69,6 +71,7 @@
  (define-key LaTeX-mode-map (kbd "C-c C-u") 'outline-up-heading)
  (define-key LaTeX-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
  (define-key LaTeX-mode-map (kbd "C-c C-b") 'outline-backward-same-level)
+ (define-key LaTeX-mode-map (kbd "C-c <tab>") 'outline-show-all)
  
  
  (define-key LaTeX-mode-map (kbd "M-<left>") 'outline-promote)
