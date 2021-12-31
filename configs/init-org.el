@@ -21,7 +21,12 @@
 )
 (add-hook 'org-mode-hook #'valign-mode)
 
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode)))
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode)))
+  )
+
 ;(add-hook 'org-mode-hook (lambda () (flyspell-mode)))
 
 (font-lock-add-keywords 'org-mode
