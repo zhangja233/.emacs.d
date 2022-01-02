@@ -22,19 +22,6 @@
       (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
   (ggtags-mode 1))))
 
-;; cpp
-;(require 'company-c-headers)
-;(add-to-list 'company-backends 'company-c-headers)
-;(add-to-list 'company-c-headers-path-system "/usr/include/c++/9/")
-(eval-after-load "cc"
-'(progn
-   (define-key c++-mode-map (kbd "C-j") 'newline-and-indent)
-   (defun insert-cout()
- (interactive) (insert "cout <<  << endl;") (backward-char 9)
-     )
- (define-key c++-mode-map (kbd "C-c c")  'insert-cout)
-))
-
 ;; perl
 (fset 'perl-mode 'cperl-mode)
 
