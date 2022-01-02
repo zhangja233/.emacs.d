@@ -12,6 +12,31 @@
    :map LaTeX-mode-map
    ("C-;" . insert-backslash)
    )
+
+  (defun LaTeX-mark-environment-inner (&optional count)
+    "modified based on the auctex function LaTeX-mark-environment.
+     mark inner content of the environment"
+    (interactive "p")
+    (setq count (if count (abs count) 1))
+    (let ((cur (point)) beg end)
+      ;; Only change point and mark after beginning and end were found.
+      ;; Point should not end up in the middle of nowhere if the search fails.
+      (save-excursion
+	(dotimes (_ count) (LaTeX-find-matching-end))
+	(previous-line)
+	(end-of-line)
+	(setq end (line-beginning-position 2))
+	(goto-char cur)
+	(dotimes (_ count) (LaTeX-find-matching-begin))
+	(next-line)
+	(beginning-of-line)
+	(setq beg (point)))
+      (push-mark end)
+      (goto-char beg)
+      (TeX-activate-region)))
+  
+  (define-key LaTeX-mode-map (kbd "C-c >") 'LaTeX-mark-environment-inner)
+  
   )
 
 ;;; minor modes
@@ -94,16 +119,29 @@
  (define-key LaTeX-mode-map (kbd "C-c C-r")  'insert-rm)  
  
  ;; setting marks
- (defun mark-inline-equation()
- "mark the content inside an inline equation"
-   (interactive) 
-   (search-forward "$")
+ (defun LaTeX-mark-inner(delim)
+   "mark the content inside a pair of delimiters"
+   (search-forward delim)
    (backward-char)
    (push-mark nil t t)
-   (search-backward "$" nil nil 1)
-   (forward-char)
+   (search-backward delim nil nil 1)
+   (forward-char)   
    )
- (define-key LaTeX-mode-map (kbd "C-c $") 'mark-inline-equation)
+  
+ (defun LaTeX-mark-inline-equation()
+ "mark the content inside an inline equation"
+   (interactive) 
+   (LaTeX-mark-inner "$")
+   )
+
+ (defun LaTeX-mark-cell()
+ "mark a cell in table, array etc."
+   (interactive) 
+   (LaTeX-mark-inner "&")
+   )
+ 
+ (define-key LaTeX-mode-map (kbd "C-c $") 'LaTeX-mark-inline-equation)
+ (define-key LaTeX-mode-map (kbd "C-c &") 'LaTeX-mark-cell)
  (define-key LaTeX-mode-map (kbd "C-c @") 'LaTeX-mark-section)
  
  (defun insert-latex-env(env-name)
@@ -192,10 +230,11 @@
 
 
 ;restore default paragraph definitions
-;(setq paragraph-start "\\|[ 	]*$")
-;(setq paragraph-separate "[ 	]*$")
+(defun use-default-paragraph-delimiters ()
+  (setq paragraph-start (default-value 'paragraph-start)
+        paragraph-separate (default-value 'paragraph-separate)))
 
-;(add-hook 'latex-mode-hook (lambda ()(setq paragraph-start "\\|[ 	]*$" paragraph-separate  "[ 	]*$")))
+(add-hook 'LaTeX-mode-hook 'use-default-paragraph-delimiters)
 
 ; Update PDF buffers after successful LaTeX runs
 ;(add-hook 'TeX-after-compilation-finished-functions
