@@ -257,8 +257,11 @@
 ;(setq insert-directory-program "gls" dired-use-ls-dired t)
 
 ; a trick to make dired be able to access ~/Downloads and folders alike
-(setq insert-directory-program "gls" dired-use-ls-dired t)
-(setq dired-listing-switches "-al --group-directories-first")
+(when (eq system-type 'darwin)
+  (setq insert-directory-program "gls" dired-use-ls-dired t)
+  )
+
+(setq dired-listing-switches "-alh --group-directories-first")
 ;(setq dired-listing-switches "-AlBGh  --group-directories-first")
 
 (setq dired-deletion-confirmer #'y-or-n-p) 
