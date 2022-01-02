@@ -6,9 +6,10 @@
     )
 (global-set-key (kbd "C-z C-z") 'my-compile)
 
-(unless (eq system-type 'windows-nt)
-  (define-key compilation-minor-mode-map (kbd "C-;") 'quit-window)
-  (define-key compilation-shell-minor-mode-map (kbd "C-;") 'quit-window)
+(eval-after-load "compile"
+  '(progn (define-key compilation-minor-mode-map (kbd "C-;") 'quit-window)
+	  (define-key compilation-shell-minor-mode-map (kbd "C-;") 'quit-window)
+  )
   )
 
 (global-set-key (kbd "C-z C-s") 'shell-command)
@@ -46,6 +47,10 @@
   (setq electric-indent-chars (delq 10 electric-indent-chars)))
 
 (add-hook 'emacs-lisp-mode-hook #'electric-indent-mode-configure)
+
+(use-package markdown-mode
+  :ensure t
+  )
 
 (use-package json-mode
   :ensure t
