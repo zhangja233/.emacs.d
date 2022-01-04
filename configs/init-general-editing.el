@@ -91,8 +91,6 @@
   )
 (global-set-key (kbd "C-o") 'open-line-above)
 
-
-
 ;; delete, kill, copy and paste
 (defun backward-kill-word-or-kill-region(&optional arg)
   "backward kill word if region is not active, otherwise kill region"
@@ -221,6 +219,8 @@
 :config
 (global-set-key (kbd "C-z <tab>") 'yas-expand-from-trigger-key) ; sometimes <tab> is redefined in certain modes, use this as a backup solution
 (global-set-key (kbd "C-z R") 'yas-reload-all)
+(define-key yas-minor-mode-map (kbd "C-c &") nil)
+(global-set-key (kbd "<f2> i") 'yas-new-snippet)
 (yas-global-mode)
 :diminish yas-minor-mode
 )
