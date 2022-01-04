@@ -50,6 +50,9 @@
 
 (setq set-mark-command-repeat-pop t) ; repeat pop by C-SPC after C-u C-SPC
 
+(global-set-key (kbd "<prior>") 'scroll-other-window-down)
+(global-set-key (kbd "<next>") 'scroll-other-window)
+
 ; simple editing
 (global-set-key (kbd "M-t") 'transpose-chars)
 (global-set-key (kbd "M-g") 'quoted-insert)
