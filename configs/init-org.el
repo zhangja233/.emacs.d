@@ -1,11 +1,13 @@
-(setq initial-major-mode 'org-mode)
+y(setq initial-major-mode 'org-mode)
 
 (add-hook 'org-mode-hook 'flyspell-mode)
 
 ;;org-mobile
 (setq org-mobile-directory "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/")
 (setq org-mobile-inbox-for-pull "~/org/phone.org")
-(global-set-key (kbd "C-z M") 'org-mobile-push)
+
+(global-set-key (kbd "C-z P") 'org-mobile-push)
+(global-set-key (kbd "C-z F") 'org-mobile-pull)
 
 ; Don't add PROPERTIES to my headings(As long as there is no structure like
 ; * heading1
@@ -69,7 +71,7 @@
      (outline-previous-heading)
      (org-cycle)
      )
-   (define-key org-mode-map (kbd "C-c C-<tab>") 'cycle-this-heading)
+   (define-key org-mode-map (kbd "C-c <tab>") 'cycle-this-heading)
       
    (defun insert-heading-and-demote()
      (interactive)
@@ -105,7 +107,7 @@
 (global-set-key (kbd "C-z o") 'org-clock-out)
 
 (setq org-clock-mode-line-total 'today)
-(define-key org-mode-map (kbd "C-;") 'org-ctrl-c-ctrl-c)
+(define-key org-mode-map (kbd "C-;") 'insert-backslash)
 (define-key org-mode-map (kbd "C-c a") 'org-metaleft)
 (define-key org-mode-map (kbd "C-c c") 'org-insert-todo-heading)
 (define-key org-mode-map (kbd "C-c d") 'org-metaright)
