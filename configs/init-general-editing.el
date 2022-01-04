@@ -235,6 +235,7 @@
 (global-set-key (kbd "M-i") 'company-complete)
 (setq company-dabbrev-downcase nil) ;make completion case sensitive
 (setq company-idle-delay nil) ; do not give suggestions unless invoked manually
+(setq company-async-timeout 120)
 (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
 )
 
