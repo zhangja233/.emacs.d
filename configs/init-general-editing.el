@@ -33,8 +33,6 @@
 
 (setq sentence-end-double-space nil) ;make backward-sentence and forward-sentence behave as in fundamental mode
 
-
-
 ;; avy-mode
 (use-package avy
   :ensure t
