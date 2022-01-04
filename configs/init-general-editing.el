@@ -207,6 +207,11 @@
   (require 'smartparens-config)
   (setq sp-navigate-consider-symbols nil) ; don't treat a word as a sexp
   (setq sp-highlight-pair-overlay nil) ; don't hightlight inner content of a pair
+  
+  (sp-with-modes '(latex-mode)
+    (sp-local-pair "\\begin" "\\end")
+    (sp-local-pair "|" "|"))
+  
   (advice-remove 'delete-backward-char #'ad-Advice-delete-backward-char) ;prevent smartparens from deleting the whole \right) when using backspace
   :diminish smartparens-mode)
 
