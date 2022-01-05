@@ -17,6 +17,15 @@ y(setq initial-major-mode 'org-mode)
 (setq org-mobile-force-id-on-agenda-items nil)
 
 ; minor modes
+(use-package org-roam
+  :ensure t
+  :config
+  (setq org-roam-directory "~/roam")
+  (org-roam-db-autosync-mode)
+  :bind
+  ("C-z f" . org-roam-node-find)
+  )
+
 (use-package valign ; visual alignment for org tables when using Chinese
 :ensure t
 :diminish valign-mode
@@ -149,22 +158,10 @@ y(setq initial-major-mode 'org-mode)
   )
 (global-set-key (kbd "C-z p")  'find-planer)
 
-(defun find-daily()
-  (interactive)
-(find-file "~/org/daily.org")
-  )
-(global-set-key (kbd "C-z d")  'find-daily)
-
 (defun find-download()
   (interactive)
   (find-file "~/Downloads/")
   )
 (global-set-key (kbd "C-z C-d")  'find-download)
-
-(defun find-learn()
-  (interactive)
-(find-file "~/org/learn.org")
-  )
-(global-set-key (kbd "C-z l")  'find-learn)
 
 (provide 'init-org)

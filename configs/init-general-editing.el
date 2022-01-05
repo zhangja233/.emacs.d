@@ -373,7 +373,7 @@
   (interactive)
   (find-file "~/org/personal/info.org")
   )
-(global-set-key (kbd "C-z f") 'find-my-info)
+(global-set-key (kbd "C-z F") 'find-my-info)
 
 ;; interact with the world outside emacs
 
