@@ -48,6 +48,9 @@
 
 (setq set-mark-command-repeat-pop t) ; repeat pop by C-SPC after C-u C-SPC
 
+(global-set-key (kbd "<prior>") 'scroll-other-window-down)
+(global-set-key (kbd "<next>") 'scroll-other-window)
+
 ; simple editing
 (global-set-key (kbd "M-t") 'transpose-chars)
 (global-set-key (kbd "M-g") 'quoted-insert)
@@ -85,8 +88,6 @@
   (indent-for-tab-command)
   )
 (global-set-key (kbd "C-o") 'open-line-above)
-
-
 
 ;; delete, kill, copy and paste
 (defun backward-kill-word-or-kill-region(&optional arg)
@@ -146,11 +147,11 @@
   (define-key smartparens-mode-map (kbd "M-f") 'sp-forward-sexp)
   (define-key smartparens-mode-map (kbd "M-b") 'sp-backward-sexp)
   ; down a level
-  (define-key smartparens-mode-map (kbd "C-M-n") 'sp-down-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-p") 'sp-backward-down-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-d") 'sp-down-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-S-d") 'sp-backward-down-sexp)
   ; up a level
-  (define-key smartparens-mode-map (kbd "C-M-d") 'sp-up-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-u") 'sp-backward-up-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-f") 'sp-up-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-up-sexp)
  
   (define-key smartparens-mode-map (kbd "C-M-a") 'sp-beginning-of-sexp)
   (define-key smartparens-mode-map (kbd "C-M-e") 'sp-end-of-sexp)
@@ -202,6 +203,11 @@
   (require 'smartparens-config)
   (setq sp-navigate-consider-symbols nil) ; don't treat a word as a sexp
   (setq sp-highlight-pair-overlay nil) ; don't hightlight inner content of a pair
+  
+  (sp-with-modes '(latex-mode)
+    (sp-local-pair "\\begin" "\\end")
+    (sp-local-pair "|" "|"))
+  
   (advice-remove 'delete-backward-char #'ad-Advice-delete-backward-char) ;prevent smartparens from deleting the whole \right) when using backspace
   :diminish smartparens-mode)
 
@@ -211,6 +217,8 @@
 :config
 (global-set-key (kbd "C-z <tab>") 'yas-expand-from-trigger-key) ; sometimes <tab> is redefined in certain modes, use this as a backup solution
 (global-set-key (kbd "C-z R") 'yas-reload-all)
+(define-key yas-minor-mode-map (kbd "C-c &") nil)
+(global-set-key (kbd "<f2> i") 'yas-new-snippet)
 (yas-global-mode)
 :diminish yas-minor-mode
 )
@@ -233,6 +241,7 @@
 (global-set-key (kbd "M-i") 'company-complete)
 (setq company-dabbrev-downcase nil) ;make completion case sensitive
 (setq company-idle-delay nil) ; do not give suggestions unless invoked manually
+(setq company-async-timeout 120)
 (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
 )
 
@@ -364,7 +373,7 @@
   (interactive)
   (find-file "~/org/personal/info.org")
   )
-(global-set-key (kbd "C-z f") 'find-my-info)
+(global-set-key (kbd "C-z F") 'find-my-info)
 
 ;; interact with the world outside emacs
 
