@@ -1,4 +1,4 @@
-y(setq initial-major-mode 'org-mode)
+(setq initial-major-mode 'org-mode)
 
 (add-hook 'org-mode-hook 'flyspell-mode)
 

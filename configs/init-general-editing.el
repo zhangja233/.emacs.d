@@ -147,11 +147,11 @@
   (define-key smartparens-mode-map (kbd "M-f") 'sp-forward-sexp)
   (define-key smartparens-mode-map (kbd "M-b") 'sp-backward-sexp)
   ; down a level
-  (define-key smartparens-mode-map (kbd "C-M-n") 'sp-down-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-p") 'sp-backward-down-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-d") 'sp-down-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-S-d") 'sp-backward-down-sexp)
   ; up a level
-  (define-key smartparens-mode-map (kbd "C-M-d") 'sp-up-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-u") 'sp-backward-up-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-f") 'sp-up-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-up-sexp)
  
   (define-key smartparens-mode-map (kbd "C-M-a") 'sp-beginning-of-sexp)
   (define-key smartparens-mode-map (kbd "C-M-e") 'sp-end-of-sexp)
