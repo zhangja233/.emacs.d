@@ -8,9 +8,13 @@
   (defun insert-backslash() 
     (interactive)(insert "\\")
     )
+  (defun latex-insert-prime() 
+    (interactive)(insert "^{\\prime }")
+    )
   (bind-keys* 
    :map LaTeX-mode-map
    ("C-;" . insert-backslash)
+   ("C-c '" . latex-insert-prime)
    )
 
   (defun LaTeX-mark-environment-inner (&optional count)
