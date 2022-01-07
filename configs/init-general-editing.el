@@ -81,6 +81,8 @@
 (define-key input-decode-map (kbd "C-m") (kbd "H-m"))
 (global-set-key (kbd "H-m") 'open-line-below)
 
+(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
+
 (defun open-line-above()
   (interactive)
   (beginning-of-line)
@@ -132,12 +134,20 @@
   (global-set-key (kbd "S-SPC") 'easy-mark)
   )
 
+(use-package undo-tree
+  :ensure t
+  :config
+  (global-undo-tree-mode)
+  :bind
+  ("M-/" . 'undo-tree-redo)
+  :diminish undo-tree-mode
+  )
+
 ;; About sexps 
 (show-paren-mode 1)
 
 (setq blink-matching-paren nil)
 
-(global-set-key (kbd "C-M-SPC") (lambda() (interactive) (backward-up-list) (mark-sexp)))
 ; smartparens
 (use-package smartparens
   :ensure t
