@@ -74,5 +74,6 @@
 (require 'init-python)
 (require 'init-helm)
 (require 'init-magit)
+(require 'init-linux)
 (require 'init-windows)
 
