@@ -25,7 +25,12 @@
 (use-package virtualenvwrapper
   :ensure t
   :config
-  (setq venv-location "/opt/homebrew/Caskroom/miniforge/base/envs")
+  (setq venv-location 
+	(cl-case system-type
+	  ('gnu/linux "~/opt/miniconda3/envs/")
+	  ('darwin "/opt/homebrew/Caskroom/miniforge/base/envs") 
+	  )
+	)
   (venv-initialize-interactive-shells) ;;  interactive shell support
   (venv-initialize-eshell) ;;  eshell support
   )
