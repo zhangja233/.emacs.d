@@ -1,8 +1,3 @@
-(when (eq system-type 'darwin)
-  (setq mac-command-modifier 'control)
-  (setq mac-option-modifier 'meta) 
-  )
-
 ;; a hack to prevent my keybindings from being overriden
 ;; https://emacs.stackexchange.com/questions/352/how-to-override-major-mode-bindings
 (defvar my-mode-map (make-sparse-keymap)
@@ -75,5 +70,6 @@
 (require 'init-helm)
 (require 'init-magit)
 (require 'init-linux)
+(require 'init-osx)
 (require 'init-windows)
 
