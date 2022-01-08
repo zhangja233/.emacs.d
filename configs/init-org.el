@@ -2,20 +2,6 @@
 
 (add-hook 'org-mode-hook 'flyspell-mode)
 
-;;org-mobile
-(setq org-mobile-directory "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org/")
-(setq org-mobile-inbox-for-pull "~/org/phone.org")
-
-(global-set-key (kbd "C-z P") 'org-mobile-push)
-(global-set-key (kbd "C-z F") 'org-mobile-pull)
-
-; Don't add PROPERTIES to my headings(As long as there is no structure like
-; * heading1
-; ** heading2
-; ** heading2
-; there won't be sync conflicts)
-(setq org-mobile-force-id-on-agenda-items nil)
-
 ; minor modes
 (use-package org-roam
   :ensure t
@@ -138,14 +124,14 @@
 ;(setq org-todo-keywords
 ;      '((sequence  "TODO" "NEXT"  "|" "DONE" "CANCELED")))
 (setq calendar-week-start-day 1) ;start week on Mon
-(setq org-agenda-files '("~/org"));my personal org files which store my to-do lists
-(setq org-default-notes-file "~/org/capture.org") ; the file to store captured items
+(setq org-agenda-files '("~/Dropbox/org"));my personal org files which store my to-do lists
+(setq org-default-notes-file "~/Dropbox/org/capture.org") ; the file to store captured items
 (setq org-adapt-indentation nil) ; do not indent when using c-j after a title
  '(org-startup-truncated nil)
 ))
 
 (defun find-work() 
-  (interactive) (find-file "~/org/work.org")
+  (interactive) (find-file "~/Dropbox/org/work.org")
   )
 (global-set-key (kbd "C-z w")  'find-work)
 (global-set-key (kbd "C-z a") 'org-agenda)
@@ -154,7 +140,7 @@
 
 (defun find-planer()
   (interactive)
-(find-file "~/org/plan.org")
+(find-file "~/Dropbox/org/plan.org")
   )
 (global-set-key (kbd "C-z p")  'find-planer)
 
