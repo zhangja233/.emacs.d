@@ -1,9 +1,16 @@
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 
 (use-package latex
   :ensure auctex
   :defer t
   :config
+  ; to be able to jump to the relevant page in the PDF document
+  (TeX-source-correlate-mode)
+  (when (eq system-type 'darwin)
+    (setq TeX-view-program-list '(("skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b" )))
+    (setq TeX-view-program-selection '((output-pdf "skim")))
+    )
  ; some facilites
   (defun insert-backslash() 
     (interactive)(insert "\\")
