@@ -1,6 +1,7 @@
 (setq initial-major-mode 'org-mode)
 
 (add-hook 'org-mode-hook 'flyspell-mode)
+(add-hook 'org-mode-hook 'auto-fill-mode)
 
 ; minor modes
 (use-package org-roam

@@ -21,4 +21,6 @@
 )
 (global-set-key (kbd "C-<f13>") 'font-size-extscreen)
 
+(setq-default fill-column 120)
+
 (provide 'init-display)

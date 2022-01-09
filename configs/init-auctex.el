@@ -22,6 +22,7 @@
    :map LaTeX-mode-map
    ("C-;" . insert-backslash)
    ("C-c '" . latex-insert-prime)
+   ("C-c F" . LaTeX-fill-buffer)
    )
 
   (defun LaTeX-mark-environment-inner (&optional count)
