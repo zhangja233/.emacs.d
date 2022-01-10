@@ -271,8 +271,6 @@
 (define-key dired-mode-map (kbd "SPC") 'browse-url-of-dired-file)
 (define-key dired-mode-map (kbd "e") 'wdired-change-to-wdired-mode)
 
-;(setq insert-directory-program "gls" dired-use-ls-dired t)
-
 ; a trick to make dired be able to access ~/Downloads and folders alike
 (when (eq system-type 'darwin)
   (setq insert-directory-program "gls" dired-use-ls-dired t)
@@ -281,7 +279,10 @@
 (setq dired-listing-switches "-alh --group-directories-first")
 ;(setq dired-listing-switches "-AlBGh  --group-directories-first")
 
-(setq dired-deletion-confirmer #'y-or-n-p) 
+(setq dired-deletion-confirmer #'y-or-n-p)
+;; always delete and copy recursively
+(setq dired-recursive-deletes 'always)
+(setq dired-recursive-copies 'always)
 
 
 (global-set-key (kbd "C-z C-v") 'find-file-other-window)
