@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: document
+# key: d
+# --
+\\documentclass[12pt,a4paper,openany]{book}
+\\input{\$HOME/lib/preamble}
+
+\\begin{document}
+
+$0
+
+\\end{document}

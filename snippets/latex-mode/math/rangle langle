@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: rangle langle
+# key: rl
+# --
+|${1:}\\rangle\\langle ${2:}|$0
