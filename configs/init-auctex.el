@@ -82,6 +82,25 @@
 	))
 ))
 
+(add-hook 'LaTeX-mode-hook (lambda()
+ (outline-minor-mode)
+ (setq outline-minor-mode-prefix nil)
+ (diminish outline-minor-mode)
+ ;; easier outline keybindings
+ (define-key LaTeX-mode-map (kbd "C-c C-c") 'outline-show-subtree)
+ (define-key LaTeX-mode-map (kbd "C-c C-SPC") 'outline-hide-body)
+ (define-key LaTeX-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
+ (define-key outline-minor-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading) ; override preview-map
+ (define-key LaTeX-mode-map (kbd "C-c C-u") 'outline-up-heading)
+ (define-key LaTeX-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
+ (define-key LaTeX-mode-map (kbd "C-c C-b") 'outline-backward-same-level)
+ (define-key LaTeX-mode-map (kbd "C-c <tab>") 'outline-show-all)
+ 
+ 
+ (define-key LaTeX-mode-map (kbd "M-<left>") 'outline-promote)
+ (define-key LaTeX-mode-map (kbd "M-<right>") 'outline-demote)
+	  ))
+
 (eval-after-load "LaTeX"  
 '(progn
   (setq-local company-backends
@@ -94,25 +113,12 @@
 
  (define-key LaTeX-mode-map (kbd "\"")  (lambda() (interactive) (insert "\"\"") (backward-char))) ; prevent latex quote 
 
- (outline-minor-mode)
- (setq outline-minor-mode-prefix nil)
- (diminish outline-minor-mode)
+
+
+
+
 
  (define-key LaTeX-mode-map (kbd "C-j") 'newline-and-indent)
- 
- ;; easier outline keybindings
- (define-key LaTeX-mode-map (kbd "C-c C-c") 'outline-show-subtree)
- (define-key LaTeX-mode-map (kbd "C-c C-SPC") 'outline-hide-body)
- (define-key LaTeX-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
- (define-key LaTeX-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading)
- (define-key LaTeX-mode-map (kbd "C-c C-u") 'outline-up-heading)
- (define-key LaTeX-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
- (define-key LaTeX-mode-map (kbd "C-c C-b") 'outline-backward-same-level)
- (define-key LaTeX-mode-map (kbd "C-c <tab>") 'outline-show-all)
- 
- 
- (define-key LaTeX-mode-map (kbd "M-<left>") 'outline-promote)
- (define-key LaTeX-mode-map (kbd "M-<right>") 'outline-demote)
 
  (define-key LaTeX-mode-map (kbd "C-c N") 'TeX-normal-mode)
  (define-key LaTeX-mode-map (kbd "<f5>") 'TeX-font)
@@ -202,10 +208,6 @@
 )
  (define-key LaTeX-mode-map (kbd "C-c s") 'insert-sqrt)
  
- (defun insert-preamble()
-   (interactive) (insert "\\documentclass[12pt,a4paper,openany]{book}") (newline-and-indent) (insert "\\input{$HOME/lib/preamble}") 
-)
- (define-key LaTeX-mode-map (kbd "C-c jd")  'insert-preamble)
  (defun insert-font()
     (interactive) (insert "\\fontsize{pt}{\\baselineskip}\\selectfont ") (backward-word 3) 
 )
@@ -214,7 +216,7 @@
  (interactive) (insert "\\includegraphics[width=1\\textwidth]{}") (backward-char)   
 )
 (define-key LaTeX-mode-map (kbd "C-c ji") 'insert-include-graph)
-(define-key LaTeX-mode-map (kbd "C-c ja") (lambda() (interactive) (insert "\\langle \\rangle") (backward-char 7)))
+
  (setq TeX-command-force "XeLaTeX")
  (defun latex-compile-and-view()
     (interactive) (save-some-buffers 1) (TeX-command-run-all nil)
@@ -222,7 +224,7 @@
 (define-key LaTeX-mode-map (kbd "C-c C-a") 'latex-compile-and-view) ; let C-c C-l be save-and-compile
 (defun latex-save-and-compile()
   (interactive)
-  (save-some-buffers 1) (TeX-command-master nil)
+  (save-some-buffers 1) (TeX-command-master)
   )
 (define-key LaTeX-mode-map (kbd "C-x C-s") 'latex-save-and-compile) ; compile tex file every time hit C-x C-s, thus making it up to date.
 (define-key LaTeX-mode-map (kbd "C-'") 'latex-save-and-compile) 
@@ -236,10 +238,6 @@
 
 (setq LaTeX-verbatim-macros-with-braces '("input" ))
 (setq LaTeX-verbatim-macros-with-delims '("l" ))
-; Use pdf-tools to open PDF files
-;(setq TeX-view-program-selection '((output-pdf "Evince")))
-;      TeX-source-correlate-start-server t)
-
 
 ;restore default paragraph definitions
 (defun use-default-paragraph-delimiters ()
@@ -259,11 +257,9 @@
 ;(setq LaTeX-electric-left-right-brace t) ;auto insert braces
 ;(setq TeX-electric-math (cons "$" "$")) ;automatically insert a pair of dollars
 ;; So that RefTeX finds my bibliography
-(setq reftex-default-bibliography '("~/lib/bib/phylab.bib" "~/lib/bib/main.bib" ))
-))
+(setq reftex-default-bibliography '("~/lib/bib/phylab.bib" "~/lib/bib/main.bib" )))
+)
 
 (setq TeX-engine 'xetex)
-;; fonts
-;(setq font-latex-fontify-sectioning 'color)
 
 (provide 'init-auctex)
