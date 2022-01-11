@@ -49,6 +49,8 @@
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file)
 
+(setq echo-keystrokes 0.01) ; echo unfinished commands(e.g., C-x) immediately
+
 (use-package keyfreq
 :ensure t
 
