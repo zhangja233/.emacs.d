@@ -54,7 +54,6 @@
 ; simple editing
 (global-set-key (kbd "M-t") 'transpose-chars)
 (global-set-key (kbd "M-g") 'quoted-insert)
-(global-set-key (kbd "M-q") 'ispell-word)
 (global-set-key (kbd "M-r") 'replace-string)
 (defun backward-upcase-word()
   (interactive)
@@ -255,6 +254,9 @@
 (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
 )
 
+(setq-default abbrev-mode t)
+(setq abbrev-file-name "~/.emacs.d/.abbrev_defs") 
+
 ;;; buffer, window, frame and file management
 (global-set-key (kbd "C-<left>") 'mac-previous-tab)
 (global-set-key (kbd "C-<right>") 'mac-next-tab)
@@ -359,8 +361,15 @@
 :init
   (setq flyspell-mode-map (make-sparse-keymap)) ; prevent flyspell from overriding existing keybindings
 :config
+:custom
+  (flyspell-abbrev-p t)
 :diminish flyspell-mode
    )
+(use-package flyspell-correct
+  :ensure t
+  :config
+  (define-key flyspell-mode-map (kbd "M-q") 'flyspell-correct-wrapper)
+  )
 
 ;(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e") ;load mu4e in case emacs can not find it
 
