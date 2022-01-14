@@ -102,9 +102,6 @@
  
 (define-key my-mode-map (kbd "C-w") 'backward-kill-word-or-kill-region)
 
-
-(global-set-key (kbd "C-<escape>") 'kill-word)
-
 (unless (eq system-type 'darwin)
   (define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
   (global-set-key (kbd "C-h") (kbd "<backspace>")) 
@@ -113,12 +110,49 @@
 (delete-selection-mode) ; using C-d to delete a selected region
 (setq delete-active-region 'kill) ; kill the selected region while using delete and backspace. Note that you can still use C-d to delete a region.
 
-(defun delete-line()
+(defun delete-line (&optional arg)
   "equivalence of kill-line without affecting kill-ring"
-  (interactive)
-  (delete-region (point) (line-end-position))
-  )
+  (interactive "P")
+  (delete-region (point)
+	       ;; It is better to move point to the other end of the kill
+	       ;; before killing.  That way, in a read-only buffer, point
+	       ;; moves across the text that is copied to the kill ring.
+	       ;; The choice has no effect on undo now that undo records
+	       ;; the value of point from before the command was run.
+	       (progn
+		 (if arg
+		     (forward-visible-line (prefix-numeric-value arg))
+		   (if (eobp)
+		       (signal 'end-of-buffer nil))
+		   (let ((end
+			  (save-excursion
+			    (end-of-visible-line) (point))))
+		     (if (or (save-excursion
+			       ;; If trailing whitespace is visible,
+			       ;; don't treat it as nothing.
+			       (unless show-trailing-whitespace
+				 (skip-chars-forward " \t" end))
+			       (= (point) end))
+			     (and kill-whole-line (bolp)))
+			 (forward-visible-line 1)
+		       (goto-char end))))
+		 (point))))
+
 (global-set-key (kbd "C-S-k") 'delete-line)
+
+(defun backward-delete-word (arg)
+  "Delete characters backward until encountering the beginning of a word.
+With argument ARG, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (backward-word arg) (point))))
+(global-set-key (kbd "C-<backspace>") 'backward-delete-word)
+
+(defun delete-word (arg)
+  "Delete characters forward until encountering the end of a word.
+With argument ARG, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (forward-word arg) (point))))
+(global-set-key (kbd "C-<escape>") 'delete-word)
 
 ; copy to clipboard when M-w
 (setq x-select-enable-clipboard t)
