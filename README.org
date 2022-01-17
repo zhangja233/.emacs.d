@@ -37,8 +37,8 @@ it locates near the other two major prefix keys(=C-x= and =C-c=).
 *** Window, buffer and file
 | keybinding(s)    | description                                   |
 |------------------+-----------------------------------------------|
-| =C-'=, =C-x C-s= | save all buffers                              |
-| ~C-,~            | ~helm-multi-files~, an enhanced ~buffer-list~ |
+| =C-' or C-x C-s= | save all buffers                              |
+| =C-,=              | ~helm-multi-files~, an enhanced ~buffer-list~ |
 | =C-.=            | switch to other window                        |
 | =C-1=            | =delete-other-windows=                        |
 | =C-x x=          | =delete-window=                               |
