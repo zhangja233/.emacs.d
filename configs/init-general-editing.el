@@ -48,6 +48,7 @@
 
 (setq set-mark-command-repeat-pop t) ; repeat pop by C-SPC after C-u C-SPC
 
+(global-set-key (kbd "C-r") 'scroll-down-command)
 (global-set-key (kbd "<prior>") 'scroll-other-window-down)
 (global-set-key (kbd "<next>") 'scroll-other-window)
 
