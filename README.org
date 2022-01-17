@@ -1,0 +1,54 @@
+* My Emacs configs
+
+** Keybindings
+My keybindings are based on vanilla Emacs, with modifications mainly considering frequencies of usage(the statistics is
+obtained with the [[https://github.com/dacap/keyfreq][keyfreq]] package).
+
+I made =C-z= a global prefix key, since I don't use the =suspend-frame= function bound to =C-z= in vanilla Emacs at all, and
+it locates near the other two major prefix keys(=C-x= and =C-c=).
+
+*** Move the cursor
+| keybinding(s) | description                                              |
+|---------------+----------------------------------------------------------|
+| =C-n/p/f/b=   | down/up/right/left                                       |
+| =C-t/q=       | forward/backward word                                    |
+| =C-a/e=       | beginning/end of line, setting mark at original position |
+| =C-l=         | =avy-goto-word-1=                                        |
+| =M-a/e=       | beginning/end of buffer                                  |
+| =C-v/r=       | next/previous page                                       |
+
+*** Kill, delete, copy and paste
+| keybinding(s) | description                                                   |
+|---------------+---------------------------------------------------------------|
+| =C-h=         | backspace                                                     |
+| =C-w=         | backward kill word if no active region, otherwise kill region |
+| =C-backspace= | backward delete word                                          |
+| =M-d/C-esc=   | kill/delete word                                              |
+| =M-w=         | [[https://github.com/leoliu/easy-kill][easy-kill]], an enhanced =kill-ring-save=                                        |
+| =M-y=         | =helm-show-king-ring=                                         |
+
+
+*** Search and replace
+| keybinding(s) | description                   |
+|---------------+-------------------------------|
+| =C-s=         | [[https://github.com/abo-abo/swiper][swiper]], an enhanced =isearch= |
+| =M-r=         | replace string                |
+
+*** Window, buffer and file
+| keybinding(s)    | description                                   |
+|------------------+-----------------------------------------------|
+| =C-'= or =C-x C-s= | save all buffers                              |
+| =C-,=            | =helm-multi-files=, an enhanced =buffer-list= |
+| =C-.=            | switch to other window                        |
+| =C-1=            | =delete-other-windows=                        |
+| =C-x x=          | =delete-window=                               |
+
+*** Other editing functionalities 
+| keybinding(s)   | description                                                    |
+|-----------------+----------------------------------------------------------------|
+| =C-o=           | =beginning-of-line= then =open-line=                           |
+| =C-m=           | =end-of-line= then =newline-and-indent=                        |
+| =C-i=           | =dabbrev-expand=                                               |
+| =C-/= and =M-/= | =undo-tree-undo= and =undo-tree-redo=                       |
+| =C-;=           | a mode-specific key, e.g., in =AUCTeX= mode it's inserting =\=   |
+
