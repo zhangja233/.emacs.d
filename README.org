@@ -38,8 +38,8 @@ it locates near the other two major prefix keys(=C-x= and =C-c=).
 | keybinding(s)    | description            |
 |------------------+------------------------|
 | =C-' or C-x C-s= | save all buffers       |
-| ~C-,~            | [[https://github.com/emacs-helm/helm/blob/master/helm-for-files.el][helm-multi-files]]       |
-| =C-.=            | switch to other window |
+| ~C-comma~        | =helm-multi-files=           |
+| =C-dot=          | switch to other window |
 | =C-1=            | =delete-other-windows= |
 | =C-x x=          | =delete-window=        |
 
