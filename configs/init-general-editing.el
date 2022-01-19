@@ -296,9 +296,25 @@ With argument ARG, do this that many times."
 (global-set-key (kbd "C-<left>") 'mac-previous-tab)
 (global-set-key (kbd "C-<right>") 'mac-next-tab)
 
-(global-set-key (kbd "C-.") 'other-window)
+(global-set-key (kbd "C-.") 'next-window-any-frame)
 (global-set-key (kbd "C-1") 'delete-other-windows)
 (global-set-key (kbd "C-S-r") 'recenter-top-bottom)
+(global-set-key (kbd "C-x x") 'delete-window)
+
+(global-set-key (kbd "C-z j") 'jump-to-register)
+
+(setq winner-dont-bind-my-keys t)
+(winner-mode 1)
+(global-set-key (kbd "C-z ,") 'winner-undo)
+(global-set-key (kbd "C-z .") 'winner-redo)
+
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
+  (setq projectile-project-search-path '("~/Dropbox/" "~/pwd/" "~/.emacs.d/"))
+  )
 
 ;; dired mode
 (require 'dired-x)
