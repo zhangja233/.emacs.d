@@ -196,11 +196,7 @@ With argument ARG, do this that many times."
   ; up a level
   (define-key smartparens-mode-map (kbd "C-M-f") 'sp-up-sexp)
   (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-up-sexp)
- 
-  (define-key smartparens-mode-map (kbd "C-M-a") 'sp-beginning-of-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-e") 'sp-end-of-sexp)
-
-
+  
 ;;  (define-key smartparens-mode-map (kbd "C-M-k") 'sp-kill-sexp)
 ;; (define-key smartparens-mode-map (kbd "C-M-t") 'sp-transpose-sexp)
 
@@ -220,29 +216,13 @@ With argument ARG, do this that many times."
 ;; (define-key smartparens-mode-map (kbd "C-M-<backspace>") 'sp-splice-sexp-killing-backward)
 ;; (define-key smartparens-mode-map (kbd "C-S-<backspace>") 'sp-splice-sexp-killing-around)
 
-
-
-
-
-  (define-key smartparens-mode-map (kbd "C-]") 'sp-select-next-thing)
-  (define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
-  (define-key smartparens-mode-map (kbd "H-\[") 'sp-select-previous-thing)  
+  (define-key smartparens-mode-map (kbd "C-M-SPC") 'sp-select-next-thing)
+  (define-key smartparens-mode-map (kbd "C-M-S-SPC") 'sp-select-previous-thing)  
   (define-key smartparens-mode-map (kbd "C-M-i") 'sp-change-enclosing)
   (define-key smartparens-mode-map (kbd "C-M-r") 'sp-rewrap-sexp)
-  (defun my-sp-kill-sexp (&optional arg)
-    "make C-u sp-kill-sexp behave as killing inner"
-    (interactive "P")
-    (let* (
-         (arg (prefix-numeric-value arg))
-         (n (abs arg))
-	 )
-      (if (= n 4)
-	  (sp-kill-sexp 0)
-	(sp-kill-sexp arg))
-      ))
-
-  (define-key smartparens-mode-map (kbd "M-k") 'my-sp-kill-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-k") 'sp-unwrap-sexp)
+  
+  (define-key smartparens-mode-map (kbd "C-M-k") 'my-sp-kill-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-u") 'sp-unwrap-sexp)
   :config
   (require 'smartparens-config)
   (setq sp-navigate-consider-symbols nil) ; don't treat a word as a sexp
@@ -354,6 +334,7 @@ With argument ARG, do this that many times."
     )
 (global-set-key (kbd "C-x C-s")  'save-all-buffers)
 (global-set-key (kbd "C-'")  'save-all-buffers)
+(global-set-key (kbd "C-x C-S-s") 'save-buffer)
 
 (defun my-quit-emacs()
   (interactive)
@@ -419,7 +400,7 @@ With argument ARG, do this that many times."
 (use-package flyspell-correct
   :ensure t
   :config
-  (define-key flyspell-mode-map (kbd "M-q") 'flyspell-correct-wrapper)
+  (define-key flyspell-mode-map (kbd "M-q") 'flyspell-correct-previous)
   )
 
 ;(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e") ;load mu4e in case emacs can not find it
@@ -442,7 +423,7 @@ With argument ARG, do this that many times."
 (global-set-key (kbd "C-z e") 'find-emacs-configs)
 (defun find-my-info()
   (interactive)
-  (find-file "~/org/personal/info.org")
+  (find-file "~/Dropbox/org/personal/info.org")
   )
 (global-set-key (kbd "C-z F") 'find-my-info)
 
@@ -476,5 +457,7 @@ With argument ARG, do this that many times."
 :config
 (global-disable-mouse-mode) ; in case I move the mouse accidentally
   )
+
+(setq initial-major-mode 'latex-mode)
 
 (provide 'init-general-editing)

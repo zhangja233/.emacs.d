@@ -13,8 +13,8 @@ it locates near the other two major prefix keys(=C-x= and =C-c=).
 | =C-n/p/f/b=   | down/up/right/left                                       |
 | =C-t/q=       | forward/backward word                                    |
 | =C-a/e=       | beginning/end of line, setting mark at original position |
-| =C-l=         | =avy-goto-word-1=                                        |
 | =M-a/e=       | beginning/end of buffer                                  |
+| =C-l=         | =avy-goto-word-1=                                        |
 | =C-v/r=       | next/previous page                                       |
 
 *** Kill, delete, copy and paste
@@ -38,7 +38,7 @@ it locates near the other two major prefix keys(=C-x= and =C-c=).
 | keybinding(s)    | description            |
 |------------------+------------------------|
 | =C-' or C-x C-s= | save all buffers       |
-| ~C-comma~        | =helm-multi-files=           |
+| ~C-comma~        | =helm-multi-files=     |
 | =C-dot=          | switch to other window |
 | =C-1=            | =delete-other-windows= |
 | =C-x x=          | =delete-window=        |
