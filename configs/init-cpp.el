@@ -1,6 +1,16 @@
 (custom-set-variables
  '(c-basic-offset 2))
 
+
+(defun c-insert-comment()
+  (interactive) (insert "//") 
+  )
+
+(add-hook 'c-mode-common-hook
+	  (lambda ()
+    (define-key c-mode-base-map (kbd "C-;")  'c-insert-comment)
+	    ))
+  
 ; completion of headers
 (use-package company-c-headers
   :ensure t
@@ -16,8 +26,6 @@
 (eval-after-load "cc"
 '(progn
    (define-key c++-mode-map (kbd "C-j") 'newline-and-indent)
-   (defun cpp-insert-comment()
-     (interactive) (insert "//") 
-     )
- (define-key c++-mode-map (kbd "C-;")  'cpp-insert-comment)
+ (define-key c++-mode-map (kbd "C-;")  'c-insert-comment)
 ))
+
