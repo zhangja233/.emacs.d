@@ -1,3 +1,6 @@
+(custom-set-variables
+ '(c-basic-offset 2))
+
 ; completion of headers
 (use-package company-c-headers
   :ensure t
