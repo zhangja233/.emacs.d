@@ -296,9 +296,14 @@ With argument ARG, do this that many times."
   :ensure t
   :config
   (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
-  (setq projectile-project-search-path '("~/Dropbox/" "~/pwd/" "~/.emacs.d/"))
+  (define-key projectile-mode-map (kbd "M-j") 'projectile-command-map)
+  (setq projectile-indexing-method 'hybrid)
   )
+
+(use-package helm-projectile
+  :ensure t
+  )
+
 
 ;; dired mode
 (require 'dired-x)
