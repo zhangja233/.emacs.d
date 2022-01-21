@@ -296,7 +296,11 @@ With argument ARG, do this that many times."
 (global-set-key (kbd "C-<left>") 'mac-previous-tab)
 (global-set-key (kbd "C-<right>") 'mac-next-tab)
 
-(global-set-key (kbd "C-.") 'next-window-any-frame)
+(if (equal system-type 'darwin)
+    (global-set-key (kbd "C-.") 'next-window-any-frame)
+  (global-set-key (kbd "C-.") 'next-multiframe-window)
+  )
+
 (global-set-key (kbd "C-1") 'delete-other-windows)
 (global-set-key (kbd "C-S-r") 'recenter-top-bottom)
 (global-set-key (kbd "C-x x") 'delete-window)
