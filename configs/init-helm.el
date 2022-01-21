@@ -10,7 +10,7 @@
   (helm-mode 1) ;turn on helm-mode at startup
   (setq helm-locate-command  
     (cl-case system-type
-      ('gnu/linux "locate -i -r %s")
+      ('gnu/linux "locate %s -e -A --regex %s")
       ('windows-nt "es %s -sort run-count -p -n 50 %s") ;; commandline interface for Everything.exe, from voidtools
       ('darwin "mdfind -name %s %s") ;; mdfind seems to work way better than locate in os x 
       (t "locate %s")))
