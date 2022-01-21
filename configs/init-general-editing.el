@@ -160,14 +160,6 @@ With argument ARG, do this that many times."
 
 (setq mouse-yank-at-point t) ; paste at the cursor instead of where you click when using middle button of the mouse
 
-(use-package easy-kill
-  :ensure t
-  :config
-  (global-set-key [remap kill-ring-save] #'easy-kill)
-  (global-set-key (kbd "M-w") 'easy-kill)
-  (global-set-key (kbd "S-SPC") 'easy-mark)
-  )
-
 (use-package undo-tree
   :ensure t
   :config

@@ -24,7 +24,6 @@ it locates near the other two major prefix keys(=C-x= and =C-c=).
 | =C-w=         | backward kill word if no active region, otherwise kill region |
 | =C-backspace= | backward delete word                                          |
 | =M-d/C-esc=   | kill/delete word                                              |
-| =M-w=         | [[https://github.com/leoliu/easy-kill][easy-kill]], an enhanced =kill-ring-save=                                        |
 | =M-y=         | =helm-show-king-ring=                                         |
 
 
