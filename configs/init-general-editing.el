@@ -278,6 +278,7 @@ With argument ARG, do this that many times."
 (global-set-key (kbd "C-x x") 'delete-window)
 
 (global-set-key (kbd "C-z j") 'jump-to-register)
+(global-set-key (kbd "C-z SPC") 'window-configuration-to-register)
 
 (setq winner-dont-bind-my-keys t)
 (winner-mode 1)
