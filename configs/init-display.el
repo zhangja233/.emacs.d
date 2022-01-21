@@ -12,15 +12,13 @@
   )
 
 (defun set-font-size(size)
-  (interactive)
-  (set-face-attribute 'default nil :height size)
+   "190 for external; 220 for normal"
+  (interactive "p")
+   (set-face-attribute 'default nil :height size)
 )
 
-(defun font-size-extscreen() (interactive)
-(set-font-size 281)
-)
-(global-set-key (kbd "C-<f13>") 'font-size-extscreen)
+(global-set-key (kbd "C-<f13>") 'set-font-size)
 
-(setq-default fill-column 120)
+(setq-default fill-column 80)
 
 (provide 'init-display)
