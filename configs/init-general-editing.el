@@ -6,10 +6,11 @@
   "save mark when using beginning-of-line"
   (interactive "^p")
   (or (consp arg) (region-active-p) (push-mark))
-  (if (eq major-mode 'org-mode) 
-      (org-beginning-of-line arg)
-    (beginning-of-line arg)
-  )
+  (cl-case major-mode
+      ('org-mode (org-beginning-of-line arg))
+      ('eshell-mode (eshell-bol))
+      (t (beginning-of-line arg))
+      )
   )
 (define-key my-mode-map (kbd "C-a") 'my-beginning-of-line)
 
@@ -17,10 +18,10 @@
   "save mark when using end-of-line"
   (interactive "^p")
   (or (consp arg) (region-active-p) (push-mark))
-  (if (eq major-mode 'org-mode) 
-      (org-end-of-line arg)
-    (end-of-line arg)
-  )
+  (cl-case major-mode
+      ('org-mode (org-end-of-line arg))
+      (t (end-of-line arg))
+      )
   )
 (define-key my-mode-map (kbd "C-e") 'my-end-of-line)
 
@@ -292,7 +293,8 @@ With argument ARG, do this that many times."
   :ensure t
   :config
   (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "M-j") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "M-j") 'projectile-switch-project)
+  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
   (setq projectile-indexing-method 'hybrid)
   )
 
@@ -407,14 +409,6 @@ With argument ARG, do this that many times."
   :config
   (define-key flyspell-mode-map (kbd "M-q") 'flyspell-correct-previous)
   )
-
-;(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e") ;load mu4e in case emacs can not find it
-
-;; mu4e
-;(require 'mu4e) 
-;(setq mu4e-get-mail-command "offlineimap")
-;(global-set-key (kbd "C-z m") 'mu4e)
-;(setq mu4e-update-interval 7200) ; set interval of mu4e updates to 2 hours
 
 (defun find-dot-emacs()
   (interactive)
