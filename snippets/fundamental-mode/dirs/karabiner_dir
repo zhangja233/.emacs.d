@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: karabiner_dir
+# key: kara
+# --
+~/.config/karabiner/assets/complex_modifications
