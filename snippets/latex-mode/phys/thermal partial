@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: thermal partial
+# key: pu
+# --
+\\left(\\frac{\\p ${1:}}{\\p ${2:}}\\right)_{$0}
