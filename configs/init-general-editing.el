@@ -115,6 +115,7 @@
 (require 'misc)
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 
+(define-key my-mode-map (kbd "C-k") 'kill-line)
 (defun delete-line (&optional arg)
   "equivalence of kill-line without affecting kill-ring"
   (interactive "P")
@@ -289,13 +290,31 @@ With argument ARG, do this that many times."
 (global-set-key (kbd "C-z ,") 'winner-undo)
 (global-set-key (kbd "C-z .") 'winner-redo)
 
+(use-package ace-window
+  :ensure t
+  :config
+  (global-set-key (kbd "M-o") 'ace-window)
+  )
+
+(use-package window-purpose
+  :ensure t
+  :config
+  (purpose-mode)
+  (setq purpose-mode-map (make-sparse-keymap)) ; prevent from overriding existing keybindings
+  (global-set-key (kbd "C-z t") 'purpose-toggle-window-purpose-dedicated)
+  )
+
 (use-package projectile
   :ensure t
+  :diminish projectile-mode
   :config
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "M-j") 'projectile-switch-project)
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
   (setq projectile-indexing-method 'hybrid)
+  (setq projectile-ignored-projects '("~") )
+  (setq projectile-track-known-projects-automatically nil) ; only allow manually adding projects
+  (setq projectile-auto-discover nil)
   )
 
 (use-package helm-projectile
@@ -306,10 +325,10 @@ With argument ARG, do this that many times."
 ;; dired mode
 (require 'dired-x)
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
-(global-set-key (kbd "C-x j") 'dired-jump)
+(define-key my-mode-map (kbd "C-x j") 'dired-jump)
 
 (define-key dired-mode-map (kbd "SPC") 'browse-url-of-dired-file)
-(define-key dired-mode-map (kbd "e") 'wdired-change-to-wdired-mode)
+(define-key dired-mode-map (kbd "E") 'wdired-change-to-wdired-mode)
 
 ; a trick to make dired be able to access ~/Downloads and folders alike
 (when (eq system-type 'darwin)
