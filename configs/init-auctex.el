@@ -15,12 +15,18 @@
   (defun insert-backslash() 
     (interactive)(insert "\\")
     )
+  (defun insert-dollar() 
+    (interactive)
+    (insert "$$")
+    (backward-char)
+    )
   (defun latex-insert-prime() 
     (interactive)(insert "^{\\prime }")
     )
   (bind-keys* 
    :map LaTeX-mode-map
    ("C-;" . insert-backslash)
+   ("M-;" . insert-dollar)
    ("C-c '" . latex-insert-prime)
    ("C-c F" . LaTeX-fill-buffer)
    )
@@ -125,6 +131,7 @@
 
  (define-key LaTeX-mode-map (kbd "C-c <return>") 'LaTeX-insert-item)
  (define-key LaTeX-mode-map (kbd "C-c C-j") 'TeX-insert-macro)
+ (define-key LaTeX-mode-map (kbd "C-c j") 'TeX-insert-macro)
 
   (defun insert-bold()
     (interactive) (insert "\\b{}") (backward-char)
@@ -207,21 +214,16 @@
    (insert "\\sqrt{}") (backward-char)
 )
  (define-key LaTeX-mode-map (kbd "C-c s") 'insert-sqrt)
- 
- (defun insert-font()
-    (interactive) (insert "\\fontsize{pt}{\\baselineskip}\\selectfont ") (backward-word 3) 
-)
-(define-key LaTeX-mode-map (kbd "C-c jf") 'insert-font) 
-(defun insert-include-graph()
- (interactive) (insert "\\includegraphics[width=1\\textwidth]{}") (backward-char)   
-)
-(define-key LaTeX-mode-map (kbd "C-c ji") 'insert-include-graph)
 
  (setq TeX-command-force "XeLaTeX")
- (defun latex-compile-and-view()
-    (interactive) (save-some-buffers 1) (TeX-command-run-all nil)
-)
-(define-key LaTeX-mode-map (kbd "C-c C-a") 'latex-compile-and-view) ; let C-c C-l be save-and-compile
+
+;;  (defun latex-compile-and-view()
+;;     (interactive) (save-some-buffers 1) (TeX-command-run-all nil)
+;; )
+;; (define-key LaTeX-mode-map (kbd "C-c C-a") 'latex-compile-and-view) ; let C-c C-l be save-and-compile
+
+(setq TeX-save-query nil) ;don't ask for saving, just save it
+
 (defun latex-save-and-compile()
   (interactive)
   (save-some-buffers 1) (TeX-command-master)
@@ -234,7 +236,8 @@
 ;(setq TeX-auto-private '("~/lib/auto/" ) )
 
 ; some plain text environments or macros
-(setq LaTeX-verbatim-environments-local '("Verbatim" "lstlisting" ))
+(setq LaTeX-verbatim-environments '("verbatim" "lstlisting" ))
+
 
 (setq LaTeX-verbatim-macros-with-braces '("input" ))
 (setq LaTeX-verbatim-macros-with-delims '("l" ))

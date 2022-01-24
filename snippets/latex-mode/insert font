@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: insert font
+# key: if
+# --
+\\fontsize{$0pt}{\\baselineskip}\\selectfont
