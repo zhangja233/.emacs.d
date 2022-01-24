@@ -239,7 +239,7 @@ With argument ARG, do this that many times."
 (global-set-key (kbd "C-z <tab>") 'yas-expand-from-trigger-key) ; sometimes <tab> is redefined in certain modes, use this as a backup solution
 (global-set-key (kbd "C-z R") 'yas-reload-all)
 (define-key yas-minor-mode-map (kbd "C-c &") nil)
-(global-set-key (kbd "<f2> i") 'yas-new-snippet)
+(global-set-key (kbd "<f6> i") 'yas-new-snippet)
 (yas-global-mode)
 :diminish yas-minor-mode
 )
@@ -349,7 +349,7 @@ With argument ARG, do this that many times."
 (defun find-scratch()
   (interactive) (switch-to-buffer "*scratch*")
   )
-(global-set-key (kbd "C-z s") 'find-scratch)
+(global-set-key (kbd "<f6> s") 'find-scratch)
 (global-set-key (kbd "C-z N") 'make-frame)
 
 
