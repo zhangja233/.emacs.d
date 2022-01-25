@@ -42,6 +42,7 @@
 
   (global-set-key (kbd "C-z C-f") 'helm-locate)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+  (define-key dired-mode-map (kbd "l") 'helm-find-files)
   )
 
 (provide 'init-helm)
