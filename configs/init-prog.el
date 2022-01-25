@@ -1,9 +1,16 @@
-(defun my-compile()
-     (interactive) 
-     (save-some-buffers 1) 
-     (setq current-prefix-arg '(4)) ; to use compile-buffer in comint mode
-     (call-interactively 'compile t (vector compile-command))
-    )
+(defun my-compile(&optional arg)
+  (interactive "P") 
+  (save-some-buffers 1) 
+  (cond ((equal arg '(4))
+         ; use compile-buffer in comint mode[note that current-prefix-arg is '(4) ]
+	 (call-interactively 'compile t (vector compile-command)))
+	(t
+	 (setq-local compilation-read-command nil)
+	 (call-interactively 'compile)
+	 )
+	)
+  )
+
 (global-set-key (kbd "C-z C-z") 'my-compile)
 
 (eval-after-load "compile"
