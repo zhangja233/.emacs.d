@@ -1,5 +1,3 @@
-(setq initial-major-mode 'org-mode)
-
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)
 
@@ -7,8 +5,10 @@
 (use-package org-roam
   :ensure t
   :config
-  (setq org-roam-directory "~/roam")
+  (setq org-roam-directory "~/Dropbox/roam")
   (org-roam-db-autosync-mode)
+  (define-key org-mode-map (kbd "C-c i") 'org-roam-node-insert)
+  (define-key org-mode-map (kbd "C-c t") 'org-id-get-create)
   :bind
   ("C-z f" . org-roam-node-find)
   )
@@ -83,20 +83,31 @@
    "/DONE" 'file))
 (define-key org-mode-map (kbd "C-c <return>") 'org-archive-done-tasks)
 
-(define-key org-mode-map (kbd "M-<return>") 'insert-heading-and-demote)   
-(define-key org-mode-map (kbd "M-h") nil) ; override org-mode key binding
-(define-key org-mode-map (kbd "C-<tab>") nil) ; override org-mode key binding
+(define-key org-mode-map (kbd "C-<return>") 'org-meta-return)
+(define-key org-mode-map (kbd "M-<return>") 'org-insert-subheading)
+(defun org-insert-superheading()
+  (interactive)
+  (org-insert-heading)
+  (org-metaleft)
+  )
+(define-key org-mode-map (kbd "C-S-<return>") 'org-insert-superheading)
+
+;(define-key org-mode-map (kbd "M-h") nil) ; override org-mode key binding
 (define-key org-mode-map (kbd "C-,") nil) ; override org-mode key binding
 (define-key org-mode-map (kbd "C-'") nil) ; override org-mode key binding
 ;(define-key org-mode-map (kbd "S-<right>") nil) ; override org-mode key binding
 ;(define-key org-mode-map (kbd "S-<left>") nil) ; override org-mode key binding
-(define-key org-mode-map (kbd "M-a") 'beginning-of-buffer)
-(define-key org-mode-map (kbd "M-e") 'end-of-buffer)
+;(define-key org-mode-map (kbd "M-a") 'beginning-of-buffer)
+;(define-key org-mode-map (kbd "M-e") 'end-of-buffer)
 
 ; table
 (define-key org-mode-map (kbd "C-c n") 'org-table-next-row)
 (define-key org-mode-map (kbd "C-c p") 'org-table-insert-row)
 (define-key org-mode-map (kbd "C-c b") 'org-table-insert-column)
+(define-key org-mode-map (kbd "C-c <left>") 'org-table-move-cell-left)
+(define-key org-mode-map (kbd "C-c <right>") 'org-table-move-cell-right)
+(define-key org-mode-map (kbd "C-c <up>") 'org-table-move-cell-up)
+(define-key org-mode-map (kbd "C-c <down>") 'org-table-move-cell-down)
 
 ; clock
 (global-set-key (kbd "C-z i") 'org-clock-in)
@@ -111,10 +122,12 @@
 (define-key org-mode-map (kbd "C-c js") (lambda()
   (interactive)
   (insert (concat "#+BEGIN_" "SRC")) (newline-and-indent) (newline) (insert (concat "#+END_" "SRC")) (previous-line)))
+; miscellaneous
+(define-key org-mode-map (kbd "C-c v") 'org-latex-preview)
 
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((python . t)))
+ '((python . t) (latex . t)))
 
 (defun my-org-confirm-babel-evaluate (lang body)
     (not (string= lang "python")))  ; don't ask 
@@ -128,7 +141,8 @@
 (setq org-agenda-files '("~/Dropbox/org"));my personal org files which store my to-do lists
 (setq org-default-notes-file "~/Dropbox/org/capture.org") ; the file to store captured items
 (setq org-adapt-indentation nil) ; do not indent when using c-j after a title
- '(org-startup-truncated nil)
+; '(org-startup-truncated nil)
+(setq org-return-follows-link t) ; use return to open link
 ))
 
 (defun find-work() 
