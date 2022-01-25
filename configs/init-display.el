@@ -20,5 +20,6 @@
 (global-set-key (kbd "C-<f13>") 'set-font-size)
 
 (setq-default fill-column 80)
+(global-set-key (kbd "C-z h") 'fill-paragraph)
 
 (provide 'init-display)
