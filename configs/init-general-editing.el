@@ -270,9 +270,6 @@ With argument ARG, do this that many times."
 (setq abbrev-file-name "~/.emacs.d/.abbrev_defs") 
 
 ;;; buffer, window, frame and file management
-(global-set-key (kbd "C-<left>") 'mac-previous-tab)
-(global-set-key (kbd "C-<right>") 'mac-next-tab)
-
 (if (equal system-type 'darwin)
     (global-set-key (kbd "C-.") 'next-window-any-frame)
   (global-set-key (kbd "C-.") 'next-multiframe-window)
@@ -426,7 +423,7 @@ With argument ARG, do this that many times."
 (use-package flyspell-correct
   :ensure t
   :config
-  (define-key flyspell-mode-map (kbd "M-q") 'flyspell-correct-previous)
+  (define-key my-mode-map (kbd "M-q") 'flyspell-correct-previous)
   )
 
 (defun find-dot-emacs()

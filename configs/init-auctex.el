@@ -159,15 +159,33 @@
    (LaTeX-mark-inner "$")
    )
 
- (defun LaTeX-mark-cell()
+
+ 
+ (define-key LaTeX-mode-map (kbd "C-c $") 'LaTeX-mark-inline-equation)
+ (define-key LaTeX-mode-map (kbd "C-c @") 'LaTeX-mark-section)
+
+
+  ;; table editing 
+  (defun LaTeX-mark-cell()
  "mark a cell in table, array etc."
    (interactive) 
    (LaTeX-mark-inner "&")
    )
+
+  (define-key LaTeX-mode-map (kbd "C-c &") 'LaTeX-mark-cell)
  
- (define-key LaTeX-mode-map (kbd "C-c $") 'LaTeX-mark-inline-equation)
- (define-key LaTeX-mode-map (kbd "C-c &") 'LaTeX-mark-cell)
- (define-key LaTeX-mode-map (kbd "C-c @") 'LaTeX-mark-section)
+ (defun LaTeX-next-cell(&optional count)
+   "go to next cell or previous cell according to count"
+   (interactive "p")
+   (setq count (if count count 1))
+   (search-forward "&" nil t count)
+   (unless (equal (if (> count 0) (char-after) (char-after (+ (point) count) ))
+		  ?&)
+     (forward-char count))
+   (align-current)
+   )
+ (define-key LaTeX-mode-map (kbd "C-<right>") 'LaTeX-next-cell)
+ (define-key LaTeX-mode-map (kbd "C-<left>") (lambda() (interactive) (LaTeX-next-cell -1)))
  
  (defun insert-latex-env(env-name)
    (interactive)
