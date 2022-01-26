@@ -116,7 +116,7 @@
 (setq org-clock-mode-line-total 'today)
 (define-key org-mode-map (kbd "C-;") 'insert-backslash)
 (define-key org-mode-map (kbd "C-c a") 'org-metaleft)
-(define-key org-mode-map (kbd "C-c c") 'org-insert-todo-heading)
+(define-key org-mode-map (kbd "M-;") 'org-insert-todo-heading)
 (define-key org-mode-map (kbd "C-c d") 'org-metaright)
 (define-key org-mode-map (kbd "C-c r") 'org-clock-report)
 (define-key org-mode-map (kbd "C-c js") (lambda()
