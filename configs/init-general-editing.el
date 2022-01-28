@@ -187,6 +187,7 @@ With argument ARG, do this that many times."
 
   (define-key smartparens-mode-map (kbd "M-f") 'sp-forward-sexp)
   (define-key smartparens-mode-map (kbd "M-b") 'sp-backward-sexp)
+  (define-key smartparens-mode-map (kbd "M-k") 'sp-kill-sexp)
   ; down a level
   (define-key smartparens-mode-map (kbd "C-M-d") 'sp-down-sexp)
   (define-key smartparens-mode-map (kbd "C-M-S-d") 'sp-backward-down-sexp)
@@ -194,7 +195,7 @@ With argument ARG, do this that many times."
   (define-key smartparens-mode-map (kbd "C-M-f") 'sp-up-sexp)
   (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-up-sexp)
   
-;;  (define-key smartparens-mode-map (kbd "C-M-k") 'sp-kill-sexp)
+
 ;; (define-key smartparens-mode-map (kbd "C-M-t") 'sp-transpose-sexp)
 
 
@@ -217,8 +218,6 @@ With argument ARG, do this that many times."
   (define-key smartparens-mode-map (kbd "C-M-S-SPC") 'sp-select-previous-thing)  
   (define-key smartparens-mode-map (kbd "C-M-i") 'sp-change-enclosing)
   (define-key smartparens-mode-map (kbd "C-M-r") 'sp-rewrap-sexp)
-  
-  (define-key smartparens-mode-map (kbd "C-M-k") 'my-sp-kill-sexp)
   (define-key smartparens-mode-map (kbd "C-M-u") 'sp-unwrap-sexp)
   :config
   (require 'smartparens-config)
@@ -307,6 +306,7 @@ With argument ARG, do this that many times."
   :config
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "M-j") 'projectile-switch-project)
+  (define-key projectile-mode-map (kbd "M-J") 'projectile-find-file)
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
   (setq projectile-indexing-method 'hybrid)
   (setq projectile-ignored-projects '("~") )
