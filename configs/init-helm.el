@@ -34,7 +34,8 @@
   (advice-add 'helm-buffers-sort-transformer :around 'helm-buffers-sort-transformer@donot-sort)
 
   (global-set-key (kbd "M-x") 'helm-M-x)
-  (global-set-key (kbd "C-,") 'helm-multi-files)
+;  (global-set-key (kbd "C-,") 'helm-multi-files)
+  (global-set-key (kbd "C-,") 'helm-buffers-list)
   (global-set-key (kbd "C-x f") 'helm-find-files)
   (global-set-key (kbd "M-s o") 'helm-occur)
   (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)

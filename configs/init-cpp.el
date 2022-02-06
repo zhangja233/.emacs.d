@@ -6,9 +6,19 @@
   (interactive) (insert "//") 
   )
 
+(defun c-open-line-above()
+  (interactive)
+  (beginning-of-line)
+  (c-context-open-line)
+  (indent-for-tab-command)
+  )
+
 (add-hook 'c-mode-common-hook
 	  (lambda ()
-    (define-key c-mode-base-map (kbd "C-;")  'c-insert-comment)
+	    (bind-keys :map c-mode-base-map
+		       ("C-;" . c-insert-comment)
+		       ("C-o" . c-open-line-above)
+		       )
 	    ))
   
 ; completion of headers

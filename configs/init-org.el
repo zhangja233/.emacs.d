@@ -1,11 +1,13 @@
+;; general editing
+
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)
+;(add-hook 'org-mode-hook 'visual-line-mode)
 
-; minor modes
 (use-package org-roam
   :ensure t
   :config
-  (setq org-roam-directory "~/Dropbox/roam")
+  (setq org-roam-directory "~/Dropbox/org/roam")
   (org-roam-db-autosync-mode)
   (define-key org-mode-map (kbd "C-c i") 'org-roam-node-insert)
   (define-key org-mode-map (kbd "C-c t") 'org-id-get-create)
@@ -17,7 +19,8 @@
 :ensure t
 :diminish valign-mode
 )
-(add-hook 'org-mode-hook #'valign-mode)
+;(add-hook 'org-mode-hook #'valign-mode)
+
 
 (use-package org-bullets
   :ensure t
@@ -36,6 +39,21 @@
 
 (eval-after-load "org"
 '(progn
+   (bind-keys :map org-mode-map
+	      ("C-<return>" . org-insert-heading)
+	      ("C-;" . org-insert-todo-heading)
+	      ("M-p" . org-previous-visible-heading)
+	      ("M-n" . org-next-visible-heading)
+	      ("M-;" . org-insert-todo-subheading)
+	      ("M-<return>" . org-insert-subheading)
+	      ("M-'" . org-metaright)
+	      ("C-c m" . org-mark-subtree)
+	      ("C-c w". org-cut-subtree)
+	      )
+   (bind-keys :map global-map
+	      ("C-z m" . org-store-link)
+	      ("C-z G" . org-clock-goto)
+	      )
 ;; configs for org-mode
 ;;; customize org-agenda   
 (setq org-agenda-start-on-weekday nil) ; make org-agenda start at the current day
@@ -44,6 +62,8 @@
       '(("c" "Simple agenda view"
          ((agenda "")
           (alltodo "")))))
+
+;(setq org-agenda-prefix-format )
 
 
 ;; org-capture
@@ -83,8 +103,6 @@
    "/DONE" 'file))
 (define-key org-mode-map (kbd "C-c <return>") 'org-archive-done-tasks)
 
-(define-key org-mode-map (kbd "C-<return>") 'org-meta-return)
-(define-key org-mode-map (kbd "M-<return>") 'org-insert-subheading)
 (defun org-insert-superheading()
   (interactive)
   (org-insert-heading)
@@ -114,14 +132,9 @@
 (global-set-key (kbd "C-z o") 'org-clock-out)
 
 (setq org-clock-mode-line-total 'today)
-(define-key org-mode-map (kbd "C-;") 'insert-backslash)
 (define-key org-mode-map (kbd "C-c a") 'org-metaleft)
-(define-key org-mode-map (kbd "M-;") 'org-insert-todo-heading)
 (define-key org-mode-map (kbd "C-c d") 'org-metaright)
 (define-key org-mode-map (kbd "C-c r") 'org-clock-report)
-(define-key org-mode-map (kbd "C-c js") (lambda()
-  (interactive)
-  (insert (concat "#+BEGIN_" "SRC")) (newline-and-indent) (newline) (insert (concat "#+END_" "SRC")) (previous-line)))
 ; miscellaneous
 (define-key org-mode-map (kbd "C-c v") 'org-latex-preview)
 
@@ -138,12 +151,14 @@
 ;(setq org-todo-keywords
 ;      '((sequence  "TODO" "NEXT"  "|" "DONE" "CANCELED")))
 (setq calendar-week-start-day 1) ;start week on Mon
-(setq org-agenda-files '("~/Dropbox/org"));my personal org files which store my to-do lists
+(setq org-agenda-files (directory-files-recursively "~/Dropbox/org" "\.org$"));my personal org files which store my to-do lists
 (setq org-default-notes-file "~/Dropbox/org/capture.org") ; the file to store captured items
 (setq org-adapt-indentation nil) ; do not indent when using c-j after a title
 ; '(org-startup-truncated nil)
 (setq org-return-follows-link t) ; use return to open link
 ))
+
+(setq-default org-catch-invisible-edits 'smart)
 
 (defun find-work() 
   (interactive) (find-file "~/Dropbox/org/work.org")

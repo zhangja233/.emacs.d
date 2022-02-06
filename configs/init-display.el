@@ -1,6 +1,7 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (setq inhibit-startup-screen t) ;do not show welcome page
+(setq initial-scratch-message "Have fun!\n\n")
 (setq visible-bell nil)
 (setq auto-save-no-message t)
 

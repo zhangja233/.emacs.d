@@ -1,5 +1,6 @@
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
+;(add-hook 'LaTeX-mode-hook 'visual-line-mode)
 
 (use-package latex
   :ensure auctex
@@ -20,6 +21,10 @@
     (insert "$$")
     (backward-char)
     )
+  (defun insert-single-dollar() 
+    (interactive)
+    (insert "$")
+    )
   (defun latex-insert-prime() 
     (interactive)(insert "^{\\prime }")
     )
@@ -27,7 +32,10 @@
    :map LaTeX-mode-map
    ("C-;" . insert-backslash)
    ("M-;" . insert-dollar)
+   ("C-:" . insert-single-dollar)
    ("C-c '" . latex-insert-prime)
+   ("C-c i" . TeX-complete-symbol)
+   ("C-c m" . LaTeX-mark-section)
    ("C-c F" . LaTeX-fill-buffer)
    )
 
@@ -78,6 +86,8 @@
        '((?h "hbar ")
         (?i "infty ")
 	(?u "hat ")
+	(?o "omega ")
+	(?O "Omega ")
 	(?' "prime ")
 	(?| "bigg|")
 	("SPC" "quad ")
@@ -95,8 +105,11 @@
  ;; easier outline keybindings
  (define-key LaTeX-mode-map (kbd "C-c C-c") 'outline-show-subtree)
  (define-key LaTeX-mode-map (kbd "C-c C-SPC") 'outline-hide-body)
+ (define-key LaTeX-mode-map (kbd "S-<tab>") 'outline-hide-body)
  (define-key LaTeX-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
  (define-key outline-minor-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading) ; override preview-map
+ (define-key LaTeX-mode-map (kbd "M-p") 'outline-previous-visible-heading)
+ (define-key LaTeX-mode-map (kbd "M-n") 'outline-next-visible-heading)
  (define-key LaTeX-mode-map (kbd "C-c C-u") 'outline-up-heading)
  (define-key LaTeX-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
  (define-key LaTeX-mode-map (kbd "C-c C-b") 'outline-backward-same-level)
@@ -179,7 +192,7 @@
    (interactive "p")
    (setq count (if count count 1))
    (search-forward "&" nil t count)
-   (unless (or (equal (if (> count 0) (char-after) (char-after (+ (point) count) ))
+   (unless (or (equal (if (> count 0) (char-after)f (char-after (+ (point) count) ))
 		  ?&)
 	       (equal (char-after) ?\C-j) )
      (forward-char count))

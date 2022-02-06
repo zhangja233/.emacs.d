@@ -1,7 +1,6 @@
 (eval-after-load "python"
 '(progn
-   (defun python-insert-comment () (interactive) (insert "#"))
-   (define-key python-mode-map (kbd "C-;") 'python-insert-comment)
+   (define-key python-mode-map (kbd "C-;") 'insert-number-sign)
    (define-key python-mode-map (kbd "C-j") 'newline-and-indent) ; electric-newline-and-maybe-indent does not do what I want
 ))
 
@@ -11,6 +10,7 @@
   :hook python-mode
   :config
   (define-key anaconda-mode-map (kbd "C-c r") 'anaconda-mode-find-references)
+  (define-key anaconda-mode-map (kbd "M-r") nil)
   )
 
 ;; python completion with company

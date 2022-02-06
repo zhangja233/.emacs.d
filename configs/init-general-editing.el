@@ -34,13 +34,25 @@
 
 (setq sentence-end-double-space nil) ;make backward-sentence and forward-sentence behave as in fundamental mode
 
+(bind-keys :map global-map
+	   ("C-M-l" . downcase-word)
+	   ) 
+
 ;; avy-mode
 (use-package avy
   :ensure t
+  :bind ("M-l" . avy-goto-char-timer)
   :config
 (global-set-key (kbd "C-l") 'avy-goto-word-1)
-(global-set-key (kbd "C-z g") 'avy-goto-line)
-(global-set-key (kbd "C-S-l") 'avy-goto-char-in-line)
+(global-set-key (kbd "M-g") 'avy-goto-line)
+(setq avy-keys (nconc (number-sequence ?a ?z)
+		      ))
+(setq avy-keys-alist nil)
+(add-to-list 'avy-orders-alist '(avy-goto-line . avy-order-closest))
+(add-to-list 'avy-orders-alist '(avy-goto-word-1 . avy-order-closest))
+(add-to-list 'avy-orders-alist '(avy-goto-char-timer . avy-order-closest))
+(setq avy-timeout-seconds 0.2)
+	     
   )
 
 
@@ -54,8 +66,7 @@
 (global-set-key (kbd "<next>") 'scroll-other-window)
 
 ; simple editing
-(global-set-key (kbd "M-t") 'transpose-chars)
-(global-set-key (kbd "M-g") 'quoted-insert)
+(global-set-key (kbd "<deletechar>") 'quoted-insert)
 (global-set-key (kbd "M-r") 'replace-string)
 (defun backward-upcase-word()
   (interactive)
@@ -79,10 +90,10 @@
   (end-of-line)
   (newline-and-indent)
   )
-(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
-(global-set-key (kbd "H-m") 'open-line-below)
+;(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
+;(global-set-key (kbd "H-m") 'open-line-below)
 
-(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
+;(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
 
 (defun open-line-above()
   (interactive)
@@ -226,7 +237,8 @@ With argument ARG, do this that many times."
   
   (sp-with-modes '(latex-mode)
     (sp-local-pair "\\begin" "\\end")
-    (sp-local-pair "|" "|"))
+    (sp-local-pair "|" "|")
+    (sp-local-pair "\\|" "\\|"))
   
   (advice-remove 'delete-backward-char #'ad-Advice-delete-backward-char) ;prevent smartparens from deleting the whole \right) when using backspace
   :diminish smartparens-mode)
@@ -269,10 +281,8 @@ With argument ARG, do this that many times."
 (setq abbrev-file-name "~/.emacs.d/.abbrev_defs") 
 
 ;;; buffer, window, frame and file management
-(if (equal system-type 'darwin)
-    (global-set-key (kbd "C-.") 'next-window-any-frame)
-  (global-set-key (kbd "C-.") 'next-multiframe-window)
-  )
+
+(global-set-key (kbd "C-.") 'other-window)
 
 (global-set-key (kbd "C-1") 'delete-other-windows)
 (global-set-key (kbd "C-S-r") 'recenter-top-bottom)
@@ -297,7 +307,7 @@ With argument ARG, do this that many times."
   :config
   (purpose-mode)
   (setq purpose-mode-map (make-sparse-keymap)) ; prevent from overriding existing keybindings
-  (global-set-key (kbd "C-z t") 'purpose-toggle-window-purpose-dedicated)
+  (global-set-key (kbd "C-z t") 'purpose-toggle-window-buffer-dedicated)
   )
 
 (use-package projectile
@@ -309,9 +319,13 @@ With argument ARG, do this that many times."
   (define-key projectile-mode-map (kbd "M-J") 'projectile-find-file)
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
   (setq projectile-indexing-method 'hybrid)
-  (setq projectile-ignored-projects '("~") )
+;  (setq projectile-ignored-projects '("~") )
   (setq projectile-track-known-projects-automatically nil) ; only allow manually adding projects
   (setq projectile-auto-discover nil)
+  (setq projectile-sort-order 'recentf)
+  (setq projectile-current-project-on-switch 'keep) ; leave the current project at the default position
+;  (setq projectile-dynamic-mode-line nil)
+;  (setq-default projectile-mode-line-function nil)
   )
 
 (use-package helm-projectile
@@ -452,6 +466,10 @@ With argument ARG, do this that many times."
       (browse-url-of-file (expand-file-name default-directory))
     (error "No `default-directory' to open")))
 (global-set-key (kbd "C-z b") 'browse-file-directory)
+
+(use-package rg
+  :ensure t
+  )
 
 (use-package google-this
 :ensure t  

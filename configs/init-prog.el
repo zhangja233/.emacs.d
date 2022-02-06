@@ -21,6 +21,9 @@
 
 (global-set-key (kbd "C-z C-s") 'shell-command)
 
+(global-set-key (kbd "<f2> e") 'eshell)
+
+
 (use-package ggtags
   :ensure t
   )
@@ -31,7 +34,19 @@
   (ggtags-mode 1))))
 
 ;; perl
-(fset 'perl-mode 'cperl-mode)
+;(fset 'perl-mode 'cperl-mode)
+;(setq-default cperl-invalid-face nil)
+
+
+(defun insert-number-sign () (interactive) (insert "#"))
+
+(eval-after-load "perl"
+'(progn
+   (bind-keys :map perl-mode-map
+	      ("C-;" . insert-single-dollar)
+	      ("M-;" . insert-number-sign)
+	      )
+))   
 
 ;; f90-mode
 ;; Set Fortran 90 mode for .F
@@ -43,17 +58,14 @@
    (define-key f90-mode-map (kbd "C-c w") (kbd "WRITE(*,*) SPC ")) ; make life easier
 ))
 
-;; lisp-mode
-(eval-after-load "lisp-mode"
-'(progn
-(define-key emacs-lisp-mode-map (kbd "C-c jl") (lambda () (interactive) (insert "(lambda () (interactive) () )") (backward-char 3)))
-))
-; solve the problem that electric-indent-mode makes intent too much after return
-(defun electric-indent-mode-configure ()
-  "Delete newline (?\n) from `electric-indent-chars'."
-  (setq electric-indent-chars (delq 10 electric-indent-chars)))
-
-(add-hook 'emacs-lisp-mode-hook #'electric-indent-mode-configure)
+(use-package matlab
+  :ensure matlab-mode
+  :config
+  (add-to-list
+   'auto-mode-alist
+   '("\\.m\\'" . matlab-mode))
+  (setq exec-path (append exec-path '("/Applications/MATLAB_R2021b.app/bin")))
+  )
 
 (use-package markdown-mode
   :ensure t
