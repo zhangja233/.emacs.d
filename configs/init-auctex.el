@@ -275,8 +275,9 @@
 (setq LaTeX-verbatim-macros-with-delims '("l" ))
 
 ;restore default paragraph definitions
+;(setq-default paragraph-separate "[ \t\f]*$")
 (defun use-default-paragraph-delimiters ()
-  (setq paragraph-start (default-value 'paragraph-start)
+  (setq-local paragraph-start (default-value 'paragraph-start)
         paragraph-separate (default-value 'paragraph-separate)))
 
 (add-hook 'LaTeX-mode-hook 'use-default-paragraph-delimiters)
