@@ -90,8 +90,9 @@
   (end-of-line)
   (newline-and-indent)
   )
+(global-set-key (kbd "M-o") 'open-line-below)
 ;(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
-;(global-set-key (kbd "H-m") 'open-line-below)
+
 
 ;(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
 
@@ -299,7 +300,7 @@ With argument ARG, do this that many times."
 (use-package ace-window
   :ensure t
   :config
-  (global-set-key (kbd "M-o") 'ace-window)
+  (global-set-key (kbd "C-M-.") 'ace-window)
   )
 
 (use-package window-purpose
