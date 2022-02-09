@@ -13,6 +13,7 @@
     (setq TeX-view-program-selection '((output-pdf "skim")))
     )
  ; some facilites
+
   (defun insert-backslash() 
     (interactive)(insert "\\")
     )
@@ -125,6 +126,7 @@
   (setq-local company-backends
 	     (append '((company-math-symbols-latex company-latex-commands))
 		     company-backends))
+
  (setq LaTeX-section-label nil)
  (setq TeX-insert-macro-default-style 'mandatory-args-only)
 
@@ -274,14 +276,6 @@
 (setq LaTeX-verbatim-macros-with-braces '("input" ))
 (setq LaTeX-verbatim-macros-with-delims '("l" ))
 
-;restore default paragraph definitions
-;(setq-default paragraph-separate "[ \t\f]*$")
-(defun use-default-paragraph-delimiters ()
-  (setq-local paragraph-start (default-value 'paragraph-start)
-        paragraph-separate (default-value 'paragraph-separate)))
-
-(add-hook 'LaTeX-mode-hook 'use-default-paragraph-delimiters)
-
 ; Update PDF buffers after successful LaTeX runs
 ;(add-hook 'TeX-after-compilation-finished-functions
 ;          #'TeX-revert-document-buffer)
@@ -291,7 +285,7 @@
 ;(setq-default TeX-master nil) ; let auctex ask for a master file
 
 ;(setq LaTeX-electric-left-right-brace t) ;auto insert braces
-;(setq TeX-electric-math (cons "$" "$")) ;automatically insert a pair of dollars
+
 ;; So that RefTeX finds my bibliography
 (setq reftex-default-bibliography '("~/lib/bib/phylab.bib" "~/lib/bib/main.bib" )))
 )

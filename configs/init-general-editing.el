@@ -14,6 +14,11 @@
   )
 (define-key my-mode-map (kbd "C-a") 'my-beginning-of-line)
 
+
+
+(define-key my-mode-map (kbd "M-[") 'my-backward-paragraph)
+(define-key my-mode-map (kbd "M-]") 'my-forward-paragraph)
+
 (defun my-end-of-line(&optional arg)
   "save mark when using end-of-line"
   (interactive "^p")
@@ -29,8 +34,20 @@
 (global-set-key (kbd "C-S-b") 'backward-sentence)
 (global-set-key (kbd "C-S-f") 'forward-sentence)
 
-(global-set-key (kbd "M-[") 'backward-paragraph)
-(global-set-key (kbd "M-]") 'forward-paragraph)
+(defun forward-half-sentence(&optional arg)
+  (interactive)
+  (re-search-forward "[;,]" nil nil arg)
+  )
+
+(defun backward-half-sentence(&optional arg)
+  (interactive)
+  (re-search-backward "[;,]" nil nil arg)
+  )
+
+(bind-keys :map global-map
+	   ("M-F" . forward-half-sentence)
+	   ("M-B" . backward-half-sentence)
+	   )
 
 (setq sentence-end-double-space nil) ;make backward-sentence and forward-sentence behave as in fundamental mode
 
