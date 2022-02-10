@@ -25,8 +25,8 @@
   )
 (define-key my-mode-map (kbd "C-e") 'my-end-of-line)
 
-(define-key my-mode-map (kbd "C-M-b") 'my-backward-paragraph)
-(define-key my-mode-map (kbd "C-M-f") 'my-forward-paragraph)
+(global-set-key (kbd "M-p") 'my-backward-paragraph)
+(global-set-key (kbd "M-n") 'my-forward-paragraph)
 
 (global-set-key (kbd "C-S-b") 'backward-sentence)
 (global-set-key (kbd "C-S-f") 'forward-sentence)
@@ -376,7 +376,7 @@ With argument ARG, do this that many times."
 (defun find-scratch()
   (interactive) (switch-to-buffer "*scratch*")
   )
-(global-set-key (kbd "<f2> s") 'find-scratch)
+(global-set-key (kbd "C-z s") 'find-scratch)
 (global-set-key (kbd "C-z N") 'make-frame)
 
 
