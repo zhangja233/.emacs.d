@@ -152,6 +152,7 @@
     (interactive) (insert "\\b{}") (backward-char)
    )
  (define-key LaTeX-mode-map (kbd "C-c b")  'insert-bold)
+ (define-key LaTeX-mode-map (kbd "C-c C-b") 'insert-bold)
 
    (defun insert-rm()
     (interactive) (insert "\\r{}") (backward-char)
