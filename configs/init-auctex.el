@@ -109,11 +109,11 @@
  (define-key LaTeX-mode-map (kbd "S-<tab>") 'outline-hide-body)
  (define-key LaTeX-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
  (define-key outline-minor-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading) ; override preview-map
- (define-key LaTeX-mode-map (kbd "M-p") 'outline-previous-visible-heading)
- (define-key LaTeX-mode-map (kbd "M-n") 'outline-next-visible-heading)
- (define-key LaTeX-mode-map (kbd "C-c C-u") 'outline-up-heading)
- (define-key LaTeX-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
- (define-key LaTeX-mode-map (kbd "C-c C-b") 'outline-backward-same-level)
+ (define-key LaTeX-mode-map (kbd "<up>") 'outline-previous-visible-heading)
+ (define-key LaTeX-mode-map (kbd "<down>") 'outline-next-visible-heading)
+ (define-key LaTeX-mode-map (kbd "C-<up>") 'outline-up-heading)
+ (define-key LaTeX-mode-map (kbd "<right>") 'outline-forward-same-level)
+ (define-key LaTeX-mode-map (kbd "<left>") 'outline-backward-same-level)
  (define-key LaTeX-mode-map (kbd "C-c <tab>") 'outline-show-all)
  
  
