@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: homework
+# key: hw
+# --
+\\documentclass[12pt,a4paper,openany]{article}
+\\input{\$HOME/lib/preamble}
+
+\\title{$1}
+\\author{Juan Zhang}
+\\date{}
+
+\\begin{document}
+\\maketitle
+
+$0
+
+\\end{document}

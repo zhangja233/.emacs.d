@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: set counter
+# key: sc
+# --
+\\setcounter{secnumdepth}{-2}
