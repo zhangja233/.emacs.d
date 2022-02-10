@@ -14,11 +14,6 @@
   )
 (define-key my-mode-map (kbd "C-a") 'my-beginning-of-line)
 
-
-
-(define-key my-mode-map (kbd "M-[") 'my-backward-paragraph)
-(define-key my-mode-map (kbd "M-]") 'my-forward-paragraph)
-
 (defun my-end-of-line(&optional arg)
   "save mark when using end-of-line"
   (interactive "^p")
@@ -30,6 +25,8 @@
   )
 (define-key my-mode-map (kbd "C-e") 'my-end-of-line)
 
+(define-key my-mode-map (kbd "C-M-b") 'my-backward-paragraph)
+(define-key my-mode-map (kbd "C-M-f") 'my-forward-paragraph)
 
 (global-set-key (kbd "C-S-b") 'backward-sentence)
 (global-set-key (kbd "C-S-f") 'forward-sentence)
@@ -221,8 +218,8 @@ With argument ARG, do this that many times."
   (define-key smartparens-mode-map (kbd "C-M-d") 'sp-down-sexp)
   (define-key smartparens-mode-map (kbd "C-M-S-d") 'sp-backward-down-sexp)
   ; up a level
-  (define-key smartparens-mode-map (kbd "C-M-f") 'sp-up-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-up-sexp)
+;  (define-key smartparens-mode-map (kbd "C-M-f") 'sp-up-sexp)
+;  (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-up-sexp)
   
 
 ;; (define-key smartparens-mode-map (kbd "C-M-t") 'sp-transpose-sexp)
