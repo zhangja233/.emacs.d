@@ -13,7 +13,7 @@
   )
 
 (defun set-font-size(size)
-   "190 for external; 220 for normal"
+   "190 for external; 220 for normal; 170 for internal double"
   (interactive "p")
    (set-face-attribute 'default nil :height size)
 )
