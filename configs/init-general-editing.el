@@ -50,6 +50,7 @@
 
 (bind-keys :map global-map
 	   ("C-M-l" . downcase-word)
+	   ("C-M-c" . capitalize-word)
 	   ) 
 
 ;; avy-mode
