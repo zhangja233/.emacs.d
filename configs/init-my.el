@@ -1,5 +1,65 @@
 ;; patch for my-mode, generally minior changes for internal commands
 
+(defun delete-line (&optional arg)
+  "equivalence of kill-line without affecting kill-ring"
+  (interactive "P")
+  (delete-region (point)
+	       ;; It is better to move point to the other end of the kill
+	       ;; before killing.  That way, in a read-only buffer, point
+	       ;; moves across the text that is copied to the kill ring.
+	       ;; The choice has no effect on undo now that undo records
+	       ;; the value of point from before the command was run.
+	       (progn
+		 (if arg
+		     (forward-visible-line (prefix-numeric-value arg))
+		   (if (eobp)
+		       (signal 'end-of-buffer nil))
+		   (let ((end
+			  (save-excursion
+			    (end-of-visible-line) (point))))
+		     (if (or (save-excursion
+			       ;; If trailing whitespace is visible,
+			       ;; don't treat it as nothing.
+			       (unless show-trailing-whitespace
+				 (skip-chars-forward " \t" end))
+			       (= (point) end))
+			     (and kill-whole-line (bolp)))
+			 (forward-visible-line 1)
+		       (goto-char end))))
+		 (point))))
+
+(defun backward-delete-word (arg)
+  "Delete characters backward until encountering the beginning of a word.
+With argument ARG, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (backward-word arg) (point))))
+
+(defun delete-word (arg)
+  "Delete characters forward until encountering the end of a word.
+With argument ARG, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (forward-word arg) (point))))
+
+(defun my-beginning-of-line(&optional arg)
+  "save mark when using beginning-of-line"
+  (interactive "^p")
+  (or (consp arg) (region-active-p) (push-mark))
+  (cl-case major-mode
+      ('org-mode (org-beginning-of-line arg))
+      ('eshell-mode (eshell-bol))
+      (t (beginning-of-line arg))
+      )
+  )
+(defun my-end-of-line(&optional arg)
+  "save mark when using end-of-line"
+  (interactive "^p")
+  (or (consp arg) (region-active-p) (push-mark))
+  (cl-case major-mode
+      ('org-mode (org-end-of-line arg))
+      (t (end-of-line arg))
+      )
+  )
+
 (setq my-paragraph-start (default-value 'paragraph-start))
 (setq my-paragraph-separate (default-value 'paragraph-separate))
 

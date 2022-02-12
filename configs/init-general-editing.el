@@ -2,27 +2,8 @@
 (global-set-key (kbd "C-q") 'backward-word)
 (global-set-key (kbd "C-t") 'forward-word)
 
-(defun my-beginning-of-line(&optional arg)
-  "save mark when using beginning-of-line"
-  (interactive "^p")
-  (or (consp arg) (region-active-p) (push-mark))
-  (cl-case major-mode
-      ('org-mode (org-beginning-of-line arg))
-      ('eshell-mode (eshell-bol))
-      (t (beginning-of-line arg))
-      )
-  )
-(define-key my-mode-map (kbd "C-a") 'my-beginning-of-line)
 
-(defun my-end-of-line(&optional arg)
-  "save mark when using end-of-line"
-  (interactive "^p")
-  (or (consp arg) (region-active-p) (push-mark))
-  (cl-case major-mode
-      ('org-mode (org-end-of-line arg))
-      (t (end-of-line arg))
-      )
-  )
+(define-key my-mode-map (kbd "C-a") 'my-beginning-of-line)
 (define-key my-mode-map (kbd "C-e") 'my-end-of-line)
 
 (global-set-key (kbd "M-p") 'my-backward-paragraph)
@@ -143,48 +124,10 @@
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 
 (define-key my-mode-map (kbd "C-k") 'kill-line)
-(defun delete-line (&optional arg)
-  "equivalence of kill-line without affecting kill-ring"
-  (interactive "P")
-  (delete-region (point)
-	       ;; It is better to move point to the other end of the kill
-	       ;; before killing.  That way, in a read-only buffer, point
-	       ;; moves across the text that is copied to the kill ring.
-	       ;; The choice has no effect on undo now that undo records
-	       ;; the value of point from before the command was run.
-	       (progn
-		 (if arg
-		     (forward-visible-line (prefix-numeric-value arg))
-		   (if (eobp)
-		       (signal 'end-of-buffer nil))
-		   (let ((end
-			  (save-excursion
-			    (end-of-visible-line) (point))))
-		     (if (or (save-excursion
-			       ;; If trailing whitespace is visible,
-			       ;; don't treat it as nothing.
-			       (unless show-trailing-whitespace
-				 (skip-chars-forward " \t" end))
-			       (= (point) end))
-			     (and kill-whole-line (bolp)))
-			 (forward-visible-line 1)
-		       (goto-char end))))
-		 (point))))
+
 
 (global-set-key (kbd "C-S-k") 'delete-line)
-
-(defun backward-delete-word (arg)
-  "Delete characters backward until encountering the beginning of a word.
-With argument ARG, do this that many times."
-  (interactive "p")
-  (delete-region (point) (progn (backward-word arg) (point))))
 (global-set-key (kbd "C-<backspace>") 'backward-delete-word)
-
-(defun delete-word (arg)
-  "Delete characters forward until encountering the end of a word.
-With argument ARG, do this that many times."
-  (interactive "p")
-  (delete-region (point) (progn (forward-word arg) (point))))
 (global-set-key (kbd "C-<escape>") 'delete-word)
 
 ; copy to clipboard when M-w
@@ -221,25 +164,6 @@ With argument ARG, do this that many times."
   ; up a level
 ;  (define-key smartparens-mode-map (kbd "C-M-f") 'sp-up-sexp)
 ;  (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-up-sexp)
-  
-
-;; (define-key smartparens-mode-map (kbd "C-M-t") 'sp-transpose-sexp)
-
-
-
-
-;; (define-key smartparens-mode-map (kbd "M-<delete>") 'sp-unwrap-sexp)
-;; (define-key smartparens-mode-map (kbd "M-<backspace>") 'sp-backward-unwrap-sexp)
-
-;; (define-key smartparens-mode-map (kbd "C-<right>") 'sp-forward-slurp-sexp)
-;; (define-key smartparens-mode-map (kbd "C-<left>") 'sp-forward-barf-sexp)
-;; (define-key smartparens-mode-map (kbd "C-M-<left>") 'sp-backward-slurp-sexp)
-;; (define-key smartparens-mode-map (kbd "C-M-<right>") 'sp-backward-barf-sexp)
-
-;; (define-key smartparens-mode-map (kbd "M-D") 'sp-splice-sexp)
-;; (define-key smartparens-mode-map (kbd "C-M-<delete>") 'sp-splice-sexp-killing-forward)
-;; (define-key smartparens-mode-map (kbd "C-M-<backspace>") 'sp-splice-sexp-killing-backward)
-;; (define-key smartparens-mode-map (kbd "C-S-<backspace>") 'sp-splice-sexp-killing-around)
 
   (define-key smartparens-mode-map (kbd "C-M-SPC") 'sp-select-next-thing)
   (define-key smartparens-mode-map (kbd "C-M-S-SPC") 'sp-select-previous-thing)  
@@ -321,7 +245,7 @@ With argument ARG, do this that many times."
 (use-package window-purpose
   :ensure t
   :config
-  (purpose-mode)
+;  (purpose-mode)
   (setq purpose-mode-map (make-sparse-keymap)) ; prevent from overriding existing keybindings
   (global-set-key (kbd "C-z t") 'purpose-toggle-window-buffer-dedicated)
   )
@@ -362,7 +286,7 @@ With argument ARG, do this that many times."
   (setq insert-directory-program "gls" dired-use-ls-dired t)
   )
 
-(setq dired-listing-switches "-alh --group-directories-first")
+(setq dired-listing-switches "-alht --group-directories-first")
 ;(setq dired-listing-switches "-AlBGh  --group-directories-first")
 
 (setq dired-deletion-confirmer #'y-or-n-p)
@@ -507,6 +431,6 @@ With argument ARG, do this that many times."
 (global-disable-mouse-mode) ; in case I move the mouse accidentally
   )
 
-(setq initial-major-mode 'latex-mode)
+(setq initial-major-mode 'org-mode)
 
 (provide 'init-general-editing)
