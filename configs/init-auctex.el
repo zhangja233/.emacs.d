@@ -1,6 +1,5 @@
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
-;(add-hook 'LaTeX-mode-hook 'visual-line-mode)
 
 (use-package latex
   :ensure auctex
@@ -29,6 +28,14 @@
   (defun latex-insert-prime() 
     (interactive)(insert "^{\\prime }")
     )
+  (defun latex-append-ampersand()
+    (interactive)
+    (save-excursion
+      (beginning-of-line)
+      (search-forward "=")
+      (insert "&")
+      )
+    )
   (bind-keys* 
    :map LaTeX-mode-map
    ("C-;" . insert-backslash)
@@ -38,6 +45,8 @@
    ("C-c i" . TeX-complete-symbol)
    ("C-c m" . LaTeX-mark-section)
    ("C-c F" . LaTeX-fill-buffer)
+   ("C-c >" . LaTeX-mark-environment-inner)
+   ("C-c =" . latex-append-ampersand)
    )
 
   (defun LaTeX-mark-environment-inner (&optional count)
@@ -61,9 +70,6 @@
       (push-mark end)
       (goto-char beg)
       (TeX-activate-region)))
-  
-  (define-key LaTeX-mode-map (kbd "C-c >") 'LaTeX-mark-environment-inner)
-  
   )
 
 ;;; minor modes
@@ -90,9 +96,9 @@
 	(?o "omega ")
 	(?O "Omega ")
 	(?' "prime ")
-	(?| "bigg|")
 	("SPC" "quad ")
-	("C-SPC" (lambda() (interactive) (insert " &= ")))
+	(?= "approx ")
+	("C-<return>" (lambda() (interactive) (insert " =& ")))
 	("C-b" insert-bra "" nil)
 	("C-k" insert-ket "" nil)
 	("DEL" insert-hline "" nil)
@@ -134,11 +140,6 @@
 
  (define-key LaTeX-mode-map (kbd "\"")  (lambda() (interactive) (insert "\"\"") (backward-char))) ; prevent latex quote 
 
-
-
-
-
-
  (define-key LaTeX-mode-map (kbd "C-j") 'newline-and-indent)
 
  (define-key LaTeX-mode-map (kbd "C-c N") 'TeX-normal-mode)
@@ -178,7 +179,6 @@
 
  
  (define-key LaTeX-mode-map (kbd "C-c $") 'LaTeX-mark-inline-equation)
- (define-key LaTeX-mode-map (kbd "C-c @") 'LaTeX-mark-section)
 
 
   ;; table editing 
