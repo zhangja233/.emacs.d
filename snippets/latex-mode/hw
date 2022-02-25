@@ -5,8 +5,10 @@
 \\documentclass[12pt,a4paper,openany]{article}
 \\input{\$HOME/lib/preamble}
 
+\setcounter{secnumdepth}{-2}	
+	
 \\title{$1}
-\\author{Juan Zhang}
+\\author{Ju-an Zhang}
 \\date{}
 
 \\begin{document}

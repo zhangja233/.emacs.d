@@ -3,5 +3,5 @@
 # key: l
 # --
 \begin{lstlisting}
-$1
+$0
 \end{lstlisting}
