@@ -1,10 +1,10 @@
 ;;; moving the cursor
-(global-set-key (kbd "C-q") 'backward-word)
-(global-set-key (kbd "C-t") 'forward-word)
-
-
-(define-key my-mode-map (kbd "C-a") 'my-beginning-of-line)
-(define-key my-mode-map (kbd "C-e") 'my-end-of-line)
+(bind-keys :map my-mode-map
+	   ("C-q" . backward-word)
+	   ("C-t" . forward-word)
+	   ("C-a" . my-beginning-of-line)
+	   ("C-e" . my-end-of-line)
+	   )
 
 (global-set-key (kbd "M-p") 'my-backward-paragraph)
 (global-set-key (kbd "M-n") 'my-forward-paragraph)
@@ -19,12 +19,12 @@
 
 (defun backward-half-sentence(&optional arg)
   (interactive)
-  (re-search-backward "[;,]" nil nil arg)
+  (re-search-backward "[;,=]" nil nil arg)
   )
 
 (bind-keys :map global-map
-	   ("M-F" . forward-half-sentence)
-	   ("M-B" . backward-half-sentence)
+	   ("C-M-f" . forward-half-sentence)
+	   ("C-M-b" . backward-half-sentence)
 	   )
 
 (setq sentence-end-double-space nil) ;make backward-sentence and forward-sentence behave as in fundamental mode
@@ -41,8 +41,9 @@
   :config
 (global-set-key (kbd "C-l") 'avy-goto-word-1)
 (global-set-key (kbd "M-g") 'avy-goto-line)
-(setq avy-keys (nconc (number-sequence ?a ?z)
-		      ))
+;(setq avy-keys (nconc (number-sequence ?a ?z)
+;		      ))
+(setq avy-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?j ?k ?l ?m ?n ?o ?p ?q ?r ?s ?u ?v ?w ?y ?z))
 (setq avy-keys-alist nil)
 (add-to-list 'avy-orders-alist '(avy-goto-line . avy-order-closest))
 (add-to-list 'avy-orders-alist '(avy-goto-word-1 . avy-order-closest))
@@ -64,6 +65,12 @@
 ; simple editing
 (global-set-key (kbd "<deletechar>") 'quoted-insert)
 (global-set-key (kbd "M-r") 'replace-string)
+
+(bind-keys :map global-map
+	   ("M-r" . replace-string)
+	   ("M-5" . query-replace-regexp)
+	   )
+
 (defun backward-upcase-word()
   (interactive)
   (upcase-word -1)
@@ -101,6 +108,8 @@
 (global-set-key (kbd "C-o") 'open-line-above)
 
 ;; delete, kill, copy and paste
+(setq kill-whole-line t) ; kill whole line if point at beginning of line
+
 (defun backward-kill-word-or-kill-region(&optional arg)
   "backward kill word if region is not active, otherwise kill region"
   (interactive "p")
@@ -111,6 +120,15 @@
 )
  
 (define-key my-mode-map (kbd "C-w") 'backward-kill-word-or-kill-region)
+
+(defadvice kill-ring-save (before slick-copy activate compile)
+  "When called interactively with no active region, copy a single
+line instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (message "Copied line")
+     (list (line-beginning-position)
+           (line-beginning-position 2)))))
 
 (unless (eq system-type 'darwin)
   (define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
@@ -154,22 +172,18 @@
   :ensure t
   :init
   (smartparens-global-mode)
-
   (define-key smartparens-mode-map (kbd "M-f") 'sp-forward-sexp)
   (define-key smartparens-mode-map (kbd "M-b") 'sp-backward-sexp)
   (define-key smartparens-mode-map (kbd "M-k") 'sp-kill-sexp)
-  ; down a level
-  (define-key smartparens-mode-map (kbd "C-M-d") 'sp-down-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-S-d") 'sp-backward-down-sexp)
-  ; up a level
-;  (define-key smartparens-mode-map (kbd "C-M-f") 'sp-up-sexp)
-;  (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-up-sexp)
 
-  (define-key smartparens-mode-map (kbd "C-M-SPC") 'sp-select-next-thing)
-  (define-key smartparens-mode-map (kbd "C-M-S-SPC") 'sp-select-previous-thing)  
-  (define-key smartparens-mode-map (kbd "C-M-i") 'sp-change-enclosing)
+  (define-key smartparens-mode-map (kbd "C-M-]") 'sp-select-next-thing)
+  (define-key smartparens-mode-map (kbd "C-M-[") 'sp-select-previous-thing)  
+  (define-key my-mode-map (kbd "C-M-i") 'sp-change-enclosing)
   (define-key smartparens-mode-map (kbd "C-M-r") 'sp-rewrap-sexp)
   (define-key smartparens-mode-map (kbd "C-M-u") 'sp-unwrap-sexp)
+  :bind(
+  :map smartparens-mode-map
+  ("C-M-d" . sp-kill-symbol))
   :config
   (require 'smartparens-config)
   (setq sp-navigate-consider-symbols nil) ; don't treat a word as a sexp
@@ -210,7 +224,20 @@
 :diminish company-mode
 :config
 (global-company-mode) 
-(global-set-key (kbd "M-i") 'company-complete)
+(defun my-company-show-doc-buffer ()
+  "Temporarily show the documentation buffer for the selection."
+  (interactive)
+  (let* ((selected (nth company-selection company-candidates))
+         (doc-buffer (or (company-call-backend 'doc-buffer selected)
+                         (error "No documentation available"))))
+    (with-current-buffer doc-buffer
+      (goto-char (point-min)))
+    (display-buffer doc-buffer t)))
+
+(bind-keys :map global-map
+	   ("M-i" . company-complete)
+	   ("C-M-/" . my-company-show-doc-buffer)
+	   )
 (setq company-dabbrev-downcase nil) ;make completion case sensitive
 (setq company-idle-delay nil) ; do not give suggestions unless invoked manually
 (setq company-async-timeout 120)
@@ -266,6 +293,13 @@
   (setq projectile-current-project-on-switch 'keep) ; leave the current project at the default position
 ;  (setq projectile-dynamic-mode-line nil)
 ;  (setq-default projectile-mode-line-function nil)
+
+  (defun projectile-find-notes()
+  (interactive)
+  (let ((default-directory "~/Dropbox/notes"))
+    (projectile-find-file)))
+  
+  (global-set-key (kbd "C-z n") 'projectile-find-notes)
   )
 
 (use-package helm-projectile
