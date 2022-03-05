@@ -1,8 +1,9 @@
 (eval-after-load "python"
 '(progn
    (define-key python-mode-map (kbd "C-;") 'insert-number-sign)
-   (define-key python-mode-map (kbd "C-j") 'newline-and-indent) ; electric-newline-and-maybe-indent does not do what I want
-))
+   (define-key python-mode-map (kbd "C-j") 'newline-and-indent)))
+ ; electric-newline-and-maybe-indent does not do what I want
+;   (hs-minor-mode)
 
 ;; code navigation, doc lookup and completion for python
 (use-package anaconda-mode
@@ -11,15 +12,15 @@
   :config
   (define-key anaconda-mode-map (kbd "C-c r") 'anaconda-mode-find-references)
   (define-key anaconda-mode-map (kbd "M-r") nil)
-  )
+  (define-key anaconda-mode-map (kbd "C-M-f") 'python-nav-forward-defun)
+  (define-key anaconda-mode-map (kbd "C-M-b") 'python-nav-backward-defun))
 
 ;; python completion with company
 (use-package company-anaconda
   :ensure t
   :config
   (eval-after-load "company"
- '(add-to-list 'company-backends 'company-anaconda))
-)
+ '(add-to-list 'company-backends 'company-anaconda)))
 
 ;; virtual environment support
 (use-package virtualenvwrapper
@@ -28,12 +29,9 @@
   (setq venv-location 
 	(cl-case system-type
 	  ('gnu/linux "~/opt/miniconda3/envs/")
-	  ('darwin "/opt/homebrew/Caskroom/miniforge/base/envs") 
-	  )
-	)
+	  ('darwin "/opt/homebrew/Caskroom/miniforge/base/envs")))
   (venv-initialize-interactive-shells) ;;  interactive shell support
-  (venv-initialize-eshell) ;;  eshell support
-  )
+  (venv-initialize-eshell)) ;;  eshell support
 
 ;; jupyter notebook support
 (use-package ein
@@ -44,8 +42,6 @@
 	      ("M-p" . ein:worksheet-goto-prev-input-km)
 	      ("M-n" . ein:worksheet-goto-next-input-km)
 	      ("S-<return>" . ein:worksheet-execute-cell-km)
-	      ("C-<return>" . ein:worksheet-insert-cell-below-km)
-	      )
-  )
+	      ("C-<return>" . ein:worksheet-insert-cell-below-km)))
 
 (provide 'init-python)

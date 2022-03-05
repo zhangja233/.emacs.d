@@ -1,23 +1,20 @@
 (defun my-compile(&optional arg)
   (interactive "P") 
   (save-some-buffers 1) 
-  (cond ((equal arg '(4))
+  (cl-case major-mode
+  ('latex-mode (TeX-command-run-all nil))  
+  (t (cond ((equal arg '(4))
          ; use compile-buffer in comint mode[note that current-prefix-arg is '(4) ]
 	 (call-interactively 'compile t (vector compile-command)))
 	(t
 	 (setq-local compilation-read-command nil)
-	 (call-interactively 'compile)
-	 )
-	)
-  )
+	 (call-interactively 'compile))))))
 
 (global-set-key (kbd "C-z C-z") 'my-compile)
 
 (eval-after-load "compile"
   '(progn (define-key compilation-minor-mode-map (kbd "C-;") 'quit-window)
-	  (define-key compilation-shell-minor-mode-map (kbd "C-;") 'quit-window)
-  )
-  )
+	  (define-key compilation-shell-minor-mode-map (kbd "C-;") 'quit-window)))
 
 (global-set-key (kbd "C-z C-s") 'shell-command)
 
@@ -25,8 +22,7 @@
 
 
 (use-package ggtags
-  :ensure t
-  )
+  :ensure t)
 
 (add-hook 'c-mode-common-hook
     (lambda ()
@@ -44,9 +40,7 @@
 '(progn
    (bind-keys :map perl-mode-map
 	      ("C-;" . insert-single-dollar)
-	      ("M-;" . insert-number-sign)
-	      )
-))   
+	      ("M-;" . insert-number-sign))))   
 
 ;; f90-mode
 ;; Set Fortran 90 mode for .F
@@ -55,8 +49,7 @@
 (eval-after-load "f90"
 '(progn
    (define-key f90-mode-map (kbd "C-j") 'newline-and-indent) ; electric-newline-and-maybe-indent does not do what I want
-   (define-key f90-mode-map (kbd "C-c w") (kbd "WRITE(*,*) SPC ")) ; make life easier
-))
+   (define-key f90-mode-map (kbd "C-c w") (kbd "WRITE(*,*) SPC ")))) ; make life easier
 
 (use-package matlab
   :ensure matlab-mode
@@ -64,17 +57,18 @@
   (add-to-list
    'auto-mode-alist
    '("\\.m\\'" . matlab-mode))
-  (setq exec-path (append exec-path '("/Applications/MATLAB_R2021b.app/bin")))
-  )
+  (setq exec-path (append exec-path '("/Applications/MATLAB_R2021b.app/bin"))))
 
 (use-package markdown-mode
   :ensure t
-  )
+  :bind 
+(:map markdown-mode-map
+      ("M-p" . nil)
+      ("M-n" . nil)))
 
 (use-package json-mode
   :ensure t
   :config
-  (define-key json-mode-map (kbd "C-;") 'json-pretty-print-buffer)
-  )
+  (define-key json-mode-map (kbd "C-;") 'json-pretty-print-buffer))
 
 (provide 'init-prog)

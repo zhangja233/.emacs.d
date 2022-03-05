@@ -13,14 +13,10 @@
   (indent-for-tab-command)
   )
 
-(add-hook 'c-mode-common-hook
-	  (lambda ()
-	    (bind-keys :map c-mode-base-map
-		       ("C-;" . c-insert-comment)
-		       ("C-o" . c-open-line-above)
-		       )
-	    ))
-  
+(bind-keys :map c-mode-base-map
+	   ("C-;" . c-insert-comment)
+;	   ("C-o" . open-line-above)
+	   )  
 ; completion of headers
 (use-package company-c-headers
   :ensure t

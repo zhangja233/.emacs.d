@@ -28,6 +28,34 @@
 		       (goto-char end))))
 		 (point))))
 
+(defun my-copy-line (&optional arg)
+  "equivalence of kill-line without deleting the text"
+  (interactive "P")
+  (kill-ring-save (point)
+	       ;; It is better to move point to the other end of the kill
+	       ;; before killing.  That way, in a read-only buffer, point
+	       ;; moves across the text that is copied to the kill ring.
+	       ;; The choice has no effect on undo now that undo records
+	       ;; the value of point from before the command was run.
+	       (progn
+		 (if arg
+		     (forward-visible-line (prefix-numeric-value arg))
+		   (if (eobp)
+		       (signal 'end-of-buffer nil))
+		   (let ((end
+			  (save-excursion
+			    (end-of-visible-line) (point))))
+		     (if (or (save-excursion
+			       ;; If trailing whitespace is visible,
+			       ;; don't treat it as nothing.
+			       (unless show-trailing-whitespace
+				 (skip-chars-forward " \t" end))
+			       (= (point) end))
+			     (and kill-whole-line (bolp)))
+			 (forward-visible-line 1)
+		       (goto-char end))))
+		 (point))))
+
 (defun backward-delete-word (arg)
   "Delete characters backward until encountering the beginning of a word.
 With argument ARG, do this that many times."
