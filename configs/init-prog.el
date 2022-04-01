@@ -12,6 +12,9 @@
 
 (global-set-key (kbd "C-z C-z") 'my-compile)
 
+(bind-keys :map compilation-mode-map
+	   ("M-n" . my-forward-paragraph)
+	   ("M-p" . my-backward-paragraph))
 (eval-after-load "compile"
   '(progn (define-key compilation-minor-mode-map (kbd "C-;") 'quit-window)
 	  (define-key compilation-shell-minor-mode-map (kbd "C-;") 'quit-window)))
@@ -19,6 +22,25 @@
 (global-set-key (kbd "C-z C-s") 'shell-command)
 
 (global-set-key (kbd "<f2> e") 'eshell)
+
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "S-SPC")
+  (setq lsp-diagnostic-package :none)
+
+;  (setq lsp-ui-doc-enable nil)
+;  (setq lsp-eldoc-enable-hover nil)
+  (setq lsp-signature-auto-activate nil)
+
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+        (python-mode . lsp))
+         ;; if you want which-key integration
+;         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+(use-package lsp-ui
+  :ensure t)
 
 
 (use-package ggtags
@@ -41,15 +63,6 @@
    (bind-keys :map perl-mode-map
 	      ("C-;" . insert-single-dollar)
 	      ("M-;" . insert-number-sign))))   
-
-;; f90-mode
-;; Set Fortran 90 mode for .F
-(setq auto-mode-alist
-      (cons '("\\.F$" . f90-mode) auto-mode-alist))
-(eval-after-load "f90"
-'(progn
-   (define-key f90-mode-map (kbd "C-j") 'newline-and-indent) ; electric-newline-and-maybe-indent does not do what I want
-   (define-key f90-mode-map (kbd "C-c w") (kbd "WRITE(*,*) SPC ")))) ; make life easier
 
 (use-package matlab
   :ensure matlab-mode
