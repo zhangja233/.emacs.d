@@ -90,6 +90,8 @@
   (tags  . " %i %-12:c")
   (search . " %i %-12:c")))
 
+; tags
+(setq org-tags-match-list-sublevels nil) ;don't list sublevels when searching for tags
 
 ;; org-capture
 (global-set-key (kbd "C-z c") 'org-capture)

@@ -255,11 +255,11 @@ line instead."
   (interactive)
   (jump-to-register ? ))
 
-(global-set-key (kbd "C-z SPC") 'my-jump-to-saved-location)
-(global-set-key (kbd "C-z j") 'my-jump-to-saved-window)
 (bind-keys :map my-mode-map
 	   ("C-r w" . my-window-configuration-to-register)
-	   ("C-r SPC" . my-point-to-register))
+	   ("C-r C-w" . my-jump-to-saved-window)
+	   ("C-r SPC" . my-point-to-register)
+	   ("C-r C-SPC" . my-jump-to-saved-location))
 
 (setq winner-dont-bind-my-keys t)
 (winner-mode 1)
