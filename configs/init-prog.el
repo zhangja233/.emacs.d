@@ -26,7 +26,7 @@
 (use-package lsp-mode
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "S-SPC")
+  (setq lsp-keymap-prefix "M-u")
   (setq lsp-diagnostic-package :none)
 
 ;  (setq lsp-ui-doc-enable nil)
@@ -34,7 +34,7 @@
   (setq lsp-signature-auto-activate nil)
 
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-        (python-mode . lsp))
+        ((python-mode c-mode f90-mode) . lsp))
          ;; if you want which-key integration
 ;         (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)

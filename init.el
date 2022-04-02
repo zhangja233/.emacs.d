@@ -62,6 +62,9 @@
 
 ; my personal configs
 (add-to-list 'load-path (expand-file-name "configs" user-emacs-directory))
+(require 'init-linux)
+(require 'init-osx)
+(require 'init-windows)
 (require 'init-my)
 (require 'init-display)
 (require 'init-general-editing)
@@ -74,7 +77,5 @@
 (require 'init-python)
 (require 'init-helm)
 (require 'init-magit)
-(require 'init-linux)
-(require 'init-osx)
-(require 'init-windows)
+
 

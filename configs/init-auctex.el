@@ -21,6 +21,9 @@
   (defun insert-single-dollar() 
     (interactive)
     (insert "$"))
+  (defun insert-percent() 
+    (interactive)
+    (insert "%"))  
   (defun latex-insert-prime() 
     (interactive)(insert "^{\\prime }"))
   (defun latex-append-ampersand()
@@ -33,7 +36,8 @@
    :map LaTeX-mode-map
    ("C-;" . insert-backslash)
    ("M-;" . insert-dollar)
-   ("C-:" . insert-single-dollar)
+   ("C-:" . insert-percent)
+   ("M-:" . insert-single-dollar)
    ("C-c '" . latex-insert-prime)
    ("C-c i" . TeX-complete-symbol)
    ("C-c m" . LaTeX-mark-section)
@@ -90,6 +94,8 @@
 	("C-<return>" (lambda() (interactive) (insert " =& ")))
 	("C-b" insert-bra "" nil)
 	("C-n" "nabla " )
+	("<left>" "left")
+	("<right>" "right")
 	("C-k" insert-ket "" nil)
 	("DEL" insert-hline "" nil)))))
 

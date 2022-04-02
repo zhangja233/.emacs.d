@@ -1,5 +1,26 @@
+(add-hook 'python-mode-hook
+	  (lambda() (setq-default indent-tabs-mode t)))
+(add-hook 'python-mode-hook 'auto-fill-mode)
 (eval-after-load "python"
 '(progn
+   (defun my-python-indent-shift-left()
+     (interactive)
+     (save-excursion
+       (beginning-of-line)
+       (delete-char 4)))
+   (defun my-python-indent-shift-right()
+     (interactive)
+     (save-excursion
+       (beginning-of-line)
+       (insert "    ")))   
+   (bind-keys :map python-mode-map
+	      ("<return>" . newline-and-indent)
+	      ("M-DEL" . python-mark-defun)
+	      ("<left>" . my-python-indent-shift-left)
+	      ("<backtab>" . my-python-indent-shift-left)
+	      ("<right>" . my-python-indent-shift-right)
+	      ("C-<left>" . python-indent-shift-left)
+	      ("C-<right>" . python-indent-shift-right))
    (define-key python-mode-map (kbd "C-;") 'insert-number-sign)
    (define-key python-mode-map (kbd "C-j") 'newline-and-indent)))
  ; electric-newline-and-maybe-indent does not do what I want

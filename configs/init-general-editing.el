@@ -51,7 +51,7 @@
 
 (setq set-mark-command-repeat-pop t) ; repeat pop by C-SPC after C-u C-SPC
 
-(define-key my-mode-map (kbd "C-r") 'scroll-down-command)
+;(define-key my-mode-map (kbd "C-r") 'scroll-down-command)
 (global-set-key (kbd "<prior>") 'scroll-other-window-down)
 (global-set-key (kbd "<next>") 'scroll-other-window)
 
@@ -235,8 +235,34 @@ line instead."
 (global-set-key (kbd "C-S-r") 'recenter-top-bottom)
 (global-set-key (kbd "C-x x") 'delete-window)
 
-(global-set-key (kbd "C-z j") 'jump-to-register)
-(global-set-key (kbd "C-z SPC") 'window-configuration-to-register)
+;; register
+
+(define-prefix-command 'my-register-prefix-keymap)
+(define-key my-mode-map (kbd "C-r") 'my-register-prefix-keymap)
+
+(defun my-window-configuration-to-register()
+  (interactive)
+  (window-configuration-to-register ?w)
+  (message "window config saved"))
+
+(defun my-point-to-register()
+  (interactive)
+  (point-to-register ? )
+  (message "point location saved"))
+
+(defun my-jump-to-saved-window()
+  (interactive)
+  (jump-to-register ?w))
+
+(defun my-jump-to-saved-location()
+  (interactive)
+  (jump-to-register ? ))
+
+(global-set-key (kbd "C-z SPC") 'my-jump-to-saved-location)
+(global-set-key (kbd "C-z j") 'my-jump-to-saved-window)
+(bind-keys :map my-mode-map
+	   ("C-r w" . my-window-configuration-to-register)
+	   ("C-r SPC" . my-point-to-register))
 
 (setq winner-dont-bind-my-keys t)
 (winner-mode 1)
@@ -315,9 +341,10 @@ line instead."
 
 (defun save-all-buffers()
   (interactive)
-  (save-some-buffers 1))
+  (save-some-buffers 1)
+  (message "all buffers saved"))
 (global-set-key (kbd "C-x C-s")  'save-all-buffers)
-(global-set-key (kbd "C-'")  'save-all-buffers)
+(global-set-key (kbd "M-s")  'save-all-buffers)
 (global-set-key (kbd "C-x C-S-s") 'save-buffer)
 
 (defun my-quit-emacs()
@@ -391,7 +418,18 @@ line instead."
 (defun find-my-info()
   (interactive)
   (find-file "~/Dropbox/org/personal/info.org"))
+(defun find-planer()
+  (interactive)
+(find-file "~/Dropbox/org/plan.org"))
+(global-set-key (kbd "C-z p")  'find-planer)
+
+(defun find-download()
+  (interactive)
+  (find-file "~/Downloads/"))
+(global-set-key (kbd "C-z C-d")  'find-download)
+
 (global-set-key (kbd "C-z F") 'find-my-info)
+
 
 ;; interact with the world outside emacs
 

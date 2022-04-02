@@ -37,9 +37,9 @@
 ;  (global-set-key (kbd "C-,") 'helm-multi-files)
   (global-set-key (kbd "C-,") 'helm-buffers-list)
   (global-set-key (kbd "C-x f") 'helm-find-files)
-  (global-set-key (kbd "M-s o") 'helm-occur)
+;  (global-set-key (kbd "M-s o") 'helm-occur)
   (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)
-  (global-set-key (kbd "C-x r b") 'helm-filter-bookmarks)
+  (global-set-key (kbd "C-x r b") 'helm-bookmarks)
 
   (global-set-key (kbd "C-z C-f") 'helm-locate)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)

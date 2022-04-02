@@ -1,5 +1,5 @@
 (add-hook 'org-mode-hook 'flyspell-mode)
-(add-hook 'org-mode-hook 'auto-fill-mode)
+;(add-hook 'org-mode-hook 'auto-fill-mode)
 ;(add-hook 'org-mode-hook 'visual-line-mode)
 
 (use-package org-roam
@@ -11,6 +11,14 @@
   (define-key org-mode-map (kbd "C-c t") 'org-id-get-create)
   :bind
   ("C-z f" . org-roam-node-find))
+
+(use-package org-ref
+  :ensure t
+  :config
+  (setq org-ref-bibliography-notes "~/Dropbox/org/ref/notes.org"
+      org-ref-default-bibliography '("~/Dropbox/org/ref/master.bib")
+      org-ref-pdf-directory "~/Dropbox/org/ref/pdfs/"))
+
 
 (use-package valign ; visual alignment for org tables when using Chinese
 :ensure t
@@ -33,6 +41,13 @@
 
 (eval-after-load "org"
 '(progn
+   (defun org-create-list-item-above()
+     (interactive)
+     (beginning-of-line)
+     (open-line 1)
+     (insert ?-)
+     (insert ? ))
+   (setq org-export-with-sub-superscripts nil)
    (bind-keys :map org-mode-map
 	      ("C-<return>" . org-insert-heading)
 	      ("C-;" . org-insert-todo-heading)
@@ -42,13 +57,20 @@
 	      ("<left>" . org-backward-heading-same-level)
 	      ("M-;" . org-insert-todo-subheading)
 	      ("M-<return>" . org-insert-subheading)
-	      ("M-'" . org-metaright)
+	      ("S-<return>" . org-meta-return)
+	      ("M-[" . org-metaleft)
+	      ("M-]" . org-metaright)
 	      ("C-c m" . org-mark-subtree)
 	      ("C-c w". org-cut-subtree)
-	      ("C-|" . org-table-hline-and-move))
+	      ("C-c j" . org-table-copy-down)
+	      ("C-c o" . org-create-list-item-above)
+	      ("C-c ]" . org-ref-insert-link)
+	      ("C-|" . org-table-hline-and-move)
+	      ("C-c e" . insert-equation))
    (bind-keys :map global-map
 	      ("C-z m" . org-store-link)
-	      ("C-z G" . org-clock-goto))
+	      ("C-z G" . org-clock-goto)
+	      ("C-x c" . calendar))
 ;; configs for org-mode
 ;;; customize org-agenda   
 (setq org-agenda-start-on-weekday nil) ; make org-agenda start at the current day
@@ -60,6 +82,13 @@
           (alltodo "")))))
 
 ;(setq org-agenda-prefix-format )
+(setq org-agenda-prefix-format '(
+  ;; (agenda  . " %i %-12:c%?-12t% s") ;; file name + org-agenda-entry-type
+  (agenda  . "  %?-12t% s")
+;  (timeline  . "  % s")
+  (todo  . " %i %-12:c")
+  (tags  . " %i %-12:c")
+  (search . " %i %-12:c")))
 
 
 ;; org-capture
@@ -148,21 +177,6 @@
 
 (setq-default org-catch-invisible-edits 'smart)
 
-(defun find-work() 
-  (interactive) (find-file "~/Dropbox/org/work.org"))
-(global-set-key (kbd "C-z w")  'find-work)
 (global-set-key (kbd "C-z a") 'org-agenda)
-
-
-
-(defun find-planer()
-  (interactive)
-(find-file "~/Dropbox/org/plan.org"))
-(global-set-key (kbd "C-z p")  'find-planer)
-
-(defun find-download()
-  (interactive)
-  (find-file "~/Downloads/"))
-(global-set-key (kbd "C-z C-d")  'find-download)
 
 (provide 'init-org)
