@@ -151,6 +151,8 @@
 (global-set-key (kbd "C-z o") 'org-clock-out)
 
 (setq org-clock-mode-line-total 'today)
+(setq org-duration-format (quote h:mm))
+
 (define-key org-mode-map (kbd "C-c a") 'org-metaleft)
 (define-key org-mode-map (kbd "C-c d") 'org-metaright)
 (define-key org-mode-map (kbd "C-c r") 'org-clock-report)

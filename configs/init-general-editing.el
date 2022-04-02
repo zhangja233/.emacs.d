@@ -304,7 +304,12 @@ line instead."
   (let ((default-directory "~/Dropbox/notes"))
     (projectile-find-file)))
   
-  (global-set-key (kbd "C-z n") 'projectile-find-notes))
+  (global-set-key (kbd "C-z n") 'projectile-find-notes)
+  
+  (defun projectile-find-root()
+    (interactive)
+    (find-file (projectile-project-root)))
+  (global-set-key (kbd "C-z C-r") 'projectile-find-root))
 
 (use-package helm-projectile
   :ensure t)
