@@ -85,9 +85,6 @@
 (global-set-key (kbd "M-o") 'open-line-below)
 ;(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
 
-
-;(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
-
 (defun open-line-above()
   (interactive)
   (beginning-of-line)
@@ -266,8 +263,12 @@ line instead."
 
 (setq winner-dont-bind-my-keys t)
 (winner-mode 1)
+(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
 (global-set-key (kbd "C-z ,") 'winner-undo)
 (global-set-key (kbd "C-z .") 'winner-redo)
+(bind-keys :map global-map
+	   ("H-\[" . winner-undo)
+	   ("C-\]" . winner-redo))
 
 (use-package ace-window
   :ensure t
