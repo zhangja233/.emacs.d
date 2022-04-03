@@ -115,6 +115,7 @@ line instead."
 
 (use-package expand-region
   :ensure t
+  :config
   (define-key my-mode-map (kbd "M-k") 'er/expand-region))
 
 (unless (eq system-type 'darwin)
