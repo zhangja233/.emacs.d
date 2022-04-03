@@ -113,6 +113,10 @@ line instead."
      (list (line-beginning-position)
            (line-beginning-position 2)))))
 
+(use-package expand-region
+  :ensure t
+  (define-key my-mode-map (kbd "M-k") 'er/expand-region))
+
 (unless (eq system-type 'darwin)
   (define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
   (global-set-key (kbd "C-h") (kbd "<backspace>")))
@@ -130,7 +134,7 @@ line instead."
 (global-set-key (kbd "C-<backspace>") 'backward-delete-word)
 (global-set-key (kbd "C-<escape>") 'delete-word)
 
-(global-set-key (kbd "M-k") 'my-copy-line)
+(global-set-key (kbd "C-S-w") 'my-copy-line)
 
 ; copy to clipboard when M-w
 (setq x-select-enable-clipboard t)
