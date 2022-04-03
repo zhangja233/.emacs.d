@@ -245,7 +245,7 @@ line instead."
 (defun my-window-configuration-to-register()
   (interactive)
   (window-configuration-to-register ?w)
-  (message "window config saved"))
+  (message "window layout saved"))
 
 (defun my-point-to-register()
   (interactive)
