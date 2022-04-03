@@ -226,11 +226,12 @@ line instead."
 
 ;;; buffer, window, frame and file management
 
-(global-set-key (kbd "C-.") 'other-window)
-
-(global-set-key (kbd "C-1") 'delete-other-windows)
 (global-set-key (kbd "C-S-r") 'recenter-top-bottom)
 (global-set-key (kbd "C-x x") 'delete-window)
+(bind-keys :map global-map
+	   ("C-1" . delete-other-windows)
+	   ("C-." . other-window)
+	   ("C-\\" . split-window-right))
 
 ;; register
 

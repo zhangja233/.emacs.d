@@ -1,44 +1,3 @@
-(add-hook 'org-mode-hook 'flyspell-mode)
-;(add-hook 'org-mode-hook 'auto-fill-mode)
-;(add-hook 'org-mode-hook 'visual-line-mode)
-
-(use-package org-roam
-  :ensure t
-  :config
-  (setq org-roam-directory "~/Dropbox/org/roam")
-  (org-roam-db-autosync-mode)
-  (define-key org-mode-map (kbd "C-c i") 'org-roam-node-insert)
-  (define-key org-mode-map (kbd "C-c t") 'org-id-get-create)
-  :bind
-  ("C-z f" . org-roam-node-find))
-
-(use-package org-ref
-  :ensure t
-  :config
-  (setq org-ref-bibliography-notes "~/Dropbox/org/ref/notes.org"
-      org-ref-default-bibliography '("~/Dropbox/org/ref/master.bib")
-      org-ref-pdf-directory "~/Dropbox/org/ref/pdfs/"))
-
-
-(use-package valign ; visual alignment for org tables when using Chinese
-:ensure t
-:diminish valign-mode)
-;(add-hook 'org-mode-hook #'valign-mode)
-
-
-(use-package org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
-
-
-(font-lock-add-keywords 'org-mode
-                        '(("^ *\\([-]\\) "
-                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-(font-lock-add-keywords 'org-mode
-                        '(("^ *\\([+]\\) "
-                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "◦"))))))
-
 (eval-after-load "org"
 '(progn
    (defun org-create-list-item-above()
@@ -49,6 +8,7 @@
      (insert ? ))
    (setq org-export-with-sub-superscripts nil)
    (bind-keys :map org-mode-map
+	      ("C-j" . newline-and-indent)
 	      ("C-<return>" . org-insert-heading)
 	      ("C-;" . org-insert-todo-heading)
 	      ("<up>" . org-previous-visible-heading)
@@ -182,5 +142,48 @@
 (setq-default org-catch-invisible-edits 'smart)
 
 (global-set-key (kbd "C-z a") 'org-agenda)
+
+(add-hook 'org-mode-hook 'flyspell-mode)
+;(add-hook 'org-mode-hook 'auto-fill-mode)
+;(add-hook 'org-mode-hook 'visual-line-mode)
+
+(use-package org-roam
+  :ensure t
+  :config
+  (setq org-roam-directory "~/Dropbox/org/roam")
+  (org-roam-db-autosync-mode)
+  (define-key org-mode-map (kbd "C-c i") 'org-roam-node-insert)
+  (define-key org-mode-map (kbd "C-c t") 'org-id-get-create)
+  :bind
+  ("C-z f" . org-roam-node-find))
+
+(use-package org-ref
+  :ensure t
+  :config
+  (setq org-ref-bibliography-notes "~/Dropbox/org/ref/notes.org"
+      org-ref-default-bibliography '("~/Dropbox/org/ref/master.bib")
+      org-ref-pdf-directory "~/Dropbox/org/ref/pdfs/"))
+
+
+(use-package valign ; visual alignment for org tables when using Chinese
+:ensure t
+:diminish valign-mode)
+;(add-hook 'org-mode-hook #'valign-mode)
+
+
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
+
+
+(font-lock-add-keywords 'org-mode
+                        '(("^ *\\([-]\\) "
+                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+(font-lock-add-keywords 'org-mode
+                        '(("^ *\\([+]\\) "
+                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "◦"))))))
+
+
 
 (provide 'init-org)
