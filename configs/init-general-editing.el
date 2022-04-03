@@ -288,7 +288,7 @@ line instead."
   :diminish projectile-mode
   :config
   (projectile-mode +1)
-  (define-key my-mode-map (kbd "M-j") 'projectile-switch-project)
+  (global-set-key (kbd "M-j") 'projectile-switch-project)
   (define-key projectile-mode-map (kbd "M-J") 'projectile-find-file)
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
   (setq projectile-indexing-method 'hybrid)
