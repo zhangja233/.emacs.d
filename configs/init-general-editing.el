@@ -429,7 +429,7 @@ line instead."
 (global-set-key (kbd "C-z e") 'find-emacs-configs)
 (defun find-my-info()
   (interactive)
-  (find-file "~/Dropbox/org/personal/info.org"))
+  (find-file "~/Dropbox/org_non_agenda/personal/info.org"))
 (defun find-planer()
   (interactive)
 (find-file "~/Dropbox/org/plan.org"))
