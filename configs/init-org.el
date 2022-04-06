@@ -26,7 +26,10 @@
 	      ("C-c o" . org-create-list-item-above)
 	      ("C-c ]" . org-ref-insert-link)
 	      ("C-|" . org-table-hline-and-move)
-	      ("C-c e" . insert-equation))
+	      ("C-c e" . insert-equation)
+	      ("C-<up>" . org-timestamp-up-day) ; timestamp
+;	      ("C-c C-n" . org-timestamp-down-day)
+	      )
    (bind-keys :map global-map
 	      ("C-z m" . org-store-link)
 	      ("C-z G" . org-clock-goto)

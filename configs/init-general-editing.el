@@ -93,7 +93,7 @@
 (global-set-key (kbd "C-o") 'open-line-above)
 
 ;; delete, kill, copy and paste
-(setq kill-whole-line t) ; kill whole line if point at beginning of line
+;(setq kill-whole-line t) ; kill whole line if point at beginning of line
 
 (defun backward-kill-word-or-kill-region(&optional arg)
   "backward kill word if region is not active, otherwise kill region"
@@ -130,8 +130,8 @@ line instead."
 
 (define-key my-mode-map (kbd "C-k") 'kill-line)
 
-
-(global-set-key (kbd "C-S-k") 'delete-line)
+(global-set-key (kbd "C-z C-k") 'delete-line)
+(global-set-key (kbd "C-S-k") 'kill-whole-line)
 (global-set-key (kbd "C-<backspace>") 'backward-delete-word)
 (global-set-key (kbd "C-<escape>") 'delete-word)
 
