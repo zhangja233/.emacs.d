@@ -325,6 +325,7 @@ line instead."
 (require 'dired-x)
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
 (define-key my-mode-map (kbd "C-x j") 'dired-jump)
+(define-key my-mode-map (kbd "C-x J") 'dired-jump-other-window)
 
 (define-key dired-mode-map (kbd "SPC") 'browse-url-of-dired-file)
 (define-key dired-mode-map (kbd "E") 'wdired-change-to-wdired-mode)
@@ -434,6 +435,11 @@ line instead."
   (interactive)
 (find-file "~/Dropbox/org/plan.org"))
 (global-set-key (kbd "C-z p")  'find-planer)
+
+(defun find-capture()
+  (interactive)
+(find-file "~/Dropbox/org/capture.org"))
+(global-set-key (kbd "C-z C-c")  'find-capture)
 
 (defun find-download()
   (interactive)

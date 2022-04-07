@@ -30,6 +30,10 @@
 	      ("C-<up>" . org-timestamp-up-day) ; timestamp
 ;	      ("C-c C-n" . org-timestamp-down-day)
 	      )
+	 (eval-after-load "org-agenda"
+	 '(progn
+   (bind-keys :map org-agenda-mode-map
+	      ("C-;" . org-agenda-columns))))
    (bind-keys :map global-map
 	      ("C-z m" . org-store-link)
 	      ("C-z G" . org-clock-goto)
@@ -50,8 +54,13 @@
   (agenda  . "  %?-12t% s")
 ;  (timeline  . "  % s")
   (todo  . " %i %-12:c")
-  (tags  . " %i %-12:c")
+  (tags  . "%e ")
   (search . " %i %-12:c")))
+(setq org-agenda-custom-commands
+      '(("p" tags "+pwd")
+	("P" tags "+pwd-life-entertainment")))
+(setq org-columns-default-format "%30ITEM(Task) %6CLOCKSUM{:} %6Effort(Estim){:} %DEADLINE %TAGS")
+
 
 ; tags
 (setq org-tags-match-list-sublevels nil) ;don't list sublevels when searching for tags
