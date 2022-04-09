@@ -230,7 +230,7 @@
    (insert "\\sqrt{}") (backward-char))
  (define-key LaTeX-mode-map (kbd "C-c s") 'insert-sqrt)
 
- (setq TeX-command-force "XeLaTeX")
+; (setq TeX-command-force "XeLaTeX")
 
 ;;  (defun latex-compile-and-view()
 ;;     (interactive) (save-some-buffers 1) (TeX-command-run-all nil)
@@ -264,10 +264,11 @@
 (setq TeX-parse-self t) ;parse on save
 ;(setq-default TeX-master nil) ; let auctex ask for a master file
 
-;(setq LaTeX-electric-left-right-brace t) ;auto insert braces
-
 ;; So that RefTeX finds my bibliography
-(setq reftex-default-bibliography '("~/lib/bib/phylab.bib" "~/lib/bib/main.bib" ))))
+(setq reftex-plug-into-AUCTeX t)
+(setq reftex-default-bibliography '("~/lib/bib/zhangja.bib" "~/lib/bib/main.bib" ))
+
+)) ; be aware, eval-after-load ends here
 
 (setq TeX-engine 'xetex)
 
