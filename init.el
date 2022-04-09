@@ -60,6 +60,16 @@
 (global-set-key (kbd "C-z S") 'keyfreq-show)
 )
 
+(unless (display-graphic-p)
+  (define-key key-translation-map (kbd "M-1") (kbd "C-;"))
+  (define-key key-translation-map (kbd "M-2") (kbd "H-i"))
+  (define-key key-translation-map (kbd "M-3") (kbd "H-\["))
+  (define-key key-translation-map (kbd "M-4") (kbd "C-\]"))
+  (define-key key-translation-map (kbd "M-5") (kbd "C-,"))
+  (define-key key-translation-map (kbd "M-6") (kbd "C-."))
+  (define-key key-translation-map (kbd "M-7") (kbd "C-'"))
+)
+
 ; my personal configs
 (add-to-list 'load-path (expand-file-name "configs" user-emacs-directory))
 (require 'init-linux)

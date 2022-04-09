@@ -38,7 +38,7 @@
 (global-set-key (kbd "M-g") 'avy-goto-line)
 ;(setq avy-keys (nconc (number-sequence ?a ?z)
 ;		      ))
-(setq avy-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?j ?k ?l ?m ?n ?o ?p ?q ?r ?s ?u ?v ?w ?y ?z))
+(setq avy-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?j ?k ?l ?m ?o ?p ?q ?r ?s ?u ?v ?w ?y ?z))
 (setq avy-keys-alist nil)
 (add-to-list 'avy-orders-alist '(avy-goto-line . avy-order-closest))
 (add-to-list 'avy-orders-alist '(avy-goto-word-1 . avy-order-closest))
@@ -49,24 +49,36 @@
 (define-key my-mode-map (kbd "M-a") 'beginning-of-buffer)
 (define-key my-mode-map (kbd "M-e") 'end-of-buffer)
 
+;; mark ring
 (setq set-mark-command-repeat-pop t) ; repeat pop by C-SPC after C-u C-SPC
 
-;(define-key my-mode-map (kbd "C-r") 'scroll-down-command)
 (global-set-key (kbd "<prior>") 'scroll-other-window-down)
 (global-set-key (kbd "<next>") 'scroll-other-window)
 
 ; simple editing
 (global-set-key (kbd "<deletechar>") 'quoted-insert)
+
+;;; search and replace
 (global-set-key (kbd "M-r") 'replace-string)
 
 (bind-keys :map global-map
 	   ("M-r" . replace-string)
 	   ("M-5" . query-replace-regexp))
 
+(use-package visual-regexp-steroids
+  :ensure t
+  :config
+  (bind-keys :map my-mode-map
+   ("C-M-s" . vr/isearch-forward)))
+
+(when (eq system-type 'darwin)
+(use-package pcre2el
+ :ensure t))
+
 (defun backward-upcase-word()
   (interactive)
   (upcase-word -1))
-(global-set-key (kbd "M-u") 'backward-upcase-word)
+(global-set-key (kbd "C-z U") 'backward-upcase-word)
 
 (electric-indent-mode -1)
 
@@ -116,7 +128,7 @@ line instead."
 (use-package expand-region
   :ensure t
   :config
-  (define-key my-mode-map (kbd "M-k") 'er/expand-region))
+  (define-key my-mode-map (kbd "C-=") 'er/expand-region))
 
 (unless (eq system-type 'darwin)
   (define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
@@ -169,7 +181,7 @@ line instead."
   (define-key smartparens-mode-map (kbd "C-M-u") 'sp-unwrap-sexp)
   :bind(
   :map smartparens-mode-map
-  ("C-M-d" . sp-kill-symbol))
+  ("M-k" . sp-kill-symbol))
   :config
   (require 'smartparens-config)
   (setq sp-navigate-consider-symbols nil) ; don't treat a word as a sexp
@@ -200,7 +212,9 @@ line instead."
 :config)
 
 ;;; completion
+(when (display-graphic-p)
 (define-key input-decode-map (kbd "C-i") (kbd "H-i"))
+)
 (global-set-key (kbd "H-i") 'dabbrev-expand)
 
 (use-package company
@@ -269,11 +283,15 @@ line instead."
 
 (setq winner-dont-bind-my-keys t)
 (winner-mode 1)
+
+(when (display-graphic-p)
 (define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
+)
+(global-set-key (kbd "H-\[") 'winner-undo)
+
 (global-set-key (kbd "C-z ,") 'winner-undo)
 (global-set-key (kbd "C-z .") 'winner-redo)
 (bind-keys :map global-map
-	   ("H-\[" . winner-undo)
 	   ("C-\]" . winner-redo))
 
 (use-package ace-window
