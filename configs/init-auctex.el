@@ -241,7 +241,7 @@
 
 (defun latex-save-and-compile()
   (interactive)
-  (save-some-buffers 1) (TeX-command-master))
+  (save-some-buffers 1) (TeX-command-sequence t t))
 (define-key LaTeX-mode-map (kbd "C-x C-s") 'latex-save-and-compile) ; compile tex file every time hit C-x C-s, thus making it up to date.
 (define-key LaTeX-mode-map (kbd "C-'") 'latex-save-and-compile) 
 
@@ -266,7 +266,7 @@
 
 ;; So that RefTeX finds my bibliography
 (setq reftex-plug-into-AUCTeX t)
-(setq reftex-default-bibliography '("~/lib/bib/zhangja.bib" "~/lib/bib/main.bib" ))
+(setq reftex-default-bibliography '("~/lib/bib/zhangja.bib" "~/lib/bib/url.bib"))
 
 )) ; be aware, eval-after-load ends here
 
