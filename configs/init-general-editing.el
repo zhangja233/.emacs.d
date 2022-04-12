@@ -78,10 +78,10 @@
   (end-of-line)
   (newline-and-indent)
   )
-(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
-(global-set-key (kbd "H-m") 'open-line-below)
+;(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
+;(global-set-key (kbd "H-m") 'open-line-below)
 
-(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
+;(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
 
 (defun open-line-above()
   (interactive)
@@ -246,8 +246,8 @@ With argument ARG, do this that many times."
 )
 
 ;;; completion
-(define-key input-decode-map (kbd "C-i") (kbd "H-i"))
-(global-set-key (kbd "H-i") 'dabbrev-expand)
+;(define-key input-decode-map (kbd "C-i") (kbd "H-i"))
+;(global-set-key (kbd "H-i") 'dabbrev-expand)
 
 (use-package company
 :ensure t
@@ -292,9 +292,9 @@ With argument ARG, do this that many times."
   (setq projectile-indexing-method 'hybrid)
   )
 
-(use-package helm-projectile
-  :ensure t
-  )
+;(use-package helm-projectile
+;  :ensure t
+;  )
 
 
 ;; dired mode
