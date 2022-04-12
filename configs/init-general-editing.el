@@ -69,7 +69,8 @@
   :ensure t
   :config
   (bind-keys :map my-mode-map
-   ("C-M-s" . vr/isearch-forward)))
+   ("C-M-s" . vr/isearch-forward)
+   ("C-z r" . vr/replace)))
 
 (when (eq system-type 'darwin)
 (use-package pcre2el
@@ -102,7 +103,7 @@
 ;(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
 =======
   (newline-and-indent))
-(global-set-key (kbd "M-o") 'open-line-below)
+;(global-set-key (kbd "M-o") 'open-line-below)
 ;(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
 >>>>>>> 1dc7ee849160a2669ef4eabb4ca91fe230097361
 
@@ -311,7 +312,7 @@ line instead."
 (use-package ace-window
   :ensure t
   :config
-  (global-set-key (kbd "C-M-.") 'ace-window))
+  (global-set-key (kbd "M-o") 'ace-window))
 
 (use-package window-purpose
   :ensure t

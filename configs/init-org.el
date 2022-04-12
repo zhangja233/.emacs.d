@@ -13,8 +13,10 @@
 	      ("C-;" . org-insert-todo-heading)
 	      ("<up>" . org-previous-visible-heading)
 	      ("<down>" . org-next-visible-heading)
-	      ("<right>" . org-forward-heading-same-level)
-	      ("<left>" . org-backward-heading-same-level)
+;	      ("<right>" . org-forward-heading-same-level)
+;	      ("<left>" . org-backward-heading-same-level)
+	      ("<right>" . org-metaright)
+	      ("<left>" . org-metaleft)	      
 	      ("M-;" . org-insert-todo-subheading)
 	      ("M-<return>" . org-insert-subheading)
 	      ("S-<return>" . org-meta-return)
@@ -27,6 +29,7 @@
 	      ("C-c ]" . org-ref-insert-link)
 	      ("C-|" . org-table-hline-and-move)
 	      ("C-c e" . insert-equation)
+	      ("C-c E" . org-set-effort)
 	      ("C-<up>" . org-timestamp-up-day) ; timestamp
 ;	      ("C-c C-n" . org-timestamp-down-day)
 	      )
@@ -59,11 +62,11 @@
 (setq org-agenda-custom-commands
       '(("p" tags "+pwd")
 	("P" tags "+pwd-life-entertainment")))
-(setq org-columns-default-format "%30ITEM(Task) %6CLOCKSUM{:} %6Effort(Estim){:} %DEADLINE %TAGS")
+(setq org-columns-default-format "%30ITEM(Task) %CLOCKSUM{:} %CLOCKSUM_W %6Effort(Estim){:} %DEADLINE %TAGS %done")
 
 
 ; tags
-(setq org-tags-match-list-sublevels nil) ;don't list sublevels when searching for tags
+;(setq org-tags-match-list-sublevels nil) ;don't list sublevels when searching for tags
 
 ;; org-capture
 (global-set-key (kbd "C-z c") 'org-capture)

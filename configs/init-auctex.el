@@ -26,12 +26,39 @@
     (insert "%"))  
   (defun latex-insert-prime() 
     (interactive)(insert "^{\\prime }"))
+  
+  (defun latex-kill-section()
+    (interactive)
+    (LaTeX-mark-section)
+    (kill-region (mark) (point) 'region))
+  
   (defun latex-append-ampersand()
     (interactive)
     (save-excursion
       (beginning-of-line)
       (search-forward "=")
       (insert "&")))
+
+  (defun latex-convert-equation-to-aligned()
+    (interactive)
+    (beginning-of-line)
+    (kill-line)
+    (insert-latex-env "aligned")
+    (yank)
+    (latex-append-ampersand)
+    (end-of-line)
+    (insert "\\\\")
+    (newline-and-indent))
+  
+  (defun latex-bold-region()
+    (interactive)
+    (if (region-active-p)
+	(kill-region (mark) (point) 'region)
+      (delete-char 1 t))
+    (insert "\\b{")
+    (yank)
+    (insert "}"))
+  
   (bind-keys* 
    :map LaTeX-mode-map
    ("C-;" . insert-backslash)
@@ -41,6 +68,9 @@
    ("C-c '" . latex-insert-prime)
    ("C-c i" . TeX-complete-symbol)
    ("C-c m" . LaTeX-mark-section)
+   ("C-c w" . LaTeX-kill-section)
+   ("C-c A" . latex-convert-equation-to-aligned)
+   ("C-c B" . latex-bold-region)
    ("C-c F" . LaTeX-fill-buffer)
    ("C-c >" . LaTeX-mark-environment-inner)
    ("C-c =" . latex-append-ampersand))
@@ -241,7 +271,7 @@
 
 (defun latex-save-and-compile()
   (interactive)
-  (save-some-buffers 1) (TeX-command-master))
+  (save-some-buffers 1) (TeX-command-sequence t t))
 (define-key LaTeX-mode-map (kbd "C-x C-s") 'latex-save-and-compile) ; compile tex file every time hit C-x C-s, thus making it up to date.
 (define-key LaTeX-mode-map (kbd "C-'") 'latex-save-and-compile) 
 
@@ -266,7 +296,7 @@
 
 ;; So that RefTeX finds my bibliography
 (setq reftex-plug-into-AUCTeX t)
-(setq reftex-default-bibliography '("~/lib/bib/zhangja.bib" "~/lib/bib/main.bib" ))
+(setq reftex-default-bibliography '("~/lib/bib/zhangja.bib" "~/lib/bib/url.bib"))
 
 )) ; be aware, eval-after-load ends here
 
