@@ -120,6 +120,9 @@
  
 (define-key my-mode-map (kbd "C-w") 'backward-kill-word-or-kill-region)
 
+(bind-keys :map my-mode-map
+	   ("C-z d" . prelude-duplicate-current-line-or-region))
+
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single
 line instead."

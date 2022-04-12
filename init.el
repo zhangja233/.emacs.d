@@ -77,6 +77,7 @@
 (require 'init-windows)
 (require 'init-my)
 (require 'init-display)
+(require 'init-prelude)
 (require 'init-general-editing)
 (require 'init-help)
 (require 'init-org)
