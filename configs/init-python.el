@@ -1,6 +1,12 @@
 (add-hook 'python-mode-hook
-	  (lambda() (setq-default indent-tabs-mode t)))
-(add-hook 'python-mode-hook 'auto-fill-mode)
+	  (lambda()
+	    (setq-default indent-tabs-mode t)
+	    (hs-minor-mode)
+	    (bind-keys :map hs-minor-mode-map
+		       ("C-c <tab>" . hs-show-block)
+		       ("C-c S-<tab>" . hs-hide-all))
+	    (auto-fill-mode)))
+
 (eval-after-load "python"
 '(progn
    (defun my-python-indent-shift-left()
@@ -59,10 +65,15 @@
   :ensure t
   :config
   (setq ein:output-area-inlined-images t)
-  :bind (:map ein:notebook-mode-map
+  (eval-after-load "ein:notebook-mode"
+    (bind-keys :map ein:notebook-mode-map
 	      ("M-p" . ein:worksheet-goto-prev-input-km)
 	      ("M-n" . ein:worksheet-goto-next-input-km)
 	      ("S-<return>" . ein:worksheet-execute-cell-km)
-	      ("C-<return>" . ein:worksheet-insert-cell-below-km)))
+	      ("C-<return>" . ein:worksheet-execute-cell-and-insert-below-km)))	       
+  )
+    ;; :bind (:map ein:notebook-mode-map
+
+)
 
 (provide 'init-python)

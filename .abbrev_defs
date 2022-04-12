@@ -112,6 +112,7 @@
     ("mechainics" "mechanics" nil :count 0)
     ("meories" "memories" nil :count 0)
     ("micellaneous" "Miscellaneous" nil :count 0)
+    ("mislaneous" "Miscellaneous" nil :count 0)
     ("multipler" "multiplier" nil :count 1)
     ("negelible" "negligible" nil :count 0)
     ("negeligeble" "negligible" nil :count 1)

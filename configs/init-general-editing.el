@@ -38,7 +38,7 @@
 (global-set-key (kbd "M-g") 'avy-goto-line)
 ;(setq avy-keys (nconc (number-sequence ?a ?z)
 ;		      ))
-(setq avy-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?j ?k ?l ?m ?o ?p ?q ?r ?s ?u ?v ?w ?y ?z))
+(setq avy-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?j ?k ?l ?m ?o ?p ?q ?r ?s ?u ?v ?w ?z))
 (setq avy-keys-alist nil)
 (add-to-list 'avy-orders-alist '(avy-goto-line . avy-order-closest))
 (add-to-list 'avy-orders-alist '(avy-goto-word-1 . avy-order-closest))
