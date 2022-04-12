@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: equivalent to
+# key: et
+# --
+equivalent to $0

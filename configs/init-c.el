@@ -6,11 +6,19 @@
   (interactive) (insert "//") 
   )
 
-(add-hook 'c-mode-common-hook
-	  (lambda ()
-    (define-key c-mode-base-map (kbd "C-;")  'c-insert-comment)
-	    ))
-  
+(defun c-open-line-above()
+  (interactive)
+  (beginning-of-line)
+  (c-context-open-line)
+  (indent-for-tab-command)
+  )
+(add-hook 'c-mode-hook 'auto-fill-mode)
+(add-hook 'c++-mode-hook 'auto-fill-mode)
+
+(bind-keys :map c-mode-base-map
+	   ("C-;" . c-insert-comment)
+;	   ("C-o" . open-line-above)
+	   )  
 ; completion of headers
 (use-package company-c-headers
   :ensure t
@@ -29,3 +37,4 @@
  (define-key c++-mode-map (kbd "C-;")  'c-insert-comment)
 ))
 
+(provide 'init-c)

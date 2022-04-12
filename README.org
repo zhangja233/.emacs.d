@@ -15,7 +15,7 @@ it locates near the other two major prefix keys(=C-x= and =C-c=).
 | =C-a/e=       | beginning/end of line, setting mark at original position |
 | =M-a/e=       | beginning/end of buffer                                  |
 | =C-l=         | =avy-goto-word-1=                                        |
-| =C-v/r=       | next/previous page                                       |
+| =C/M-v=       | next/previous page                                       |
 
 *** Kill, delete, copy and paste
 | keybinding(s) | description                                                   |
@@ -34,13 +34,14 @@ it locates near the other two major prefix keys(=C-x= and =C-c=).
 | =M-r=         | replace string                |
 
 *** Window, buffer and file
-| keybinding(s)    | description            |
-|------------------+------------------------|
-| =C-' or C-x C-s= | save all buffers       |
-| ~C-comma~        | =helm-multi-files=     |
-| =C-dot=          | switch to other window |
-| =C-1=            | =delete-other-windows= |
-| =C-x x=          | =delete-window=        |
+| keybinding(s)    | description                           |
+|------------------+---------------------------------------|
+| =M-s or C-x C-s= | save all buffers                      |
+| ~C-comma~        | =helm-multi-files=                    |
+| =C-dot=          | switch to other window                |
+| =C-r=            | prefix key for register functionality |
+| =C-1=            | =delete-other-windows=                |
+| =C-x x=          | =delete-window=                       |
 
 *** Other editing functionalities 
 | keybinding(s)   | description                                                    |

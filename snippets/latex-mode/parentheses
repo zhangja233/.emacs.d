@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: parentheses
+# key: (
+# --
+\\left( $0 \\right

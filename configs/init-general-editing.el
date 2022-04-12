@@ -1,66 +1,84 @@
 ;;; moving the cursor
-(global-set-key (kbd "C-q") 'backward-word)
-(global-set-key (kbd "C-t") 'forward-word)
+(bind-keys :map my-mode-map
+	   ("C-q" . backward-word)
+	   ("C-t" . forward-word)
+	   ("C-a" . my-beginning-of-line)
+	   ("C-e" . my-end-of-line))
 
-(defun my-beginning-of-line(&optional arg)
-  "save mark when using beginning-of-line"
-  (interactive "^p")
-  (or (consp arg) (region-active-p) (push-mark))
-  (if (eq major-mode 'org-mode) 
-      (org-beginning-of-line arg)
-    (beginning-of-line arg)
-  )
-  )
-(define-key my-mode-map (kbd "C-a") 'my-beginning-of-line)
-
-(defun my-end-of-line(&optional arg)
-  "save mark when using end-of-line"
-  (interactive "^p")
-  (or (consp arg) (region-active-p) (push-mark))
-  (if (eq major-mode 'org-mode) 
-      (org-end-of-line arg)
-    (end-of-line arg)
-  )
-  )
-(define-key my-mode-map (kbd "C-e") 'my-end-of-line)
-
+(global-set-key (kbd "M-p") 'my-backward-paragraph)
+(global-set-key (kbd "M-n") 'my-forward-paragraph)
 
 (global-set-key (kbd "C-S-b") 'backward-sentence)
 (global-set-key (kbd "C-S-f") 'forward-sentence)
 
-(global-set-key (kbd "M-[") 'backward-paragraph)
-(global-set-key (kbd "M-]") 'forward-paragraph)
+(defun forward-half-sentence(&optional arg)
+  (interactive)
+  (re-search-forward "[;,]" nil nil arg))
+
+(defun backward-half-sentence(&optional arg)
+  (interactive)
+  (re-search-backward "[;,=]" nil nil arg))
+
+(bind-keys :map global-map
+	   ("C-M-f" . forward-half-sentence)
+	   ("C-M-b" . backward-half-sentence))
 
 (setq sentence-end-double-space nil) ;make backward-sentence and forward-sentence behave as in fundamental mode
+
+(bind-keys :map global-map
+	   ("C-M-l" . downcase-word)
+	   ("C-M-c" . capitalize-word)) 
 
 ;; avy-mode
 (use-package avy
   :ensure t
+  :bind ("M-l" . avy-goto-char)
   :config
 (global-set-key (kbd "C-l") 'avy-goto-word-1)
-(global-set-key (kbd "C-z g") 'avy-goto-line)
-(global-set-key (kbd "C-S-l") 'avy-goto-char-in-line)
-  )
+(global-set-key (kbd "M-g") 'avy-goto-line)
+;(setq avy-keys (nconc (number-sequence ?a ?z)
+;		      ))
+(setq avy-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?j ?k ?l ?m ?o ?p ?q ?r ?s ?u ?v ?w ?y ?z))
+(setq avy-keys-alist nil)
+(add-to-list 'avy-orders-alist '(avy-goto-line . avy-order-closest))
+(add-to-list 'avy-orders-alist '(avy-goto-word-1 . avy-order-closest))
+(add-to-list 'avy-orders-alist '(avy-goto-char . avy-order-closest))
+(setq avy-timeout-seconds 0.2))
 
 
 (define-key my-mode-map (kbd "M-a") 'beginning-of-buffer)
 (define-key my-mode-map (kbd "M-e") 'end-of-buffer)
 
+;; mark ring
 (setq set-mark-command-repeat-pop t) ; repeat pop by C-SPC after C-u C-SPC
 
-(global-set-key (kbd "C-r") 'scroll-down-command)
 (global-set-key (kbd "<prior>") 'scroll-other-window-down)
 (global-set-key (kbd "<next>") 'scroll-other-window)
 
 ; simple editing
-(global-set-key (kbd "M-t") 'transpose-chars)
-(global-set-key (kbd "M-g") 'quoted-insert)
+(global-set-key (kbd "<deletechar>") 'quoted-insert)
+
+;;; search and replace
 (global-set-key (kbd "M-r") 'replace-string)
+
+(bind-keys :map global-map
+	   ("M-r" . replace-string)
+	   ("M-5" . query-replace-regexp))
+
+(use-package visual-regexp-steroids
+  :ensure t
+  :config
+  (bind-keys :map my-mode-map
+   ("C-M-s" . vr/isearch-forward)))
+
+(when (eq system-type 'darwin)
+(use-package pcre2el
+ :ensure t))
+
 (defun backward-upcase-word()
   (interactive)
-  (upcase-word -1)
-  )
-(global-set-key (kbd "M-u") 'backward-upcase-word)
+  (upcase-word -1))
+(global-set-key (kbd "C-z U") 'backward-upcase-word)
 
 (electric-indent-mode -1)
 
@@ -69,96 +87,79 @@
   (newline-and-indent)
   (newline-and-indent)
   (previous-line)
-  (indent-for-tab-command)
-)		
+  (indent-for-tab-command))		
 ;(global-set-key (kbd "C-z j") 'break-line-at-point)
 
 (defun open-line-below()
   (interactive)
   (end-of-line)
+<<<<<<< HEAD
   (newline-and-indent)
   )
 ;(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
 ;(global-set-key (kbd "H-m") 'open-line-below)
 
 ;(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
+=======
+  (newline-and-indent))
+(global-set-key (kbd "M-o") 'open-line-below)
+;(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
+>>>>>>> 1dc7ee849160a2669ef4eabb4ca91fe230097361
 
 (defun open-line-above()
   (interactive)
   (beginning-of-line)
   (open-line 1)
-  (indent-for-tab-command)
-  )
+  (indent-for-tab-command))
 (global-set-key (kbd "C-o") 'open-line-above)
 
 ;; delete, kill, copy and paste
+;(setq kill-whole-line t) ; kill whole line if point at beginning of line
+
 (defun backward-kill-word-or-kill-region(&optional arg)
   "backward kill word if region is not active, otherwise kill region"
   (interactive "p")
   (if (region-active-p)
       (kill-region (mark) (point) 'region)
-      (backward-kill-word arg)
-    )
-)
+      (backward-kill-word arg)))
  
 (define-key my-mode-map (kbd "C-w") 'backward-kill-word-or-kill-region)
 
+(defadvice kill-ring-save (before slick-copy activate compile)
+  "When called interactively with no active region, copy a single
+line instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (message "Copied line")
+     (list (line-beginning-position)
+           (line-beginning-position 2)))))
+
+(use-package expand-region
+  :ensure t
+  :config
+  (define-key my-mode-map (kbd "C-=") 'er/expand-region))
+
 (unless (eq system-type 'darwin)
   (define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
-  (global-set-key (kbd "C-h") (kbd "<backspace>")) 
-)
+  (global-set-key (kbd "C-h") (kbd "<backspace>")))
 
 (delete-selection-mode) ; using C-d to delete a selected region
 (setq delete-active-region 'kill) ; kill the selected region while using delete and backspace. Note that you can still use C-d to delete a region.
 
-(defun delete-line (&optional arg)
-  "equivalence of kill-line without affecting kill-ring"
-  (interactive "P")
-  (delete-region (point)
-	       ;; It is better to move point to the other end of the kill
-	       ;; before killing.  That way, in a read-only buffer, point
-	       ;; moves across the text that is copied to the kill ring.
-	       ;; The choice has no effect on undo now that undo records
-	       ;; the value of point from before the command was run.
-	       (progn
-		 (if arg
-		     (forward-visible-line (prefix-numeric-value arg))
-		   (if (eobp)
-		       (signal 'end-of-buffer nil))
-		   (let ((end
-			  (save-excursion
-			    (end-of-visible-line) (point))))
-		     (if (or (save-excursion
-			       ;; If trailing whitespace is visible,
-			       ;; don't treat it as nothing.
-			       (unless show-trailing-whitespace
-				 (skip-chars-forward " \t" end))
-			       (= (point) end))
-			     (and kill-whole-line (bolp)))
-			 (forward-visible-line 1)
-		       (goto-char end))))
-		 (point))))
+(require 'misc)
+(global-set-key (kbd "M-z") 'zap-up-to-char)
 
-(global-set-key (kbd "C-S-k") 'delete-line)
+(define-key my-mode-map (kbd "C-k") 'kill-line)
 
-(defun backward-delete-word (arg)
-  "Delete characters backward until encountering the beginning of a word.
-With argument ARG, do this that many times."
-  (interactive "p")
-  (delete-region (point) (progn (backward-word arg) (point))))
+(global-set-key (kbd "C-z C-k") 'delete-line)
+(global-set-key (kbd "C-S-k") 'kill-whole-line)
 (global-set-key (kbd "C-<backspace>") 'backward-delete-word)
-
-(defun delete-word (arg)
-  "Delete characters forward until encountering the end of a word.
-With argument ARG, do this that many times."
-  (interactive "p")
-  (delete-region (point) (progn (forward-word arg) (point))))
 (global-set-key (kbd "C-<escape>") 'delete-word)
+
+(global-set-key (kbd "C-S-w") 'my-copy-line)
 
 ; copy to clipboard when M-w
 (setq x-select-enable-clipboard t)
-
-(setq mouse-yank-at-point t) ; paste at the cursor instead of where you click when using middle button of the mouse
 
 (use-package undo-tree
   :ensure t
@@ -166,8 +167,7 @@ With argument ARG, do this that many times."
   (global-undo-tree-mode)
   :bind
   ("M-/" . 'undo-tree-redo)
-  :diminish undo-tree-mode
-  )
+  :diminish undo-tree-mode)
 
 ;; About sexps 
 (show-paren-mode 1)
@@ -179,42 +179,18 @@ With argument ARG, do this that many times."
   :ensure t
   :init
   (smartparens-global-mode)
+  (define-key my-mode-map (kbd "M-f") 'sp-forward-sexp)
+  (define-key my-mode-map (kbd "M-b") 'sp-backward-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-k") 'sp-kill-sexp)
 
-  (define-key smartparens-mode-map (kbd "M-f") 'sp-forward-sexp)
-  (define-key smartparens-mode-map (kbd "M-b") 'sp-backward-sexp)
-  ; down a level
-  (define-key smartparens-mode-map (kbd "C-M-d") 'sp-down-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-S-d") 'sp-backward-down-sexp)
-  ; up a level
-  (define-key smartparens-mode-map (kbd "C-M-f") 'sp-up-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-up-sexp)
-  
-;;  (define-key smartparens-mode-map (kbd "C-M-k") 'sp-kill-sexp)
-;; (define-key smartparens-mode-map (kbd "C-M-t") 'sp-transpose-sexp)
-
-
-
-
-;; (define-key smartparens-mode-map (kbd "M-<delete>") 'sp-unwrap-sexp)
-;; (define-key smartparens-mode-map (kbd "M-<backspace>") 'sp-backward-unwrap-sexp)
-
-;; (define-key smartparens-mode-map (kbd "C-<right>") 'sp-forward-slurp-sexp)
-;; (define-key smartparens-mode-map (kbd "C-<left>") 'sp-forward-barf-sexp)
-;; (define-key smartparens-mode-map (kbd "C-M-<left>") 'sp-backward-slurp-sexp)
-;; (define-key smartparens-mode-map (kbd "C-M-<right>") 'sp-backward-barf-sexp)
-
-;; (define-key smartparens-mode-map (kbd "M-D") 'sp-splice-sexp)
-;; (define-key smartparens-mode-map (kbd "C-M-<delete>") 'sp-splice-sexp-killing-forward)
-;; (define-key smartparens-mode-map (kbd "C-M-<backspace>") 'sp-splice-sexp-killing-backward)
-;; (define-key smartparens-mode-map (kbd "C-S-<backspace>") 'sp-splice-sexp-killing-around)
-
-  (define-key smartparens-mode-map (kbd "C-M-SPC") 'sp-select-next-thing)
-  (define-key smartparens-mode-map (kbd "C-M-S-SPC") 'sp-select-previous-thing)  
-  (define-key smartparens-mode-map (kbd "C-M-i") 'sp-change-enclosing)
+  (define-key smartparens-mode-map (kbd "C-M-]") 'sp-select-next-thing)
+  (define-key smartparens-mode-map (kbd "C-M-[") 'sp-select-previous-thing)  
+  (define-key my-mode-map (kbd "C-M-i") 'sp-change-enclosing)
   (define-key smartparens-mode-map (kbd "C-M-r") 'sp-rewrap-sexp)
-  
-  (define-key smartparens-mode-map (kbd "C-M-k") 'my-sp-kill-sexp)
   (define-key smartparens-mode-map (kbd "C-M-u") 'sp-unwrap-sexp)
+  :bind(
+  :map smartparens-mode-map
+  ("M-k" . sp-kill-symbol))
   :config
   (require 'smartparens-config)
   (setq sp-navigate-consider-symbols nil) ; don't treat a word as a sexp
@@ -222,7 +198,8 @@ With argument ARG, do this that many times."
   
   (sp-with-modes '(latex-mode)
     (sp-local-pair "\\begin" "\\end")
-    (sp-local-pair "|" "|"))
+    (sp-local-pair "|" "|")
+    (sp-local-pair "\\|" "\\|"))
   
   (advice-remove 'delete-backward-char #'ad-Advice-delete-backward-char) ;prevent smartparens from deleting the whole \right) when using backspace
   :diminish smartparens-mode)
@@ -236,81 +213,166 @@ With argument ARG, do this that many times."
 (define-key yas-minor-mode-map (kbd "C-c &") nil)
 (global-set-key (kbd "<f2> i") 'yas-new-snippet)
 (yas-global-mode)
-:diminish yas-minor-mode
-)
+:diminish yas-minor-mode)
 
 (use-package yasnippet-snippets
 :ensure t
 
-:config
-)
+:config)
 
 ;;; completion
+<<<<<<< HEAD
 ;(define-key input-decode-map (kbd "C-i") (kbd "H-i"))
 ;(global-set-key (kbd "H-i") 'dabbrev-expand)
+=======
+(when (display-graphic-p)
+(define-key input-decode-map (kbd "C-i") (kbd "H-i"))
+)
+(global-set-key (kbd "H-i") 'dabbrev-expand)
+>>>>>>> 1dc7ee849160a2669ef4eabb4ca91fe230097361
 
 (use-package company
 :ensure t
 :diminish company-mode
 :config
 (global-company-mode) 
-(global-set-key (kbd "M-i") 'company-complete)
+(defun my-company-show-doc-buffer ()
+  "Temporarily show the documentation buffer for the selection."
+  (interactive)
+  (let* ((selected (nth company-selection company-candidates))
+         (doc-buffer (or (company-call-backend 'doc-buffer selected)
+                         (error "No documentation available"))))
+    (with-current-buffer doc-buffer
+      (goto-char (point-min)))
+    (display-buffer doc-buffer t)))
+
+(bind-keys :map global-map
+	   ("M-i" . company-complete)
+	   ("C-M-/" . my-company-show-doc-buffer))
 (setq company-dabbrev-downcase nil) ;make completion case sensitive
 (setq company-idle-delay nil) ; do not give suggestions unless invoked manually
 (setq company-async-timeout 120)
-(define-key company-active-map (kbd "<tab>") 'company-complete-selection)
-)
+(define-key company-active-map (kbd "<tab>") 'company-complete-selection))
 
 (setq-default abbrev-mode t)
 (setq abbrev-file-name "~/.emacs.d/.abbrev_defs") 
 
 ;;; buffer, window, frame and file management
-(global-set-key (kbd "C-<left>") 'mac-previous-tab)
-(global-set-key (kbd "C-<right>") 'mac-next-tab)
 
-(if (equal system-type 'darwin)
-    (global-set-key (kbd "C-.") 'next-window-any-frame)
-  (global-set-key (kbd "C-.") 'next-multiframe-window)
-  )
-
-(global-set-key (kbd "C-1") 'delete-other-windows)
 (global-set-key (kbd "C-S-r") 'recenter-top-bottom)
 (global-set-key (kbd "C-x x") 'delete-window)
+(bind-keys :map global-map
+	   ("C-1" . delete-other-windows)
+	   ("C-." . other-window)
+	   ("C-\\" . split-window-right))
 
-(global-set-key (kbd "C-z j") 'jump-to-register)
+;; register
+
+(define-prefix-command 'my-register-prefix-keymap)
+(define-key my-mode-map (kbd "C-r") 'my-register-prefix-keymap)
+
+(defun my-window-configuration-to-register()
+  (interactive)
+  (window-configuration-to-register ?w)
+  (message "window layout saved"))
+
+(defun my-point-to-register()
+  (interactive)
+  (point-to-register ? )
+  (message "point location saved"))
+
+(defun my-jump-to-saved-window()
+  (interactive)
+  (jump-to-register ?w))
+
+(defun my-jump-to-saved-location()
+  (interactive)
+  (jump-to-register ? ))
+
+(bind-keys :map my-mode-map
+	   ("C-r w" . my-window-configuration-to-register)
+	   ("C-r C-w" . my-jump-to-saved-window)
+	   ("C-r SPC" . my-point-to-register)
+	   ("C-r C-SPC" . my-jump-to-saved-location))
 
 (setq winner-dont-bind-my-keys t)
 (winner-mode 1)
+
+(when (display-graphic-p)
+(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
+)
+(global-set-key (kbd "H-\[") 'winner-undo)
+
 (global-set-key (kbd "C-z ,") 'winner-undo)
 (global-set-key (kbd "C-z .") 'winner-redo)
+(bind-keys :map global-map
+	   ("C-\]" . winner-redo))
+
+(use-package ace-window
+  :ensure t
+  :config
+  (global-set-key (kbd "C-M-.") 'ace-window))
+
+(use-package window-purpose
+  :ensure t
+  :config
+;  (purpose-mode)
+  (setq purpose-mode-map (make-sparse-keymap)) ; prevent from overriding existing keybindings
+  (global-set-key (kbd "C-z t") 'purpose-toggle-window-buffer-dedicated))
 
 (use-package projectile
   :ensure t
+  :diminish projectile-mode
   :config
   (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "M-j") 'projectile-command-map)
+  (global-set-key (kbd "M-j") 'projectile-switch-project)
+  (define-key projectile-mode-map (kbd "M-J") 'projectile-find-file)
+  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
   (setq projectile-indexing-method 'hybrid)
-  )
+;  (setq projectile-ignored-projects '("~") )
+  (setq projectile-track-known-projects-automatically nil) ; only allow manually adding projects
+  (setq projectile-auto-discover nil)
+  (setq projectile-sort-order 'recentf)
+  (setq projectile-current-project-on-switch 'keep) ; leave the current project at the default position
+;  (setq projectile-dynamic-mode-line nil)
+;  (setq-default projectile-mode-line-function nil)
 
+  (defun projectile-find-notes()
+  (interactive)
+  (let ((default-directory "~/Dropbox/notes"))
+    (projectile-find-file)))
+  
+  (global-set-key (kbd "C-z n") 'projectile-find-notes)
+  
+  (defun projectile-find-root()
+    (interactive)
+    (find-file (projectile-project-root)))
+  (global-set-key (kbd "C-z C-r") 'projectile-find-root))
+
+<<<<<<< HEAD
 ;(use-package helm-projectile
 ;  :ensure t
 ;  )
+=======
+(use-package helm-projectile
+  :ensure t)
+>>>>>>> 1dc7ee849160a2669ef4eabb4ca91fe230097361
 
 
 ;; dired mode
 (require 'dired-x)
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
-(global-set-key (kbd "C-x j") 'dired-jump)
+(define-key my-mode-map (kbd "C-x j") 'dired-jump)
+(define-key my-mode-map (kbd "C-x J") 'dired-jump-other-window)
 
 (define-key dired-mode-map (kbd "SPC") 'browse-url-of-dired-file)
-(define-key dired-mode-map (kbd "e") 'wdired-change-to-wdired-mode)
+(define-key dired-mode-map (kbd "E") 'wdired-change-to-wdired-mode)
 
 ; a trick to make dired be able to access ~/Downloads and folders alike
 (when (eq system-type 'darwin)
-  (setq insert-directory-program "gls" dired-use-ls-dired t)
-  )
+  (setq insert-directory-program "gls" dired-use-ls-dired t))
 
-(setq dired-listing-switches "-alh --group-directories-first")
+(setq dired-listing-switches "-alht --group-directories-first")
 ;(setq dired-listing-switches "-AlBGh  --group-directories-first")
 
 (setq dired-deletion-confirmer #'y-or-n-p)
@@ -322,8 +384,7 @@ With argument ARG, do this that many times."
 (global-set-key (kbd "C-z C-v") 'find-file-other-window)
 
 (defun find-scratch()
-  (interactive) (switch-to-buffer "*scratch*")
-  )
+  (interactive) (switch-to-buffer "*scratch*"))
 (global-set-key (kbd "C-z s") 'find-scratch)
 (global-set-key (kbd "C-z N") 'make-frame)
 
@@ -332,9 +393,9 @@ With argument ARG, do this that many times."
 (defun save-all-buffers()
   (interactive)
   (save-some-buffers 1)
-    )
+  (message "all buffers saved"))
 (global-set-key (kbd "C-x C-s")  'save-all-buffers)
-(global-set-key (kbd "C-'")  'save-all-buffers)
+(global-set-key (kbd "M-s")  'save-all-buffers)
 (global-set-key (kbd "C-x C-S-s") 'save-buffer)
 
 (defun my-quit-emacs()
@@ -343,8 +404,7 @@ With argument ARG, do this that many times."
       (org-clock-out)
   (error nil)) ; ignore the error when there's no clock so that the remaining code could be executed
   (save-some-buffers 1)
-  (save-buffers-kill-terminal)
-  )
+  (save-buffers-kill-terminal))
 (global-set-key (kbd "C-x C-c")  'my-quit-emacs)
 (setq confirm-kill-emacs 'y-or-n-p)
 
@@ -354,14 +414,12 @@ With argument ARG, do this that many times."
 
 (defun insert-tilde()
   (interactive)
-  (insert "~")
-  )
+  (insert "~"))
 (define-key minibuffer-local-map (kbd "C-;") 'insert-tilde)
 
 ;; magit
 (use-package magit
-:ensure t
-  )
+:ensure t)
 
 ;; input method
 ; Chinese
@@ -377,13 +435,11 @@ With argument ARG, do this that many times."
 ; japanese
 (defun set-japanese()
   (interactive)
-  (set-input-method "japanese")
-  )
+  (set-input-method "japanese"))
 (global-set-key (kbd "C-z J") 'set-japanese)
  (defun set-chinese()
   (interactive)
-  (set-input-method "pyim")
-  )
+  (set-input-method "pyim"))
 (global-set-key (kbd "C-z C") 'set-chinese)
 
 (setq-default ispell-program-name "aspell")
@@ -396,37 +452,40 @@ With argument ARG, do this that many times."
 :config
 :custom
   (flyspell-abbrev-p t)
-:diminish flyspell-mode
-   )
+:diminish flyspell-mode)
 (use-package flyspell-correct
   :ensure t
   :config
-  (define-key flyspell-mode-map (kbd "M-q") 'flyspell-correct-previous)
-  )
-
-;(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e") ;load mu4e in case emacs can not find it
-
-;; mu4e
-;(require 'mu4e) 
-;(setq mu4e-get-mail-command "offlineimap")
-;(global-set-key (kbd "C-z m") 'mu4e)
-;(setq mu4e-update-interval 7200) ; set interval of mu4e updates to 2 hours
+  (define-key my-mode-map (kbd "M-q") 'flyspell-correct-previous))
 
 (defun find-dot-emacs()
   (interactive)
-  (find-file "~/.emacs.d/init.el")
-  )
+  (find-file "~/.emacs.d/init.el"))
 (defun find-emacs-configs()
   (interactive)
-  (find-file "~/.emacs.d/configs/")
-  )
+  (find-file "~/.emacs.d/configs/"))
 (global-set-key (kbd "C-z E") 'find-dot-emacs)
 (global-set-key (kbd "C-z e") 'find-emacs-configs)
 (defun find-my-info()
   (interactive)
-  (find-file "~/Dropbox/org/personal/info.org")
-  )
+  (find-file "~/Dropbox/org_non_agenda/personal/info.org"))
+(defun find-planer()
+  (interactive)
+(find-file "~/Dropbox/org/plan.org"))
+(global-set-key (kbd "C-z p")  'find-planer)
+
+(defun find-capture()
+  (interactive)
+(find-file "~/Dropbox/org/capture.org"))
+(global-set-key (kbd "C-z C-c")  'find-capture)
+
+(defun find-download()
+  (interactive)
+  (find-file "~/Downloads/"))
+(global-set-key (kbd "C-z C-d")  'find-download)
+
 (global-set-key (kbd "C-z F") 'find-my-info)
+
 
 ;; interact with the world outside emacs
 
@@ -439,26 +498,27 @@ With argument ARG, do this that many times."
     (error "No `default-directory' to open")))
 (global-set-key (kbd "C-z b") 'browse-file-directory)
 
+(use-package rg
+  :ensure t)
+
 (use-package google-this
 :ensure t  
 :init
-(global-set-key (kbd "C-z <RET>") 'google-this-mode-submap)
-  )
+(global-set-key (kbd "C-z <RET>") 'google-this-mode-submap))
 
 (use-package exec-path-from-shell
 :ensure t
 :init
 (unless (eq system-type 'windows-nt)
-  (exec-path-from-shell-initialize) ;get $PATH from shell 
-)
-  )
+  (exec-path-from-shell-initialize) ;get $PATH from shell
+))
 (use-package disable-mouse
 :ensure t
 :diminish disable-mouse-global-mode
 :config
 (global-disable-mouse-mode) ; in case I move the mouse accidentally
-  )
+)
 
-(setq initial-major-mode 'latex-mode)
+(setq initial-major-mode 'org-mode)
 
 (provide 'init-general-editing)

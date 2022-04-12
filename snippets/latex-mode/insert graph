@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: insert graph
+# key: ig
+# --
+\\includegraphics[width=1\\textwidth]{$0}

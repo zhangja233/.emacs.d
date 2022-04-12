@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: scientific notation
+# key: 1
+# --
+\\times 10^{$1}$0

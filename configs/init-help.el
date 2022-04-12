@@ -5,4 +5,10 @@
 
 (setq find-function-C-source-directory "~/lib/emacs/src")
 
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode 1)
+  )
+
 (provide 'init-help)
