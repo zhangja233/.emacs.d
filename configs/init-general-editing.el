@@ -94,18 +94,12 @@
 (defun open-line-below()
   (interactive)
   (end-of-line)
-<<<<<<< HEAD
   (newline-and-indent)
   )
 ;(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
 ;(global-set-key (kbd "H-m") 'open-line-below)
 
 ;(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
-=======
-  (newline-and-indent))
-;(global-set-key (kbd "M-o") 'open-line-below)
-;(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
->>>>>>> 1dc7ee849160a2669ef4eabb4ca91fe230097361
 
 (defun open-line-above()
   (interactive)
@@ -222,15 +216,10 @@ line instead."
 :config)
 
 ;;; completion
-<<<<<<< HEAD
-;(define-key input-decode-map (kbd "C-i") (kbd "H-i"))
-;(global-set-key (kbd "H-i") 'dabbrev-expand)
-=======
 (when (display-graphic-p)
 (define-key input-decode-map (kbd "C-i") (kbd "H-i"))
 )
 (global-set-key (kbd "H-i") 'dabbrev-expand)
->>>>>>> 1dc7ee849160a2669ef4eabb4ca91fe230097361
 
 (use-package company
 :ensure t
@@ -350,14 +339,8 @@ line instead."
     (find-file (projectile-project-root)))
   (global-set-key (kbd "C-z C-r") 'projectile-find-root))
 
-<<<<<<< HEAD
-;(use-package helm-projectile
-;  :ensure t
-;  )
-=======
 (use-package helm-projectile
   :ensure t)
->>>>>>> 1dc7ee849160a2669ef4eabb4ca91fe230097361
 
 
 ;; dired mode
