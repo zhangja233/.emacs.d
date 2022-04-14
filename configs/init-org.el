@@ -147,8 +147,12 @@
 ;(setq org-todo-keywords
 ;      '((sequence  "TODO" "NEXT"  "|" "DONE" "CANCELED")))
 (setq calendar-week-start-day 1) ;start week on Mon
-(setq org-agenda-files (directory-files-recursively "~/Dropbox/org" "\.org$"));my personal org files which store my to-do lists
-(setq org-default-notes-file "~/Dropbox/org/capture.org") ; the file to store captured items
+
+(when (eq system-type 'darwin)
+  (setq org-agenda-files (directory-files-recursively "~/Dropbox/org" "\.org$"));my personal org files which store my to-do lists
+((setq )etq org-default-notes-file "~/Dropbox/org/capture.org") ; the file to store captured items
+) ; end osx
+
 (setq org-adapt-indentation nil) ; do not indent when using c-j after a title
 ; '(org-startup-truncated nil)
 (setq org-return-follows-link t) ; use return to open link
