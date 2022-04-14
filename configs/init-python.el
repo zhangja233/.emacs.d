@@ -65,15 +65,13 @@
   :ensure t
   :config
   (setq ein:output-area-inlined-images t)
-  (eval-after-load "ein:notebook-mode"
-    (bind-keys :map ein:notebook-mode-map
-	      ("M-p" . ein:worksheet-goto-prev-input-km)
-	      ("M-n" . ein:worksheet-goto-next-input-km)
-	      ("S-<return>" . ein:worksheet-execute-cell-km)
-	      ("C-<return>" . ein:worksheet-execute-cell-and-insert-below-km)))	       
-  )
-    ;; :bind (:map ein:notebook-mode-map
-
+;  (eval-after-load "ein:notebook-mode"
+;    (bind-keys :map ein:notebook-mode-map
+;	      ("M-p" . ein:worksheet-goto-prev-input-km)
+;	      ("M-n" . ein:worksheet-goto-next-input-km)
+;	      ("S-<return>" . ein:worksheet-execute-cell-km)
+;	      ("C-<return>" . ein:worksheet-execute-cell-and-insert-below-km)))	       
+;    ;; :bind (:map ein:notebook-mode-map
 )
 
 (provide 'init-python)
