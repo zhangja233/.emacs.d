@@ -1,5 +1,10 @@
 ;; copied or adapted from https://github.com/bbatsov/prelude
 
+(use-package crux
+  :ensure t
+  :config
+  )
+
 (defun prelude-duplicate-current-line-or-region (arg)
   "Duplicates the current line or region ARG times.
 If there's no region, the current line will be duplicated. However, if
