@@ -49,6 +49,13 @@
 (define-key my-mode-map (kbd "M-a") 'beginning-of-buffer)
 (define-key my-mode-map (kbd "M-e") 'end-of-buffer)
 
+(use-package drag-stuff
+  :ensure t
+  :config
+  (bind-keys :map global-map
+	     ("M-<up>" . drag-stuff-up)
+	     ("M-<down>" . drag-stuff-down)))
+
 ;; mark ring
 (setq set-mark-command-repeat-pop t) ; repeat pop by C-SPC after C-u C-SPC
 
@@ -223,6 +230,7 @@ line instead."
 (define-key input-decode-map (kbd "C-i") (kbd "H-i"))
 )
 (global-set-key (kbd "H-i") 'dabbrev-expand)
+(global-set-key (kbd "C-z C-e") 'hippie-expand) 
 
 (use-package company
 :ensure t
@@ -459,19 +467,32 @@ line instead."
 (defun find-planer()
   (interactive)
 (find-file "~/Dropbox/org/plan.org"))
-(global-set-key (kbd "C-z p")  'find-planer)
 
 (defun find-capture()
   (interactive)
 (find-file "~/Dropbox/org/capture.org"))
-(global-set-key (kbd "C-z C-c")  'find-capture)
+
+(defun find-literature()
+  (interactive)
+  (find-file "~/Dropbox/research/literature/"))
+
+(when (eq system-type 'darwin)
+(bind-keys :map global-map
+	   ("C-z l" . find-literature)
+	   ("C-z p" . find-planer)
+	   ("C-z C-c" . find-capture)
+	   ("C-z F" . find-my-info))
+) ; end os x
+
+
+
 
 (defun find-download()
   (interactive)
   (find-file "~/Downloads/"))
 (global-set-key (kbd "C-z C-d")  'find-download)
 
-(global-set-key (kbd "C-z F") 'find-my-info)
+ 
 
 
 ;; interact with the world outside emacs
