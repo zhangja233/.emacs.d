@@ -271,7 +271,9 @@
 
 (defun latex-save-and-compile()
   (interactive)
-  (save-some-buffers 1) (TeX-command-sequence t t))
+  (save-some-buffers 1)
+  (let ((TeX-command-force "LaTeX"))
+    (TeX-command-master nil)))
 (define-key LaTeX-mode-map (kbd "C-x C-s") 'latex-save-and-compile) ; compile tex file every time hit C-x C-s, thus making it up to date.
 (define-key LaTeX-mode-map (kbd "C-'") 'latex-save-and-compile) 
 
