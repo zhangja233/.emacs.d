@@ -134,8 +134,8 @@
  (setq outline-minor-mode-prefix nil)
  (diminish outline-minor-mode)
  ;; easier outline keybindings
- (define-key LaTeX-mode-map (kbd "C-c C-c") 'outline-show-subtree)
- (define-key LaTeX-mode-map (kbd "C-c C-SPC") 'outline-hide-body)
+; (define-key LaTeX-mode-map (kbd "C-c C-c") 'outline-show-subtree)
+; (define-key LaTeX-mode-map (kbd "C-c C-SPC") 'outline-hide-body)
  (define-key LaTeX-mode-map (kbd "S-<tab>") 'outline-hide-body)
  (define-key LaTeX-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
  (define-key outline-minor-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading) ; override preview-map
@@ -301,5 +301,6 @@
 )) ; be aware, eval-after-load ends here
 
 (setq TeX-engine 'xetex)
+;(setq TeX-engine 'default)
 
 (provide 'init-auctex)
