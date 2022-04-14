@@ -32,6 +32,7 @@
 ;  (setq lsp-ui-doc-enable nil)
 ;  (setq lsp-eldoc-enable-hover nil)
   (setq lsp-signature-auto-activate nil)
+  (setq lsp-enable-symbol-highlighting nil) ; don't show distraction when cursor is on an object
 
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
         ((python-mode c-mode f90-mode) . lsp))
