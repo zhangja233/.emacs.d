@@ -321,14 +321,16 @@ line instead."
   (setq purpose-mode-map (make-sparse-keymap)) ; prevent from overriding existing keybindings
   (global-set-key (kbd "C-z t") 'purpose-toggle-window-buffer-dedicated))
 
+;; projects and files
+
 (use-package projectile
   :ensure t
   :diminish projectile-mode
   :config
   (projectile-mode +1)
-  (global-set-key (kbd "M-j") 'projectile-switch-project)
-  (define-key projectile-mode-map (kbd "M-J") 'projectile-find-file)
-  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
+;  (global-set-key (kbd "M-j") 'projectile-switch-project)
+  (define-key projectile-mode-map (kbd "M-j") 'projectile-command-map)
+  (define-key projectile-command-map (kbd "j") #'projectile-switch-project)
   (setq projectile-indexing-method 'hybrid)
 ;  (setq projectile-ignored-projects '("~") )
   (setq projectile-track-known-projects-automatically nil) ; only allow manually adding projects
@@ -353,10 +355,13 @@ line instead."
 (use-package helm-projectile
   :ensure t)
 
+(recentf-mode 1)
 
 ;; dired mode
 (require 'dired-x)
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
+;(setq-default dired-omit-files-p t)
+(setq dired-omit-files "\\`[.]?#\\|\\`[.][.]?\\'\\|\.org_archive")
 (define-key my-mode-map (kbd "C-x j") 'dired-jump)
 (define-key my-mode-map (kbd "C-x J") 'dired-jump-other-window)
 
@@ -472,6 +477,10 @@ line instead."
   (interactive)
 (find-file "~/Dropbox/org/capture.org"))
 
+(defun find-stack()
+  (interactive)
+  (find-file "~/Dropbox/org/stack.org"))
+
 (defun find-literature()
   (interactive)
   (find-file "~/Dropbox/research/literature/"))
@@ -481,6 +490,7 @@ line instead."
 	   ("C-z l" . find-literature)
 	   ("C-z p" . find-planer)
 	   ("C-z C-c" . find-capture)
+	   ("C-z M-s" . find-stack)
 	   ("C-z F" . find-my-info))
 ) ; end os x
 
