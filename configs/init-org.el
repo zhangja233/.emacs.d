@@ -9,20 +9,25 @@
    (setq org-export-with-sub-superscripts nil)
    (bind-keys :map org-mode-map
 	      ("C-j" . newline-and-indent)
-	      ("C-<return>" . org-insert-heading)
+;	      ("C-<return>" . org-insert-heading)
+	      ("C-<return>" . org-meta-return)	      
 	      ("C-;" . org-insert-todo-heading)
-	      ("<up>" . org-previous-visible-heading)
-	      ("<down>" . org-next-visible-heading)
+;	      ("<up>" . org-previous-visible-heading)
+;	      ("<down>" . org-next-visible-heading)
 ;	      ("<right>" . org-forward-heading-same-level)
 ;	      ("<left>" . org-backward-heading-same-level)
-	      ("<right>" . org-metaright)
-	      ("<left>" . org-metaleft)	      
+	      ("C-<right>" . org-metaright)
+	      ("C-<left>" . org-metaleft)
+	      ("C-<up>" . org-metaup)
+	      ("C-<down>" . org-metadown)	      
 	      ("M-;" . org-insert-todo-subheading)
 	      ("M-<return>" . org-insert-subheading)
-	      ("S-<return>" . org-meta-return)
+;	      ("M-<return>" . org-meta-return)
 	      ("M-[" . org-metaleft)
 	      ("M-]" . org-metaright)
 	      ("C-c m" . org-mark-subtree)
+	      ("C-c n" . org-narrow-to-subtree)
+	      ("C-c N" . widen)
 	      ("C-c w". org-cut-subtree)
 	      ("C-c j" . org-table-copy-down)
 	      ("C-c o" . org-create-list-item-above)
@@ -40,7 +45,7 @@
    (bind-keys :map global-map
 	      ("C-z m" . org-store-link)
 	      ("C-z G" . org-clock-goto)
-	      ("C-x c" . calendar))
+	      ("C-z M-c" . calendar))
 ;; configs for org-mode
 ;;; customize org-agenda   
 (setq org-agenda-start-on-weekday nil) ; make org-agenda start at the current day
@@ -61,8 +66,11 @@
   (search . " %i %-12:c")))
 (setq org-agenda-custom-commands
       '(("p" tags "+pwd")
-	("P" tags "+pwd-life-entertainment")))
-(setq org-columns-default-format "%30ITEM(Task) %CLOCKSUM{:} %CLOCKSUM_W %6Effort(Estim){:} %DEADLINE %TAGS %done")
+	("P" tags "+pwd-life-entertainment")
+	("T" tags "+today")))
+
+;; column view
+(setq org-columns-default-format "%30ITEM(Task) %TODO %CLOCKSUM{:} %CLOCKSUM_W %6Effort(Estim){:} %DEADLINE %TAGS")
 
 
 ; tags
@@ -73,8 +81,7 @@
 
 ; Define the custum capture templates
 (setq org-capture-templates
-       '(("t" "todo" entry (file org-default-notes-file)
-	  "* TODO %?\n%u\n%a\n")
+       '(("t" "todo" entry (file "") "* TODO %? \n%U\n%i\n")
 	 ("i" "Idea" entry (file org-default-notes-file)
 	  "* %? :IDEA: \n%t")
 	 ("n" "Notes" entry (file org-default-notes-file)
@@ -101,7 +108,7 @@
      (org-archive-subtree)
      (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
    "/DONE" 'file))
-(define-key org-mode-map (kbd "C-c <return>") 'org-archive-done-tasks)
+;(define-key org-mode-map (kbd "C-c <return>") 'org-archive-done-tasks)
 
 (defun org-insert-superheading()
   (interactive)
@@ -150,7 +157,7 @@
 
 (when (eq system-type 'darwin)
   (setq org-agenda-files (directory-files-recursively "~/Dropbox/org" "\.org$"));my personal org files which store my to-do lists
-((setq )etq org-default-notes-file "~/Dropbox/org/capture.org") ; the file to store captured items
+(setq org-default-notes-file "~/Dropbox/org/capture.org") ; the file to store captured items
 ) ; end osx
 
 (setq org-adapt-indentation nil) ; do not indent when using c-j after a title
