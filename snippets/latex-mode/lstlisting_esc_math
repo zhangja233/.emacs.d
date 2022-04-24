@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: lstlisting
+# key: ll
+# --
+\begin{lstlisting}[mathescape=true]
+$0
+\end{lstlisting}
