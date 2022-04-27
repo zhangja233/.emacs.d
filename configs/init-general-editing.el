@@ -220,11 +220,11 @@ line instead."
 (yas-global-mode)
 :diminish yas-minor-mode)
 
-(use-package yasnippet-snippets
-:ensure t
-
-:config)
-
+(when (eq system-type 'darwin)
+  (use-package yasnippet-snippets
+    :ensure t
+    :config)
+)
 ;;; completion
 (when (display-graphic-p)
 (define-key input-decode-map (kbd "C-i") (kbd "H-i"))
