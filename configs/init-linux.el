@@ -9,6 +9,8 @@
       (interactive)
       (find-file "~/org/linux.org"))
     (global-set-key (kbd "C-z p") 'find-linux-dot-org)
+    (custom-set-variables
+  '(markdown-command "/usr/bin/pandoc"))
 )
 
 (provide 'init-linux)
