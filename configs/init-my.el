@@ -91,6 +91,61 @@ With argument ARG, do this that many times."
 (setq my-paragraph-start (default-value 'paragraph-start))
 (setq my-paragraph-separate (default-value 'paragraph-separate))
 
+(defun my-latex-set-paragraph()
+(make-local-variable 'my-paragraph-start)
+(make-local-variable 'my-paragraph-separate)  
+(setq my-paragraph-start
+      (concat
+       "\\(?:[ \t]*$"
+       "\\|" (regexp-quote TeX-esc) "par\\|"
+       "[ \t]*"
+       (regexp-quote TeX-esc)
+       "\\(?:"
+       "part\\|chapter\\|"       
+       "section\\|subsection\\|subsubsection\\|"
+       "paragraph\\|include\\|includeonly\\|"
+       "tableofcontents\\|appendix\\|label\\|caption\\|\\(?:item\\)?item"
+       "\\)"
+       "\\|"
+       "[ \t]*\\$\\$"         ; display math delimitor
+       "\\)" ))
+
+(setq my-paragraph-separate
+      (concat
+       "[ \t]*"
+       "\\(?:"
+       (regexp-quote TeX-esc) "par\\|"
+       "%\\|"
+       "$\\|"
+       "\\$\\$\\|"
+       (regexp-quote TeX-esc)
+       "\\(?:"
+       "part\\|chapter\\|"       
+       "section\\|subsection\\|subsubsection\\|"
+       "paragraph\\|include\\|includeonly\\|"
+       "tableofcontents\\|appendix\\|" (regexp-quote TeX-esc)
+       "\\)"
+       "\\)")))
+(add-hook 'LaTeX-mode-hook 'my-latex-set-paragraph)
+
+(defun my-f90-set-paragraph()
+(make-local-variable 'my-paragraph-start)
+(make-local-variable 'my-paragraph-separate)  
+(setq my-paragraph-start
+      (concat
+       "[ \t]*$"       
+       "\\|^[ \t]*!+[ \t]*$" ; line with only !
+       "\\|^[ \t]*end subroutine"       
+       ))
+(setq my-paragraph-separate
+      (concat
+       "[ \t]*$"       
+       "\\|^[ \t]*!+[ \t]*$" ; line with only !
+       "\\|^[ \t]*end subroutine"
+       ))
+)
+(add-hook 'f90-mode-hook 'my-f90-set-paragraph)
+
 (defun my-forward-paragraph (&optional arg)
   "Move forward to end of paragraph.
 With argument ARG, do it ARG times;
