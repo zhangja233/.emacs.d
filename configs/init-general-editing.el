@@ -19,15 +19,16 @@
   (interactive)
   (re-search-backward "[;,=]" nil nil arg))
 
-(bind-keys :map global-map
-	   ("C-M-f" . forward-half-sentence)
-	   ("C-M-b" . backward-half-sentence))
+;(bind-keys :map global-map
+;	   ("C-M-f" . forward-half-sentence)
+;	   ("C-M-b" . backward-half-sentence))
 
 (setq sentence-end-double-space nil) ;make backward-sentence and forward-sentence behave as in fundamental mode
 
 (bind-keys :map global-map
 	   ("C-M-l" . downcase-word)
-	   ("C-M-c" . capitalize-word)) 
+	   ("C-M-c" . capitalize-word)
+	   ("C-z M-l" . global-display-line-numbers-mode)) 
 
 ;; avy-mode
 (use-package avy
@@ -59,8 +60,8 @@
 ;; mark ring
 (setq set-mark-command-repeat-pop t) ; repeat pop by C-SPC after C-u C-SPC
 
-(global-set-key (kbd "<prior>") 'scroll-other-window-down)
-(global-set-key (kbd "<next>") 'scroll-other-window)
+;(global-set-key (kbd "<prior>") 'scroll-other-window-down)
+;(global-set-key (kbd "<next>") 'scroll-other-window)
 
 ; simple editing
 (global-set-key (kbd "<deletechar>") 'quoted-insert)
@@ -155,13 +156,10 @@ line instead."
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 
 (define-key my-mode-map (kbd "C-k") 'kill-line)
+(global-set-key (kbd "C-<backspace>") 'kill-whole-line)
 
-(global-set-key (kbd "C-z C-k") 'delete-line)
-(global-set-key (kbd "C-S-k") 'kill-whole-line)
-(global-set-key (kbd "C-<backspace>") 'backward-delete-word)
-(global-set-key (kbd "C-<escape>") 'delete-word)
 
-(global-set-key (kbd "C-S-w") 'my-copy-line)
+;(global-set-key (kbd "C-S-w") 'my-copy-line)
 
 ; copy to clipboard when M-w
 (setq x-select-enable-clipboard t)
@@ -186,7 +184,7 @@ line instead."
   (smartparens-global-mode)
   (define-key my-mode-map (kbd "M-f") 'sp-forward-sexp)
   (define-key my-mode-map (kbd "M-b") 'sp-backward-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-k") 'sp-kill-sexp)
+
 
   (define-key smartparens-mode-map (kbd "C-M-]") 'sp-select-next-thing)
   (define-key smartparens-mode-map (kbd "C-M-[") 'sp-select-previous-thing)  
@@ -195,7 +193,11 @@ line instead."
   (define-key smartparens-mode-map (kbd "C-M-u") 'sp-unwrap-sexp)
   :bind(
   :map smartparens-mode-map
-  ("M-k" . sp-kill-symbol))
+  ("M-k" . sp-kill-symbol)
+  ("C-M-k" . sp-kill-sexp)
+  ("C-M-w" . sp-backward-kill-sexp)
+  ("C-M-f" . sp-forward-whitespace)
+  ("C-M-b" . sp-backward-whitespace))
   :config
   (require 'smartparens-config)
   (setq sp-navigate-consider-symbols nil) ; don't treat a word as a sexp
@@ -312,7 +314,15 @@ line instead."
 (use-package ace-window
   :ensure t
   :config
-  (global-set-key (kbd "M-o") 'ace-window))
+  (global-set-key (kbd "M-o") 'ace-window)
+  (setq aw-keys '(?h ?k ?l ?a ?s ?d ?f ?g))
+  (setq aw-dispatch-always t)
+  (defun aw-helm-buffers-list-in-window (window)
+    (aw-switch-to-window window)
+    (call-interactively 'helm-buffers-list)
+    )
+  (add-to-list 'aw-dispatch-alist '(?j aw-helm-buffers-list-in-window "switch"))
+)
 
 (use-package window-purpose
   :ensure t
@@ -368,6 +378,13 @@ line instead."
 (define-key dired-mode-map (kbd "SPC") 'browse-url-of-dired-file)
 (define-key dired-mode-map (kbd "E") 'wdired-change-to-wdired-mode)
 
+(use-package dired-ranger
+  :ensure t
+  :bind (:map dired-mode-map
+              ("W" . dired-ranger-copy)
+              ("X" . dired-ranger-move)
+              ("Y" . dired-ranger-paste)))
+
 ; a trick to make dired be able to access ~/Downloads and folders alike
 (when (eq system-type 'darwin)
   (setq insert-directory-program "gls" dired-use-ls-dired t))
@@ -380,6 +397,14 @@ line instead."
 (setq dired-recursive-deletes 'always)
 (setq dired-recursive-copies 'always)
 
+(defun dired-move-to-literature (&optional arg)
+  (interactive "P")
+  (cl-letf* ((default-dest-dir "~/Dropbox/research/literature/")
+             ((symbol-function 'dired-dwim-target-directory)
+              (lambda ()
+                default-dest-dir)))
+    (call-interactively #'dired-do-rename)))
+(define-key dired-mode-map (kbd "L") 'dired-move-to-literature)
 
 (global-set-key (kbd "C-z C-v") 'find-file-other-window)
 
