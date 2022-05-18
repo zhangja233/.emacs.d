@@ -5,9 +5,6 @@
 	   ("C-a" . my-beginning-of-line)
 	   ("C-e" . my-end-of-line))
 
-(global-set-key (kbd "M-p") 'my-backward-paragraph)
-(global-set-key (kbd "M-n") 'my-forward-paragraph)
-
 (global-set-key (kbd "C-S-b") 'backward-sentence)
 (global-set-key (kbd "C-S-f") 'forward-sentence)
 
@@ -26,6 +23,9 @@
 (setq sentence-end-double-space nil) ;make backward-sentence and forward-sentence behave as in fundamental mode
 
 (bind-keys :map global-map
+	   ("M-p" . my-backward-paragraph)
+	   ("M-n" . my-forward-paragraph)
+	   ("M-h" . my-mark-paragraph)
 	   ("C-M-l" . downcase-word)
 	   ("C-M-c" . capitalize-word)
 	   ("C-z M-l" . global-display-line-numbers-mode)) 
@@ -33,18 +33,33 @@
 ;; avy-mode
 (use-package avy
   :ensure t
-  :bind ("M-l" . avy-goto-char)
   :config
-(global-set-key (kbd "C-l") 'avy-goto-word-1)
+(global-set-key (kbd "C-l") 'avy-goto-char)  
+(global-set-key (kbd "M-l") 'avy-goto-word-1)
 (global-set-key (kbd "M-g") 'avy-goto-line)
 ;(setq avy-keys (nconc (number-sequence ?a ?z)
 ;		      ))
-(setq avy-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?j ?k ?l ?m ?o ?p ?q ?r ?s ?u ?v ?w ?z))
+(setq avy-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?j ?k ?l ?o ?p ?q ?r ?s ?u ?v ?w))
 (setq avy-keys-alist nil)
 (add-to-list 'avy-orders-alist '(avy-goto-line . avy-order-closest))
 (add-to-list 'avy-orders-alist '(avy-goto-word-1 . avy-order-closest))
 (add-to-list 'avy-orders-alist '(avy-goto-char . avy-order-closest))
-(setq avy-timeout-seconds 0.2))
+(setq avy-timeout-seconds 0.2)
+
+;; https://karthinks.com/software/avy-can-do-anything/
+(defun avy-action-mark-to-char (pt)
+  (activate-mark)
+  (goto-char pt))
+
+(setf (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char)
+)
+
+(use-package elisp-slime-nav
+  :ensure t
+  :config
+  (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+  (add-hook hook 'turn-on-elisp-slime-nav-mode))
+  )
 
 
 (define-key my-mode-map (kbd "M-a") 'beginning-of-buffer)
@@ -196,15 +211,20 @@ line instead."
   ("M-k" . sp-kill-symbol)
   ("C-M-k" . sp-kill-sexp)
   ("C-M-w" . sp-backward-kill-sexp)
-  ("C-M-f" . sp-forward-whitespace)
-  ("C-M-b" . sp-backward-whitespace))
+;  ("C-M-f" . sp-forward-whitespace)
+;  ("C-M-b" . sp-backward-whitespace)
+  ("C-M-f" . sp-down-sexp)
+  ("C-M-b" . sp-backward-up-sexp)
+  ("C-S-a" . sp-beginning-of-sexp)
+  ("C-S-e" . sp-end-of-sexp)  
+  )
+
   :config
   (require 'smartparens-config)
   (setq sp-navigate-consider-symbols nil) ; don't treat a word as a sexp
   (setq sp-highlight-pair-overlay nil) ; don't hightlight inner content of a pair
   
   (sp-with-modes '(latex-mode)
-    (sp-local-pair "\\begin" "\\end")
     (sp-local-pair "|" "|")
     (sp-local-pair "\\|" "\\|"))
   
@@ -218,7 +238,6 @@ line instead."
 (global-set-key (kbd "C-z <tab>") 'yas-expand-from-trigger-key) ; sometimes <tab> is redefined in certain modes, use this as a backup solution
 (global-set-key (kbd "C-z R") 'yas-reload-all)
 (define-key yas-minor-mode-map (kbd "C-c &") nil)
-(global-set-key (kbd "<f2> i") 'yas-new-snippet)
 (yas-global-mode)
 :diminish yas-minor-mode)
 
@@ -262,11 +281,12 @@ line instead."
 
 ;;; buffer, window, frame and file management
 
-(global-set-key (kbd "C-S-r") 'recenter-top-bottom)
+(global-set-key (kbd "<f2>") 'recenter-top-bottom)
 (global-set-key (kbd "C-x x") 'delete-window)
 (bind-keys :map global-map
 	   ("C-1" . delete-other-windows)
 	   ("C-." . other-window)
+	   ("C-。" . other-window)
 	   ("C-\\" . split-window-right))
 
 ;; register
@@ -294,9 +314,9 @@ line instead."
 
 (bind-keys :map my-mode-map
 	   ("C-r w" . my-window-configuration-to-register)
-	   ("C-r C-w" . my-jump-to-saved-window)
+	   ("C-r W" . my-jump-to-saved-window)
 	   ("C-r SPC" . my-point-to-register)
-	   ("C-r C-SPC" . my-jump-to-saved-location))
+	   ("C-r S-SPC" . my-jump-to-saved-location))
 
 (setq winner-dont-bind-my-keys t)
 (winner-mode 1)
@@ -316,7 +336,7 @@ line instead."
   :config
   (global-set-key (kbd "M-o") 'ace-window)
   (setq aw-keys '(?h ?k ?l ?a ?s ?d ?f ?g))
-  (setq aw-dispatch-always t)
+;  (setq aw-dispatch-always t)
   (defun aw-helm-buffers-list-in-window (window)
     (aw-switch-to-window window)
     (call-interactively 'helm-buffers-list)
@@ -336,11 +356,13 @@ line instead."
 (use-package projectile
   :ensure t
   :diminish projectile-mode
+  :bind (:map projectile-command-map
+	      ("j" . projectile-switch-project)
+	      ("A" . projectile-add-known-project)
+	      ("R" . projectile-remove-known-project))  
   :config
   (projectile-mode +1)
-;  (global-set-key (kbd "M-j") 'projectile-switch-project)
   (define-key projectile-mode-map (kbd "M-j") 'projectile-command-map)
-  (define-key projectile-command-map (kbd "j") #'projectile-switch-project)
   (setq projectile-indexing-method 'hybrid)
 ;  (setq projectile-ignored-projects '("~") )
   (setq projectile-track-known-projects-automatically nil) ; only allow manually adding projects
@@ -451,6 +473,10 @@ line instead."
 ;(require 'pyim)
 ;(require 'pyim-basedict) ; 拼音词库设置，五笔用户 *不需要* 此行设置
 ;(pyim-basedict-enable)   ; 拼音词库，五笔用户 *不需要* 此行设置
+(global-set-key (kbd "M-\\") 'toggle-input-method)
+(use-package pyim
+  :ensure t)
+
 (setq default-input-method "pyim")
 ;(setq pyim-punctuation-translate-p '(yes no auto))   ;使用全角标点。
 (setq pyim-punctuation-dict nil)
@@ -506,6 +532,10 @@ line instead."
   (interactive)
   (find-file "~/Dropbox/org/stack.org"))
 
+(defun find-phone()
+  (interactive)
+  (find-file "~/Dropbox/org/phone.org"))
+
 (defun find-literature()
   (interactive)
   (find-file "~/Dropbox/research/literature/"))
@@ -514,21 +544,16 @@ line instead."
 (bind-keys :map global-map
 	   ("C-z l" . find-literature)
 	   ("C-z p" . find-planer)
+	   ("C-z M-p" . find-phone)	   
 	   ("C-z C-c" . find-capture)
 	   ("C-z M-s" . find-stack)
 	   ("C-z F" . find-my-info))
 ) ; end os x
 
-
-
-
 (defun find-download()
   (interactive)
   (find-file "~/Downloads/"))
 (global-set-key (kbd "C-z C-d")  'find-download)
-
- 
-
 
 ;; interact with the world outside emacs
 
@@ -544,11 +569,6 @@ line instead."
 (use-package rg
   :ensure t)
 
-(use-package google-this
-:ensure t  
-:init
-(global-set-key (kbd "C-z <RET>") 'google-this-mode-submap))
-
 (use-package exec-path-from-shell
 :ensure t
 :init
@@ -561,6 +581,41 @@ line instead."
 :config
 (global-disable-mouse-mode) ; in case I move the mouse accidentally
 )
+
+;; interacting with the world outside emacs
+
+(use-package google-this
+:ensure t  
+:init
+(global-set-key (kbd "C-z G") 'google-this-mode-submap)
+(global-set-key (kbd "C-z g") 'google-this-noconfirm))
+
+;; (use-package edit-server
+;;   :ensure t
+;;   :commands edit-server-start
+;;   :init (if after-init-time
+;;               (edit-server-start)
+;;             (add-hook 'after-init-hook
+;;                       #'(lambda() (edit-server-start))))
+;;   :config (setq edit-server-new-frame-alist
+;;                 '((name . "Edit with Emacs FRAME")
+;;                   (top . 200)
+;;                   (left . 200)
+;;                   (width . 80)
+;;                   (height . 25)
+;;                   (minibuffer . t)
+;;                   (menu-bar-lines . t)
+;;                   )))
+
+(use-package atomic-chrome
+  ;; dependency Atomic Chrome extension (in Chrome)
+  :ensure t
+  :init
+  (setq atomic-chrome-default-major-mode 'org-mode)
+;  (setq atomic-chrome-extension-type-list '(atomic-chrome))
+  :config
+  (atomic-chrome-start-server))
+
 
 (setq initial-major-mode 'org-mode)
 

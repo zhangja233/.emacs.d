@@ -97,14 +97,13 @@ With argument ARG, do this that many times."
 (setq my-paragraph-start
       (concat
        "\\(?:[ \t]*$"
-       "\\|" (regexp-quote TeX-esc) "par\\|"
+       "\\|" 
        "[ \t]*"
-       (regexp-quote TeX-esc)
        "\\(?:"
        "part\\|chapter\\|"       
        "section\\|subsection\\|subsubsection\\|"
        "paragraph\\|include\\|includeonly\\|"
-       "tableofcontents\\|appendix\\|label\\|caption\\|\\(?:item\\)?item"
+       "tableofcontents\\|appendix"
        "\\)"
        "\\|"
        "[ \t]*\\$\\$"         ; display math delimitor
@@ -114,16 +113,12 @@ With argument ARG, do this that many times."
       (concat
        "[ \t]*"
        "\\(?:"
-       (regexp-quote TeX-esc) "par\\|"
-       "%\\|"
-       "$\\|"
-       "\\$\\$\\|"
-       (regexp-quote TeX-esc)
+        "par\\|"
        "\\(?:"
        "part\\|chapter\\|"       
        "section\\|subsection\\|subsubsection\\|"
        "paragraph\\|include\\|includeonly\\|"
-       "tableofcontents\\|appendix\\|" (regexp-quote TeX-esc)
+       "tableofcontents\\|appendix" 
        "\\)"
        "\\)")))
 (add-hook 'LaTeX-mode-hook 'my-latex-set-paragraph)
@@ -303,5 +298,38 @@ See `my-forward-paragraph' for more information."
   (interactive "^p")
   (or arg (setq arg 1))
   (my-forward-paragraph (- arg)))
+
+(defun my-mark-paragraph (&optional arg allow-extend)
+  " A slight modification of mark-paragraph to use my-forward/backward-paragraph
+instead of forward/backward-paragraph.
+
+Put point at beginning of this paragraph, mark at end.
+The paragraph marked is the one that contains point or follows point.
+
+With argument ARG, puts mark at end of a following paragraph, so that
+the number of paragraphs marked equals ARG.
+
+If ARG is negative, point is put at end of this paragraph, mark is put
+at beginning of this or a previous paragraph.
+
+Interactively (or if ALLOW-EXTEND is non-nil), if this command is
+repeated or (in Transient Mark mode) if the mark is active,
+it marks the next ARG paragraphs after the ones already marked."
+  (interactive "p\np")
+  (unless arg (setq arg 1))
+  (when (zerop arg)
+    (error "Cannot mark zero paragraphs"))
+  (cond ((and allow-extend
+	      (or (and (eq last-command this-command) (mark t))
+		  (and transient-mark-mode mark-active)))
+	 (set-mark
+	  (save-excursion
+	    (goto-char (mark))
+	    (forward-paragraph arg)
+	    (point))))
+	(t
+	 (my-forward-paragraph arg)
+	 (push-mark nil t t)
+	 (my-backward-paragraph arg))))
 
 (provide 'init-my)

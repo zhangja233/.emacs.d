@@ -1,5 +1,18 @@
-(add-hook 'LaTeX-mode-hook 'flyspell-mode)
-;(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
+(add-hook 'LaTeX-mode-hook '(lambda()
+			      (flyspell-mode)
+			      (reftex-mode)
+			      ;(modify-syntax-entry (string-to-char TeX-esc) "w"
+			      ;LaTeX-mode-syntax-table) ; make \ part of a word
+			      (modify-syntax-entry ?_ "w"
+			      tex-mode-syntax-table)
+			      (modify-syntax-entry ?_ "w"
+			      LaTeX-mode-syntax-table)			      
+			      (modify-syntax-entry ?^ "w"
+			      tex-mode-syntax-table)
+			      (modify-syntax-entry ?^ "w"
+			      LaTeX-mode-syntax-table) 			      
+			      ))
+(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 
 (use-package latex
   :ensure auctex
@@ -11,7 +24,6 @@
     (setq TeX-view-program-list '(("skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b" )))
     (setq TeX-view-program-selection '((output-pdf "skim"))))
  ; some facilites
-
   (defun insert-backslash() 
     (interactive)(insert "\\"))
   (defun insert-dollar() 
@@ -26,6 +38,11 @@
     (insert "%"))  
   (defun latex-insert-prime() 
     (interactive)(insert "^{\\prime }"))
+  
+  (defun latex-insert-sub-2()
+    (interactive)
+    (insert "$_2$ "))
+
   
   (defun latex-kill-section()
     (interactive)
@@ -64,16 +81,18 @@
    ("C-;" . insert-backslash)
    ("M-;" . insert-dollar)
    ("C-:" . insert-percent)
+   ("`" . latex-insert-inline-src)
    ("M-:" . insert-single-dollar)
+   ("M-2" . latex-insert-sub-2)
    ("C-c '" . latex-insert-prime)
    ("C-c i" . TeX-complete-symbol)
    ("C-c m" . LaTeX-mark-section)
-   ("C-c w" . LaTeX-kill-section)
+   ("C-c w" . latex-kill-section)
    ("C-c A" . latex-convert-equation-to-aligned)
    ("C-c B" . latex-bold-region)
    ("C-c F" . LaTeX-fill-buffer)
-   ("C-c >" . LaTeX-mark-environment-inner)
-   ("C-c =" . latex-append-ampersand))
+   ("C-c C-." . LaTeX-mark-environment-inner)
+   ("C-c C-=" . latex-append-ampersand))
 
   (defun LaTeX-mark-environment-inner (&optional count)
     "modified based on the auctex function LaTeX-mark-environment.
@@ -135,15 +154,15 @@
  (diminish outline-minor-mode)
  ;; easier outline keybindings
 ; (define-key LaTeX-mode-map (kbd "C-c C-c") 'outline-show-subtree)
-; (define-key LaTeX-mode-map (kbd "C-c C-SPC") 'outline-hide-body)
+ (define-key LaTeX-mode-map (kbd "C-c C-SPC") 'outline-hide-body)
  (define-key LaTeX-mode-map (kbd "S-<tab>") 'outline-hide-body)
  (define-key LaTeX-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
  (define-key outline-minor-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading) ; override preview-map
- (define-key LaTeX-mode-map (kbd "<up>") 'outline-previous-visible-heading)
- (define-key LaTeX-mode-map (kbd "<down>") 'outline-next-visible-heading)
- (define-key LaTeX-mode-map (kbd "C-<up>") 'outline-up-heading)
- (define-key LaTeX-mode-map (kbd "<right>") 'outline-forward-same-level)
- (define-key LaTeX-mode-map (kbd "<left>") 'outline-backward-same-level)
+; (define-key LaTeX-mode-map (kbd "<up>") 'outline-previous-visible-heading)
+; (define-key LaTeX-mode-map (kbd "<down>") 'outline-next-visible-heading)
+ (define-key LaTeX-mode-map (kbd "C-c C-u") 'outline-up-heading)
+ (define-key LaTeX-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
+ (define-key LaTeX-mode-map (kbd "C-c M-b") 'outline-backward-same-level)
  (define-key LaTeX-mode-map (kbd "C-c <tab>") 'outline-show-all)
  
  
@@ -240,6 +259,11 @@
    (insert-latex-env "lstlisting"))
  (define-key LaTeX-mode-map (kbd "C-c l") 'insert-lstlisting)
 
+ (defun latex-insert-inline-src()
+   (interactive)
+   (insert "\\lstinline;;")
+   (backward-char))
+ 
  (defun insert-definition()
    (interactive)
    (insert-latex-env "definition")
@@ -274,6 +298,7 @@
   (save-some-buffers 1)
   (let ((TeX-command-force "LaTeX"))
     (TeX-command-master nil)))
+
 (define-key LaTeX-mode-map (kbd "C-x C-s") 'latex-save-and-compile) ; compile tex file every time hit C-x C-s, thus making it up to date.
 (define-key LaTeX-mode-map (kbd "C-'") 'latex-save-and-compile) 
 
@@ -298,7 +323,8 @@
 
 ;; So that RefTeX finds my bibliography
 (setq reftex-plug-into-AUCTeX t)
-(setq reftex-default-bibliography '("~/lib/bib/zhangja.bib" "~/lib/bib/url.bib"))
+(setq reftex-default-bibliography '("~/lib/bib/zhangja.bib" "~/lib/bib/url.bib"
+				    "~/Dropbox/research/literature/main.bib"))
 
 )) ; be aware, eval-after-load ends here
 

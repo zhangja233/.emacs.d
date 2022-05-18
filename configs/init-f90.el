@@ -17,5 +17,7 @@
 	   ("C-c C-b" . f90-previous-block)))
 )
 (setq f90-smart-end 'no-blink)
+(setq f90-critical-indent '4)
+(setq f90-program-indent '4)
 
 (provide 'init-f90)

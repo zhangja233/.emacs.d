@@ -11,17 +11,20 @@
 	      ("C-j" . newline-and-indent)
 ;	      ("C-<return>" . org-insert-heading)
 	      ("C-<return>" . org-meta-return)	      
-	      ("C-;" . org-insert-todo-heading)
+	      ("C-;" . my-org-insert-todo-heading)
 ;	      ("<up>" . org-previous-visible-heading)
 ;	      ("<down>" . org-next-visible-heading)
 ;	      ("<right>" . org-forward-heading-same-level)
 ;	      ("<left>" . org-backward-heading-same-level)
 	      ("C-<right>" . org-metaright)
 	      ("C-<left>" . org-metaleft)
+	      ("C-'" . org-metaright)
+	      ("M-'" . org-metaleft)	      
 	      ("C-<up>" . org-metaup)
 	      ("C-<down>" . org-metadown)	      
 	      ("M-;" . org-insert-todo-subheading)
 	      ("M-<return>" . org-insert-subheading)
+	      ("S-<return>" . my-org-shiftreturn)	      
 ;	      ("M-<return>" . org-meta-return)
 	      ("M-[" . org-metaleft)
 	      ("M-]" . org-metaright)
@@ -29,15 +32,20 @@
 	      ("C-c n" . org-narrow-to-subtree)
 	      ("C-c N" . widen)
 	      ("C-c w". org-cut-subtree)
-	      ("C-c j" . org-table-copy-down)
 	      ("C-c o" . org-create-list-item-above)
 	      ("C-c ]" . org-ref-insert-link)
-	      ("C-|" . org-table-hline-and-move)
 	      ("C-c e" . insert-equation)
 	      ("C-c E" . org-set-effort)
 	      ("C-<up>" . org-timestamp-up-day) ; timestamp
 ;	      ("C-c C-n" . org-timestamp-down-day)
 	      )
+   (bind-keys :map org-mode-map
+	      ("C-c j" . org-table-copy-down)
+	      ("C-|" . org-table-hline-and-move)
+	      ("C-c r" . org-table-insert-row)
+	      ("C-c c" . org-table-insert-column)
+	      ("C-c x" . org-table-delete-column)
+	      ("C-c -" . org-table-insert-hline))
 	 (eval-after-load "org-agenda"
 	 '(progn
    (bind-keys :map org-agenda-mode-map
@@ -46,8 +54,30 @@
 	      ("C-z m" . org-store-link)
 	      ("C-z G" . org-clock-goto)
 	      ("C-z M-c" . calendar))
-;; configs for org-mode
-;;; customize org-agenda   
+   
+;;; document structure
+(defun my-org-insert-todo-heading(&optional arg)
+  (interactive "P")
+  (cond ((equal arg '(4))
+	 (call-interactively 'org-insert-todo-subheading))
+	(t
+	 (call-interactively 'org-insert-todo-heading))))
+(defun my-org-previous-row(&optional arg)
+    (interactive)
+  (org-table-align)
+  (previous-line))
+
+(defun my-org-shiftreturn (&optional arg)
+  "Act on the current element according to context.
+   This does one of the following:
+
+- in a table, move to the previous row"
+  (interactive "P")
+  (call-interactively (cond ((org-at-table-p) #'my-org-previous-row)
+			    (t #'previous-line))))
+
+   
+;;; org-agenda   
 (setq org-agenda-start-on-weekday nil) ; make org-agenda start at the current day
 (setq org-agenda-show-future-repeats 'next)
 
@@ -66,16 +96,21 @@
   (search . " %i %-12:c")))
 (setq org-agenda-custom-commands
       '(("p" tags "+pwd")
-	("P" tags "+pwd-life-entertainment")
-	("T" tags "+today")))
+;	("n" ((tags-todo) (tags "+next")) )
+	("n"  tags "+next")	
+	("P" tags "pwd+{c[0-9].*}")
+	("T" tags "+today")
+	("3" tags "+30")))
+(setq org-agenda-skip-function-global '(org-agenda-skip-entry-if 'todo 'done))
+
 
 ;; column view
 (setq org-columns-default-format "%30ITEM(Task) %TODO %CLOCKSUM{:} %CLOCKSUM_W %6Effort(Estim){:} %DEADLINE %TAGS")
 
 
 ; tags
-;(setq org-tags-match-list-sublevels nil) ;don't list sublevels when searching for tags
-
+(setq org-tags-match-list-sublevels nil) ;don't list sublevels when searching for tags
+(setq org-use-tag-inheritance nil)
 ;; org-capture
 (global-set-key (kbd "C-z c") 'org-capture)
 
@@ -118,15 +153,11 @@
 
 ;(define-key org-mode-map (kbd "M-h") nil) ; override org-mode key binding
 (define-key org-mode-map (kbd "C-,") nil) ; override org-mode key binding
-(define-key org-mode-map (kbd "C-'") nil) ; override org-mode key binding
 ;(define-key org-mode-map (kbd "S-<right>") nil) ; override org-mode key binding
 ;(define-key org-mode-map (kbd "S-<left>") nil) ; override org-mode key binding
-;(define-key org-mode-map (kbd "M-a") 'beginning-of-buffer)
-;(define-key org-mode-map (kbd "M-e") 'end-of-buffer)
 
-; table
-(define-key org-mode-map (kbd "C-c p") 'org-table-insert-row)
-(define-key org-mode-map (kbd "C-c b") 'org-table-insert-column)
+
+
 
 ; clock
 (global-set-key (kbd "C-z i") 'org-clock-in)
@@ -137,7 +168,6 @@
 
 (define-key org-mode-map (kbd "C-c a") 'org-metaleft)
 (define-key org-mode-map (kbd "C-c d") 'org-metaright)
-(define-key org-mode-map (kbd "C-c r") 'org-clock-report)
 ; miscellaneous
 (define-key org-mode-map (kbd "C-c v") 'org-latex-preview)
 
@@ -163,7 +193,14 @@
 (setq org-adapt-indentation nil) ; do not indent when using c-j after a title
 ; '(org-startup-truncated nil)
 (setq org-return-follows-link t) ; use return to open link
+
+;; mark-up
 ))
+
+(use-package helm-org-rifle
+  :ensure t
+  :bind (:map my-mode-map
+              ("C-r C-r" . helm-org-rifle-current-buffer)))
 
 (setq-default org-catch-invisible-edits 'smart)
 

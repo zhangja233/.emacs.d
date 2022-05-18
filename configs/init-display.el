@@ -10,6 +10,8 @@
   :config
   (diminish 'my-mode)
   (diminish 'eldoc-mode)
+  (diminish 'abbrev-mode)
+;  (diminish 'auto-fill-mode)
   )
 
 (defun set-font-size(size)
@@ -17,6 +19,9 @@
   (interactive "p")
    (set-face-attribute 'default nil :height size)
 )
+
+(when (eq system-type 'darwin)
+  (set-font-size 190))
 
 (global-set-key (kbd "C-<f13>") 'set-font-size)
 

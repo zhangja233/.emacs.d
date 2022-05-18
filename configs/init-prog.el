@@ -2,7 +2,7 @@
   (interactive "P") 
   (save-some-buffers 1) 
   (cl-case major-mode
-  ('latex-mode (TeX-command-run-all nil))  
+  ('latex-mode (TeX-command-run-all nil))  ; special treatment for tex
   (t (cond ((equal arg '(4))
          ; use compile-buffer in comint mode[note that current-prefix-arg is '(4) ]
 	 (call-interactively 'compile t (vector compile-command)))
@@ -10,7 +10,10 @@
 	 (setq-local compilation-read-command nil)
 	 (call-interactively 'compile))))))
 
+
 (global-set-key (kbd "C-z C-z") 'my-compile)
+
+(add-hook 'prog-mode-hook #'auto-fill-mode)
 
 (bind-keys :map compilation-mode-map
 	   ("M-n" . my-forward-paragraph)
@@ -20,8 +23,7 @@
 	  (define-key compilation-shell-minor-mode-map (kbd "C-;") 'quit-window)))
 
 (global-set-key (kbd "C-z C-s") 'shell-command)
-
-(global-set-key (kbd "<f2> e") 'eshell)
+(global-set-key (kbd "C-z M-e") 'eshell)
 
 (use-package lsp-mode
   :init
@@ -29,10 +31,15 @@
   (setq lsp-keymap-prefix "M-u")
   (setq lsp-diagnostic-package :none)
 
-;  (setq lsp-ui-doc-enable nil)
-;  (setq lsp-eldoc-enable-hover nil)
+  (setq lsp-ui-doc-enable nil)
+  (setq lsp-eldoc-enable-hover nil)
   (setq lsp-signature-auto-activate nil)
-  (setq lsp-enable-symbol-highlighting nil) ; don't show distraction when cursor is on an object
+  (setq lsp-enable-symbol-highlighting nil)
+  ; don't show distraction when cursor is on an object
+  (setq lsp-ui-doc-show-with-cursor nil)
+  (setq lsp-ui-doc-show-with-mouse nil)
+  
+  
 
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
         ((python-mode c-mode f90-mode) . lsp))
@@ -40,9 +47,19 @@
 ;         (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
 
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.build\\'"))
+
 (use-package lsp-ui
   :ensure t)
 
+(use-package cmake-mode
+  :ensure t)
+
+(eval-after-load "sh-script"
+  '(progn  
+     (bind-keys :map sh-mode-map
+		("C-;" . insert-number-sign))))
 
 (use-package ggtags
   :ensure t)
@@ -59,9 +76,11 @@
 
 (defun insert-number-sign () (interactive) (insert "#"))
 
-(eval-after-load "perl"
+(defalias 'perl-mode 'cperl-mode)
+
+(eval-after-load "cperl"
 '(progn
-   (bind-keys :map perl-mode-map
+   (bind-keys :map cperl-mode-map
 	      ("C-;" . insert-single-dollar)
 	      ("M-;" . insert-number-sign))))   
 
@@ -86,3 +105,4 @@
   (define-key json-mode-map (kbd "C-;") 'json-pretty-print-buffer))
 
 (provide 'init-prog)
+

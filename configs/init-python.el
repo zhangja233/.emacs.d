@@ -1,10 +1,23 @@
 (add-hook 'python-mode-hook
 	  (lambda()
 	    (setq-default indent-tabs-mode t)
+	    (modify-syntax-entry ?_ "w" python-mode-syntax-table)	    
 	    (hs-minor-mode)
 	    (bind-keys :map hs-minor-mode-map
 		       ("C-c <tab>" . hs-show-block)
 		       ("C-c S-<tab>" . hs-hide-all))
+	    ;; (setq 'hs-special-modes-alist 
+	    ;; 		 '((c-mode . #1=(#2="{" #3="}" #4="/[*/]" nil . #5=(nil)))
+	    ;; 		 (c++-mode . #1#)
+	    ;; 		 (bibtex-mode
+	    ;; 		  ("@\\S(*\\(\\s(\\)" 1))
+	    ;; 		 (java-mode . #1#)
+	    ;; 		 (js-mode #2# #3# #4# . #5#)
+	    ;; 		 (f90-mode "\\s-∗\\_<\\(?:subroutine\\|function\\)\\_>"
+	    ;; 			      ""
+	    ;; 			      "!"
+	    ;; 			      f90-end-of-block				      
+	    ;; 			      nil)))
 	    (auto-fill-mode)))
 
 (eval-after-load "python"
@@ -21,14 +34,16 @@
        (insert "    ")))   
    (bind-keys :map python-mode-map
 	      ("<return>" . newline-and-indent)
+	      ("C-;" . insert-number-sign)
+	      ("C-j" . newline-and-indent)
+	      ("C-c C-d" . pydoc-at-point)
 	      ("M-DEL" . python-mark-defun)
-	      ("<left>" . my-python-indent-shift-left)
+	      ("S-<left>" . my-python-indent-shift-left)
 	      ("<backtab>" . my-python-indent-shift-left)
-	      ("<right>" . my-python-indent-shift-right)
+	      ("S-<right>" . my-python-indent-shift-right)
 	      ("C-<left>" . python-indent-shift-left)
 	      ("C-<right>" . python-indent-shift-right))
-   (define-key python-mode-map (kbd "C-;") 'insert-number-sign)
-   (define-key python-mode-map (kbd "C-j") 'newline-and-indent)))
+   ))
  ; electric-newline-and-maybe-indent does not do what I want
 ;   (hs-minor-mode)
 
@@ -59,6 +74,12 @@
 	  ('darwin "/opt/homebrew/Caskroom/miniforge/base/envs")))
   (venv-initialize-interactive-shells) ;;  interactive shell support
   (venv-initialize-eshell)) ;;  eshell support
+
+(use-package pydoc
+  :ensure t)
+
+;(use-package helm-pydoc
+;  :ensure t)
 
 ;; jupyter notebook support
 (use-package ein

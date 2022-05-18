@@ -7,6 +7,8 @@ obtained with the [[https://github.com/dacap/keyfreq][keyfreq]] package).
 I made =C-z= a global prefix key, since I don't use the =suspend-frame= function bound to =C-z= in vanilla Emacs at all, and
 it locates near the other two major prefix keys(=C-x= and =C-c=).
 
+The following is a list of my most frequently used functionalities and their keybindings.
+
 *** Move the cursor
 | keybinding(s) | description                                              |
 |---------------+----------------------------------------------------------|

@@ -2,4 +2,4 @@
 # name: exit
 # key: e
 # --
-exit()
+exit(0)
