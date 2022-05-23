@@ -5,8 +5,12 @@
 	   ("C-a" . my-beginning-of-line)
 	   ("C-e" . my-end-of-line))
 
-(global-set-key (kbd "C-S-b") 'backward-sentence)
-(global-set-key (kbd "C-S-f") 'forward-sentence)
+(use-package hydra
+  :ensure t
+  :init
+  :config
+  (setq hydra-hint-display-type 'message)
+  )
 
 (defun forward-half-sentence(&optional arg)
   (interactive)
@@ -16,9 +20,11 @@
   (interactive)
   (re-search-backward "[;,=]" nil nil arg))
 
-;(bind-keys :map global-map
-;	   ("C-M-f" . forward-half-sentence)
-;	   ("C-M-b" . backward-half-sentence))
+(bind-keys :map global-map
+	   ("M-F" . forward-half-sentence)
+	   ("M-B" . backward-half-sentence)
+	   ("C-S-f" . forward-sentence)
+	   ("C-S-b" . backward-sentence))
 
 (setq sentence-end-double-space nil) ;make backward-sentence and forward-sentence behave as in fundamental mode
 
@@ -28,14 +34,26 @@
 	   ("M-h" . my-mark-paragraph)
 	   ("C-M-l" . downcase-word)
 	   ("C-M-c" . capitalize-word)
-	   ("C-z M-l" . global-display-line-numbers-mode)) 
+	   ("C-z M-l" . global-display-line-numbers-mode))
+
+(defadvice upcase-word (before upcase-word-advice activate)
+  (unless (looking-back "\\b")
+    (backward-word)))
+
+(defadvice downcase-word (before downcase-word-advice activate)
+  (unless (looking-back "\\b")
+    (backward-word)))
+
+(defadvice capitalize-word (before capitalize-word-advice activate)
+  (unless (looking-back "\\b")
+    (backward-word)))
 
 ;; avy-mode
 (use-package avy
   :ensure t
   :config
-(global-set-key (kbd "C-l") 'avy-goto-char)  
-(global-set-key (kbd "M-l") 'avy-goto-word-1)
+(global-set-key (kbd "M-l") 'avy-goto-char)  
+(global-set-key (kbd "C-l") 'avy-goto-word-1)
 (global-set-key (kbd "M-g") 'avy-goto-line)
 ;(setq avy-keys (nconc (number-sequence ?a ?z)
 ;		      ))
@@ -44,6 +62,8 @@
 (add-to-list 'avy-orders-alist '(avy-goto-line . avy-order-closest))
 (add-to-list 'avy-orders-alist '(avy-goto-word-1 . avy-order-closest))
 (add-to-list 'avy-orders-alist '(avy-goto-char . avy-order-closest))
+(setq avy-all-windows nil)
+(setq avy-all-windows-alt t)
 (setq avy-timeout-seconds 0.2)
 
 ;; https://karthinks.com/software/avy-can-do-anything/
@@ -51,7 +71,8 @@
   (activate-mark)
   (goto-char pt))
 
-(setf (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char)
+(setf (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char) ; space as
+					; mark to char
 )
 
 (use-package elisp-slime-nav
@@ -82,11 +103,9 @@
 (global-set-key (kbd "<deletechar>") 'quoted-insert)
 
 ;;; search and replace
-(global-set-key (kbd "M-r") 'replace-string)
-
 (bind-keys :map global-map
 	   ("M-r" . replace-string)
-	   ("M-5" . query-replace-regexp))
+	   ("C-z M-r" . query-replace))
 
 (use-package visual-regexp-steroids
   :ensure t
@@ -119,16 +138,18 @@
   (end-of-line)
   (newline-and-indent)
   )
-;(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
-;(global-set-key (kbd "H-m") 'open-line-below)
+(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
+(global-set-key (kbd "H-m") 'open-line-below)
 
 ;(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
 
 (defun open-line-above()
   (interactive)
   (beginning-of-line)
-  (open-line 1)
-  (indent-for-tab-command))
+;  (open-line 1)
+;  (indent-for-tab-command)
+  (crux-smart-open-line-above)
+  )
 (global-set-key (kbd "C-o") 'open-line-above)
 
 ;; delete, kill, copy and paste
@@ -184,7 +205,7 @@ line instead."
   :config
   (global-undo-tree-mode)
   :bind
-  ("M-/" . 'undo-tree-redo)
+  ("C-M-/" . 'undo-tree-redo)
   :diminish undo-tree-mode)
 
 ;; About sexps 
@@ -199,8 +220,6 @@ line instead."
   (smartparens-global-mode)
   (define-key my-mode-map (kbd "M-f") 'sp-forward-sexp)
   (define-key my-mode-map (kbd "M-b") 'sp-backward-sexp)
-
-
   (define-key smartparens-mode-map (kbd "C-M-]") 'sp-select-next-thing)
   (define-key smartparens-mode-map (kbd "C-M-[") 'sp-select-previous-thing)  
   (define-key my-mode-map (kbd "C-M-i") 'sp-change-enclosing)
@@ -230,6 +249,59 @@ line instead."
   
   (advice-remove 'delete-backward-char #'ad-Advice-delete-backward-char) ;prevent smartparens from deleting the whole \right) when using backspace
   :diminish smartparens-mode)
+
+(define-key my-mode-map (kbd "M-s") (defhydra hydra-smartparens (:hint nil)
+;; https://github-wiki-see.page/m/abo-abo/hydra/wiki/Smartparens
+  "
+ Moving^^^^                       Slurp & Barf^^   Wrapping^^            Sexp juggling^^^^               Destructive
+------------------------------------------------------------------------------------------------------------------------
+ [_a_] beginning  [_n_] down      [_h_] bw slurp   [_R_]   rewrap        [_S_] split   [_t_] transpose   [_c_] change inner  [_w_] copy
+ [_e_] end        [_N_] bw down   [_H_] bw barf    [_u_]   unwrap        [_s_] splice  [_A_] absorb      [_C_] change outer
+ [_f_] forward    [_p_] up        [_l_] slurp      [_U_]   bw unwrap     [_r_] raise   [_E_] emit        [_k_] kill          [_g_] quit
+ [_b_] backward   [_P_] bw up     [_L_] barf       [_(__{__[_] wrap (){}[]   [_j_] join    [_o_] convolute   [_K_] bw kill       [_q_] quit"
+  ;; Moving
+  ("a" sp-beginning-of-sexp)
+  ("e" sp-end-of-sexp)
+  ("f" sp-forward-symbol)
+  ("b" sp-backward-symbol)
+  ("n" sp-down-sexp)
+  ("N" sp-backward-down-sexp)
+  ("p" sp-up-sexp)
+  ("P" sp-backward-up-sexp)
+  
+  ;; Slurping & barfing
+  ("h" sp-backward-slurp-sexp)
+  ("H" sp-backward-barf-sexp)
+  ("l" sp-forward-slurp-sexp)
+  ("L" sp-forward-barf-sexp)
+  
+  ;; Wrapping
+  ("R" sp-rewrap-sexp)
+  ("u" sp-unwrap-sexp)
+  ("U" sp-backward-unwrap-sexp)
+  ("(" sp-wrap-round)
+  ("{" sp-wrap-curly)
+  ("[" sp-wrap-square)
+  
+  ;; Sexp juggling
+  ("S" sp-split-sexp)
+  ("s" sp-splice-sexp)
+  ("r" sp-raise-sexp)
+  ("j" sp-join-sexp)
+  ("t" sp-transpose-sexp)
+  ("A" sp-absorb-sexp)
+  ("E" sp-emit-sexp)
+  ("o" sp-convolute-sexp)
+  
+  ;; Destructive editing
+  ("c" sp-change-inner :exit t)
+  ("C" sp-change-enclosing :exit t)
+  ("k" sp-kill-sexp)
+  ("K" sp-backward-kill-sexp)
+  ("w" sp-copy-sexp)
+
+  ("q" nil)
+  ("g" nil)))
 
 ;;; snippets
 (use-package yasnippet 
@@ -313,9 +385,9 @@ line instead."
   (jump-to-register ? ))
 
 (bind-keys :map my-mode-map
-	   ("C-r w" . my-window-configuration-to-register)
+	   ("C-r C-w" . my-window-configuration-to-register)
 	   ("C-r W" . my-jump-to-saved-window)
-	   ("C-r SPC" . my-point-to-register)
+	   ("C-r C-SPC" . my-point-to-register)
 	   ("C-r S-SPC" . my-jump-to-saved-location))
 
 (setq winner-dont-bind-my-keys t)
@@ -326,8 +398,8 @@ line instead."
 )
 (global-set-key (kbd "H-\[") 'winner-undo)
 
-(global-set-key (kbd "C-z ,") 'winner-undo)
-(global-set-key (kbd "C-z .") 'winner-redo)
+;(global-set-key (kbd "C-z ,") 'winner-undo)
+;(global-set-key (kbd "C-z .") 'winner-redo)
 (bind-keys :map global-map
 	   ("C-\]" . winner-redo))
 
@@ -388,6 +460,8 @@ line instead."
   :ensure t)
 
 (recentf-mode 1)
+(bind-keys :map my-mode-map
+	   ("C-x C-r" . helm-recentf))
 
 ;; dired mode
 (require 'dired-x)
@@ -399,6 +473,8 @@ line instead."
 
 (define-key dired-mode-map (kbd "SPC") 'browse-url-of-dired-file)
 (define-key dired-mode-map (kbd "E") 'wdired-change-to-wdired-mode)
+(bind-keys :map dired-mode-map
+	   ("j" . find-file))
 
 (use-package dired-ranger
   :ensure t
@@ -442,7 +518,6 @@ line instead."
   (save-some-buffers 1)
   (message "all buffers saved"))
 (global-set-key (kbd "C-x C-s")  'save-all-buffers)
-(global-set-key (kbd "M-s")  'save-all-buffers)
 (global-set-key (kbd "C-x C-S-s") 'save-buffer)
 
 (defun my-quit-emacs()
@@ -469,19 +544,26 @@ line instead."
 :ensure t)
 
 ;; input method
-; Chinese
-;(require 'pyim)
-;(require 'pyim-basedict) ; 拼音词库设置，五笔用户 *不需要* 此行设置
-;(pyim-basedict-enable)   ; 拼音词库，五笔用户 *不需要* 此行设置
+
+;; Chinese
 (global-set-key (kbd "M-\\") 'toggle-input-method)
 (use-package pyim
-  :ensure t)
+  :ensure t
+  :config
+  ;; 拼音词库设置
+  (use-package pyim-basedict
+    :ensure t)
+  (pyim-basedict-enable)
+  )
 
 (setq default-input-method "pyim")
 ;(setq pyim-punctuation-translate-p '(yes no auto))   ;使用全角标点。
 (setq pyim-punctuation-dict nil)
 ;(setq pyim-punctuation-translate-p '(no yes auto))   ;使用半角标点。
 (setq pyim-page-tooltip 'popup)
+
+(use-package cnfonts
+  :ensure t)
 
 ; japanese
 (defun set-japanese()
@@ -569,12 +651,37 @@ line instead."
 (use-package rg
   :ensure t)
 
+
+(use-package evil
+  :ensure t
+  :bind (:map my-mode-map
+             ("M-." . my-find-char)
+	     ("M-," . my-find-char-backward)))
+(defun my-find-char()
+  (interactive)
+  (if (equal last-command 'my-find-char)      
+      (call-interactively #'evil-repeat-find-char)
+    (call-interactively #'evil-find-char)
+    ))
+
+(defun my-find-char-backward()
+  (interactive)
+  (if (equal last-command 'my-find-char-backward)      
+      (call-interactively #'evil-repeat-find-char)
+    (call-interactively #'evil-find-char-backward)
+    ))
+
+
+
+(use-package worf
+  :ensure t)
+
 (use-package exec-path-from-shell
-:ensure t
-:init
-(unless (eq system-type 'windows-nt)
-  (exec-path-from-shell-initialize) ;get $PATH from shell
-))
+  :ensure t
+  :init
+  (unless (eq system-type 'windows-nt)
+    (exec-path-from-shell-initialize)	;get $PATH from shell
+    ))
 (use-package disable-mouse
 :ensure t
 :diminish disable-mouse-global-mode

@@ -36,14 +36,14 @@ The following is a list of my most frequently used functionalities and their key
 | =M-r=         | replace string                |
 
 *** Window, buffer and file
-| keybinding(s)    | description                           |
-|------------------+---------------------------------------|
-| =M-s or C-x C-s= | save all buffers                      |
-| ~C-comma~        | =helm-multi-files=                    |
-| =C-dot=          | switch to other window                |
-| =C-r=            | prefix key for register functionality |
-| =C-1=            | =delete-other-windows=                |
-| =C-x x=          | =delete-window=                       |
+| keybinding(s) | description                           |
+|---------------+---------------------------------------|
+| =M-s=         | prefix for [[https://github.com/Fuco1/smartparens][smartparens]] [[https://github.com/abo-abo/hydra][hydra]]          |
+| ~C-comma~     | =helm-multi-files=                    |
+| =C-dot=       | switch to other window                |
+| =C-r=         | prefix key for register functionality |
+| =C-1=         | =delete-other-windows=                |
+| =C-x x=       | =delete-window=                       |
 
 *** Other editing functionalities 
 | keybinding(s)   | description                                                    |
