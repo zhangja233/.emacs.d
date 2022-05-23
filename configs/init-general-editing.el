@@ -440,6 +440,7 @@ line instead."
   (setq projectile-track-known-projects-automatically nil) ; only allow manually adding projects
   (setq projectile-auto-discover nil)
   (setq projectile-sort-order 'recentf)
+  (setq projectile-switch-project-action 'projectile-commander)  
   (setq projectile-current-project-on-switch 'keep) ; leave the current project at the default position
 ;  (setq projectile-dynamic-mode-line nil)
 ;  (setq-default projectile-mode-line-function nil)
@@ -656,8 +657,9 @@ line instead."
   :ensure t
   :bind (:map my-mode-map
              ("M-." . my-find-char)
-	     ("M-," . my-find-char-backward)))
-(defun my-find-char()
+	     ("M-," . my-find-char-backward))
+  :config
+  (defun my-find-char()
   (interactive)
   (if (equal last-command 'my-find-char)      
       (call-interactively #'evil-repeat-find-char)
@@ -669,7 +671,7 @@ line instead."
   (if (equal last-command 'my-find-char-backward)      
       (call-interactively #'evil-repeat-find-char)
     (call-interactively #'evil-find-char-backward)
-    ))
+    )))
 
 
 
