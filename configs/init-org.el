@@ -45,9 +45,8 @@
    (bind-keys :map org-mode-map
 	      ("C-c j" . org-table-copy-down)
 	      ("C-|" . org-table-hline-and-move)
-	      ("C-c c" . org-table-insert-column)
-	      ("C-c a" . org-table-beginning-of-field)
-	      ("C-c e" . org-table-end-of-field)	      
+	      ("C-c t a" . org-table-beginning-of-field)
+	      ("C-c t e" . org-table-end-of-field)	      
 	      ("C-c x" . org-table-delete-column)
 	      ("C-c -" . org-table-insert-hline)
 	      ("｜" . (lambda() (interactive) (insert "|")))
