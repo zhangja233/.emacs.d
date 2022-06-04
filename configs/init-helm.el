@@ -1,6 +1,8 @@
 (use-package helm
   :ensure t
   :diminish helm-mode
+;;  :bind (:map helm-command-map
+;;	      )
   :config
   (use-package swiper-helm
     :ensure t
@@ -21,7 +23,10 @@
   (setq helm-mode-handle-completion-in-region nil) ; don't use helm for completion-at-point
   (dolist (item '( (dired-do-rename . nil)
 		   (dired-create-directory . nil)
-		   (dired-do-copy . nil))
+		   (dired-do-copy . nil)
+		   (rg . nil)
+		   (minibuffer-complete . nil)
+		   (completion-at-point . nil))
 		)
     (add-to-list 'helm-completing-read-handlers-alist item)
     )

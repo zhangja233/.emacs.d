@@ -1,11 +1,12 @@
 (add-hook 'python-mode-hook
 	  (lambda()
 	    (setq-default indent-tabs-mode t)
-	    (modify-syntax-entry ?_ "w" python-mode-syntax-table)	    
+	    ;; (modify-syntax-entry ?_ "w" python-mode-syntax-table)	    
 	    (hs-minor-mode)
 	    (bind-keys :map hs-minor-mode-map
 		       ("C-c <tab>" . hs-show-block)
-		       ("C-c S-<tab>" . hs-hide-all))
+		       ("C-c C-SPC" . hs-hide-all))
+;	    (flycheck-mode)
 	    ;; (setq 'hs-special-modes-alist 
 	    ;; 		 '((c-mode . #1=(#2="{" #3="}" #4="/[*/]" nil . #5=(nil)))
 	    ;; 		 (c++-mode . #1#)
@@ -18,7 +19,8 @@
 	    ;; 			      "!"
 	    ;; 			      f90-end-of-block				      
 	    ;; 			      nil)))
-	    (auto-fill-mode)))
+	    ;; (auto-fill-mode)	    
+	    ))
 
 (eval-after-load "python"
 '(progn
@@ -34,12 +36,13 @@
        (insert "    ")))   
    (bind-keys :map python-mode-map
 	      ("<return>" . newline-and-indent)
-	      ("C-;" . insert-number-sign)
+;	      ("C-;" . insert-number-sign)
+	      ("C-;" . comment-line)
 	      ("C-j" . newline-and-indent)
 	      ("C-c C-d" . pydoc-at-point)
 	      ("M-DEL" . python-mark-defun)
 	      ("S-<left>" . my-python-indent-shift-left)
-	      ("<backtab>" . my-python-indent-shift-left)
+;	      ("<backtab>" . my-python-indent-shift-left)
 	      ("S-<right>" . my-python-indent-shift-right)
 	      ("C-<left>" . python-indent-shift-left)
 	      ("C-<right>" . python-indent-shift-right))

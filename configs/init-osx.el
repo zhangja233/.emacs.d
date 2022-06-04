@@ -44,7 +44,19 @@
 ;      "Foo X. Bar\n"
 ;      "http://www.example.com\n"))
 ;    )
-  )
+  ) ; mu4e ends
+  (add-to-list 'load-path "/Users/zja/.emacs.d/pyim-tsinghua-dict")  
+  (require 'pyim-tsinghua-dict)
+  (pyim-tsinghua-dict-enable)
+  
+  (add-to-list 'load-path "/Users/zja/.emacs.d/my-packages")    
+;  (set-fontset-font
+;  (frame-parameter nil 'font)
+;   'han
+;   (font-spec :family "PingHei"))
+  
+    (custom-set-variables
+     '(markdown-command "/opt/homebrew/bin/pandoc"))  
   )
 
 (provide 'init-osx)

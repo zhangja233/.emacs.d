@@ -18,12 +18,12 @@
   :ensure auctex
   :defer t
   :config
-  ; to be able to jump to the relevant page in the PDF document
+					; to be able to jump to the relevant page in the PDF document
   (TeX-source-correlate-mode)
   (when (eq system-type 'darwin)
     (setq TeX-view-program-list '(("skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b" )))
     (setq TeX-view-program-selection '((output-pdf "skim"))))
- ; some facilites
+					; some facilites
   (defun insert-backslash() 
     (interactive)(insert "\\"))
   (defun insert-dollar() 
@@ -92,8 +92,8 @@
    ("C-c B" . latex-bold-region)
    ("C-c F" . LaTeX-fill-buffer)
    ("C-c C-." . LaTeX-mark-environment-inner)
+   ("C-c c" . LaTeX-copy-environment)   
    ("C-c C-=" . latex-append-ampersand))
-
   (defun LaTeX-mark-environment-inner (&optional count)
     "modified based on the auctex function LaTeX-mark-environment.
      mark inner content of the environment"
@@ -114,7 +114,13 @@
 	(setq beg (point)))
       (push-mark end)
       (goto-char beg)
-      (TeX-activate-region))))
+      (TeX-activate-region)))
+  (defun LaTeX-copy-environment()
+    (interactive)
+    (save-excursion (LaTeX-mark-environment)
+		    (kill-ring-save (mark) (point) 'region))
+    (message "environment copied"))
+  )
 
 ;;; minor modes
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
@@ -153,17 +159,19 @@
  (setq outline-minor-mode-prefix nil)
  (diminish outline-minor-mode)
  ;; easier outline keybindings
+ (define-key LaTeX-mode-map (kbd "M-u") 'hydra-outline/body) 
 ; (define-key LaTeX-mode-map (kbd "C-c C-c") 'outline-show-subtree)
  (define-key LaTeX-mode-map (kbd "C-c C-SPC") 'outline-hide-body)
  (define-key LaTeX-mode-map (kbd "S-<tab>") 'outline-hide-body)
- (define-key LaTeX-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
- (define-key outline-minor-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading) ; override preview-map
+;; (define-key LaTeX-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
+;; (define-key outline-minor-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading) ; override preview-map
 ; (define-key LaTeX-mode-map (kbd "<up>") 'outline-previous-visible-heading)
 ; (define-key LaTeX-mode-map (kbd "<down>") 'outline-next-visible-heading)
- (define-key LaTeX-mode-map (kbd "C-c C-u") 'outline-up-heading)
- (define-key LaTeX-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
- (define-key LaTeX-mode-map (kbd "C-c M-b") 'outline-backward-same-level)
+;; (define-key LaTeX-mode-map (kbd "C-c C-u") 'outline-up-heading)
+;; (define-key LaTeX-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
+;; (define-key LaTeX-mode-map (kbd "C-c M-b") 'outline-backward-same-level)
  (define-key LaTeX-mode-map (kbd "C-c <tab>") 'outline-show-all)
+ (define-key LaTeX-mode-map (kbd "C-c C-f") 'TeX-font) 
  
  
  (define-key LaTeX-mode-map (kbd "M-<left>") 'outline-promote)

@@ -3,6 +3,12 @@
   (interactive "P")
   (message "%s" arg))
 
+(bind-keys :map emacs-lisp-mode-map
+	   ("C-c C-r" . eval-region)
+	   ("C-M-q" . crux-indent-defun)
+	   ("M-DEL" . mark-defun)
+	   ("C-j" . newline-and-indent))
+
 
 ; solve the problem that electric-indent-mode makes intent too much after return
 (defun electric-indent-mode-configure ()

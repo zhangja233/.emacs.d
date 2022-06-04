@@ -36,17 +36,17 @@
 	   ("C-M-c" . capitalize-word)
 	   ("C-z M-l" . global-display-line-numbers-mode))
 
-(defadvice upcase-word (before upcase-word-advice activate)
-  (unless (looking-back "\\b")
-    (backward-word)))
+;; (defadvice upcase-word (before upcase-word-advice activate)
+;;   (unless (looking-back "\\b")
+;;     (backward-word)))
 
-(defadvice downcase-word (before downcase-word-advice activate)
-  (unless (looking-back "\\b")
-    (backward-word)))
+;; (defadvice downcase-word (before downcase-word-advice activate)
+;;   (unless (looking-back "\\b")
+;;     (backward-word)))
 
-(defadvice capitalize-word (before capitalize-word-advice activate)
-  (unless (looking-back "\\b")
-    (backward-word)))
+;; (defadvice capitalize-word (before capitalize-word-advice activate)
+;;   (unless (looking-back "\\b")
+;;     (backward-word)))
 
 ;; avy-mode
 (use-package avy
@@ -62,8 +62,8 @@
 (add-to-list 'avy-orders-alist '(avy-goto-line . avy-order-closest))
 (add-to-list 'avy-orders-alist '(avy-goto-word-1 . avy-order-closest))
 (add-to-list 'avy-orders-alist '(avy-goto-char . avy-order-closest))
-(setq avy-all-windows nil)
-(setq avy-all-windows-alt t)
+;;(setq avy-all-windows nil)
+;;(setq avy-all-windows-alt t)
 (setq avy-timeout-seconds 0.2)
 
 ;; https://karthinks.com/software/avy-can-do-anything/
@@ -138,8 +138,19 @@
   (end-of-line)
   (newline-and-indent)
   )
-(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
-(global-set-key (kbd "H-m") 'open-line-below)
+
+(define-prefix-command 'my-mark-prefix-keymap)
+(define-key my-mode-map (kbd "H-m") 'my-mark-prefix-keymap)
+(bind-keys :map my-mode-map
+	   ("H-m H-m" . my-mark-line))
+(defun my-mark-line()
+  (interactive)
+  (beginning-of-line)
+  (set-mark-command nil)
+  (end-of-line))
+
+
+;(global-set-key (kbd "H-m") 'open-line-below)
 
 ;(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
 
@@ -181,9 +192,8 @@ line instead."
   :config
   (define-key my-mode-map (kbd "C-=") 'er/expand-region))
 
-(unless (eq system-type 'darwin)
-  (define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
-  (global-set-key (kbd "C-h") (kbd "<backspace>")))
+(define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
+(global-set-key (kbd "C-h") (kbd "<backspace>"))
 
 (delete-selection-mode) ; using C-d to delete a selected region
 (setq delete-active-region 'kill) ; kill the selected region while using delete and backspace. Note that you can still use C-d to delete a region.
@@ -205,7 +215,7 @@ line instead."
   :config
   (global-undo-tree-mode)
   :bind
-  ("C-M-/" . 'undo-tree-redo)
+  ("C-?" . 'undo-tree-redo)
   :diminish undo-tree-mode)
 
 ;; About sexps 
@@ -246,17 +256,20 @@ line instead."
   (sp-with-modes '(latex-mode)
     (sp-local-pair "|" "|")
     (sp-local-pair "\\|" "\\|"))
+  (defun my-sp-wrap-with-pair()
+     (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "("))
+)
   
   (advice-remove 'delete-backward-char #'ad-Advice-delete-backward-char) ;prevent smartparens from deleting the whole \right) when using backspace
   :diminish smartparens-mode)
 
 (define-key my-mode-map (kbd "M-s") (defhydra hydra-smartparens (:hint nil)
 ;; https://github-wiki-see.page/m/abo-abo/hydra/wiki/Smartparens
+;;  Moving^^^^                       Slurp & Barf^^   Wrapping^^            Sexp juggling^^^^               Destructive
+;;------------------------------------------------------------------------------------------------------------------------				      
   "
- Moving^^^^                       Slurp & Barf^^   Wrapping^^            Sexp juggling^^^^               Destructive
-------------------------------------------------------------------------------------------------------------------------
  [_a_] beginning  [_n_] down      [_h_] bw slurp   [_R_]   rewrap        [_S_] split   [_t_] transpose   [_c_] change inner  [_w_] copy
- [_e_] end        [_N_] bw down   [_H_] bw barf    [_u_]   unwrap        [_s_] splice  [_A_] absorb      [_C_] change outer
+ [_e_] end        [_N_] bw down   [_H_] bw barf    [_u_]   unwrap        [_s_] kill-symbol  [_A_] absorb      [_C_] change outer
  [_f_] forward    [_p_] up        [_l_] slurp      [_U_]   bw unwrap     [_r_] raise   [_E_] emit        [_k_] kill          [_g_] quit
  [_b_] backward   [_P_] bw up     [_L_] barf       [_(__{__[_] wrap (){}[]   [_j_] join    [_o_] convolute   [_K_] bw kill       [_q_] quit"
   ;; Moving
@@ -285,7 +298,7 @@ line instead."
   
   ;; Sexp juggling
   ("S" sp-split-sexp)
-  ("s" sp-splice-sexp)
+  ("s" sp-kill-symbol)
   ("r" sp-raise-sexp)
   ("j" sp-join-sexp)
   ("t" sp-transpose-sexp)
@@ -302,6 +315,48 @@ line instead."
 
   ("q" nil)
   ("g" nil)))
+
+(use-package wrap-region
+  :ensure t
+  :diminish wrap-region-mode
+  :config
+  (wrap-region-mode))
+
+
+(defhydra hydra-outline (:color pink :hint nil)
+;; https://github.com/abo-abo/hydra/wiki/Emacs  
+  "
+^Hide^             ^Show^           ^Move
+^^^^^^------------------------------------------------------
+_q_: sublevels     _a_: all         _u_: up
+_t_: body          _e_: entry       _n_: next visible
+_o_: other         _i_: children    _p_: previous visible
+_c_: entry         _k_: branches    _f_: forward same level
+_l_: leaves        _s_: subtree     _b_: backward same level
+_d_: subtree
+
+"
+  ;; Hide
+  ("q" hide-sublevels)    ; Hide everything but the top-level headings
+  ("t" hide-body)         ; Hide everything but headings (all body lines)
+  ("o" hide-other)        ; Hide other branches
+  ("c" hide-entry)        ; Hide this entry's body
+  ("l" hide-leaves)       ; Hide body lines in this entry and sub-entries
+  ("d" hide-subtree)      ; Hide everything in this entry and sub-entries
+  ;; Show
+  ("a" show-all)          ; Show (expand) everything
+  ("e" show-entry)        ; Show this heading's body
+  ("i" show-children)     ; Show this heading's immediate child sub-headings
+  ("k" show-branches)     ; Show all sub-headings under this heading
+  ("s" show-subtree)      ; Show (expand) everything in this heading & below
+  ;; Move
+  ("u" outline-up-heading)                ; Up
+  ("n" outline-next-visible-heading)      ; Next
+  ("p" outline-previous-visible-heading)  ; Previous
+  ("f" outline-forward-same-level)        ; Forward - same level
+  ("b" outline-backward-same-level)       ; Backward - same level
+  ("g" nil "leave"))
+
 
 ;;; snippets
 (use-package yasnippet 
@@ -341,8 +396,7 @@ line instead."
     (display-buffer doc-buffer t)))
 
 (bind-keys :map global-map
-	   ("M-i" . company-complete)
-	   ("C-M-/" . my-company-show-doc-buffer))
+	   ("M-i" . company-complete))
 (setq company-dabbrev-downcase nil) ;make completion case sensitive
 (setq company-idle-delay nil) ; do not give suggestions unless invoked manually
 (setq company-async-timeout 120)
@@ -355,6 +409,7 @@ line instead."
 
 (global-set-key (kbd "<f2>") 'recenter-top-bottom)
 (global-set-key (kbd "C-x x") 'delete-window)
+(global-set-key (kbd "C-x X") 'delete-frame)
 (bind-keys :map global-map
 	   ("C-1" . delete-other-windows)
 	   ("C-." . other-window)
@@ -393,27 +448,22 @@ line instead."
 (setq winner-dont-bind-my-keys t)
 (winner-mode 1)
 
-(when (display-graphic-p)
-(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
-)
-(global-set-key (kbd "H-\[") 'winner-undo)
-
 ;(global-set-key (kbd "C-z ,") 'winner-undo)
 ;(global-set-key (kbd "C-z .") 'winner-redo)
 (bind-keys :map global-map
-	   ("C-\]" . winner-redo))
+	   ("M-/" . winner-undo)
+	   ("M-?" . winner-redo))
 
 (use-package ace-window
   :ensure t
   :config
   (global-set-key (kbd "M-o") 'ace-window)
-  (setq aw-keys '(?h ?k ?l ?a ?s ?d ?f ?g))
-;  (setq aw-dispatch-always t)
+  (setq aw-keys '(?j ?k ?l ?\; ?h ?f ?g))
+  (setq aw-dispatch-always t)
   (defun aw-helm-buffers-list-in-window (window)
     (aw-switch-to-window window)
-    (call-interactively 'helm-buffers-list)
-    )
-  (add-to-list 'aw-dispatch-alist '(?j aw-helm-buffers-list-in-window "switch"))
+    (call-interactively 'helm-buffers-list))
+  (add-to-list 'aw-dispatch-alist '(?b aw-helm-buffers-list-in-window "switch"))
 )
 
 (use-package window-purpose
@@ -428,13 +478,16 @@ line instead."
 (use-package projectile
   :ensure t
   :diminish projectile-mode
-  :bind (:map projectile-command-map
-	      ("j" . projectile-switch-project)
-	      ("A" . projectile-add-known-project)
-	      ("R" . projectile-remove-known-project))  
+  :bind (:map projectile-mode-map
+	       ("M-j" . projectile-command-map)
+	       :map projectile-command-map
+	       ("j" . projectile-switch-project)
+	       ("A" . projectile-add-known-project)
+	       ("r" . projectile-ripgrep)
+	       ("C-r" . projectile-replace)
+	       ("R" . projectile-remove-known-project))  
   :config
   (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "M-j") 'projectile-command-map)
   (setq projectile-indexing-method 'hybrid)
 ;  (setq projectile-ignored-projects '("~") )
   (setq projectile-track-known-projects-automatically nil) ; only allow manually adding projects
@@ -463,19 +516,44 @@ line instead."
 (recentf-mode 1)
 (bind-keys :map my-mode-map
 	   ("C-x C-r" . helm-recentf))
+(setq recentf-max-saved-items 1000)
 
 ;; dired mode
 (require 'dired-x)
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
+(diminish 'dired-omit-mode)
+(setq dired-dwim-target t) ; so that dired tries to guess traget dir
 ;(setq-default dired-omit-files-p t)
 (setq dired-omit-files "\\`[.]?#\\|\\`[.][.]?\\'\\|\.org_archive")
 (define-key my-mode-map (kbd "C-x j") 'dired-jump)
 (define-key my-mode-map (kbd "C-x J") 'dired-jump-other-window)
 
+
+;; (cl-flet ((always-yes (&rest _) t))
+;;   (defun no-confirm (fun &rest args)
+;;     "Apply FUN to ARGS, skipping user confirmations."
+;;     (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
+;;               ((symbol-function 'yes-or-no-p) #'always-yes))
+;;       (apply fun args))))
+
+;; (defun my-dired-folder-to-file()
+;;   "delete the folder at point (if it's empty) and find a file with the same
+;; name"
+;;   (interactive)
+;;   (dired-copy-filename-as-kill)
+;;   (let ((file-name (current-kill 0 t))
+;; 	(dired-deletion-confirmer 'no-confirm))
+;;     (dired-do-delete 1)
+;;   (message file-name))
+;;   )
+
+
+(bind-keys :map dired-mode-map
+	   ("f" . find-file))
+(define-key dired-mode-map (kbd "C-/") (lambda() (interactive) (message "C-/ is disabled in dired")))
 (define-key dired-mode-map (kbd "SPC") 'browse-url-of-dired-file)
 (define-key dired-mode-map (kbd "E") 'wdired-change-to-wdired-mode)
-(bind-keys :map dired-mode-map
-	   ("j" . find-file))
+
 
 (use-package dired-ranger
   :ensure t
@@ -547,7 +625,7 @@ line instead."
 ;; input method
 
 ;; Chinese
-(global-set-key (kbd "M-\\") 'toggle-input-method)
+(global-set-key (kbd "C-z \\") 'toggle-input-method)
 (use-package pyim
   :ensure t
   :config
@@ -597,7 +675,9 @@ line instead."
   (find-file "~/.emacs.d/init.el"))
 (defun find-emacs-configs()
   (interactive)
-  (find-file "~/.emacs.d/configs/"))
+  (let ((default-directory "~/.emacs.d/configs/"))
+    (projectile-commander)))  
+
 (global-set-key (kbd "C-z E") 'find-dot-emacs)
 (global-set-key (kbd "C-z e") 'find-emacs-configs)
 (defun find-my-info()
@@ -606,6 +686,10 @@ line instead."
 (defun find-planer()
   (interactive)
 (find-file "~/Dropbox/org/plan.org"))
+
+(defun find-non-agenda()
+  (interactive)
+(find-file "~/Dropbox/org_non_agenda/"))
 
 (defun find-capture()
   (interactive)
@@ -623,20 +707,21 @@ line instead."
   (interactive)
   (find-file "~/Dropbox/research/literature/"))
 
+(defun find-download()
+  (interactive)
+  (find-file "~/Downloads/"))
+
 (when (eq system-type 'darwin)
 (bind-keys :map global-map
 	   ("C-z l" . find-literature)
 	   ("C-z p" . find-planer)
+	   ("C-z P" . find-non-agenda)	   
 	   ("C-z M-p" . find-phone)	   
 	   ("C-z C-c" . find-capture)
+	   ("C-z C-d" . find-download)
 	   ("C-z M-s" . find-stack)
 	   ("C-z F" . find-my-info))
 ) ; end os x
-
-(defun find-download()
-  (interactive)
-  (find-file "~/Downloads/"))
-(global-set-key (kbd "C-z C-d")  'find-download)
 
 ;; interact with the world outside emacs
 
@@ -656,8 +741,8 @@ line instead."
 (use-package evil
   :ensure t
   :bind (:map my-mode-map
-             ("M-." . my-find-char)
-	     ("M-," . my-find-char-backward))
+             ("H-\[" . my-find-char-backward)
+	     ("C-]" . my-find-char))
   :config
   (defun my-find-char()
   (interactive)
@@ -675,8 +760,34 @@ line instead."
 
 
 
-(use-package worf
-  :ensure t)
+;; (use-package worf
+;;   :ensure
+;;   t)
+
+(use-package marginalia
+  :ensure t
+  :config
+  (marginalia-mode))
+
+(use-package embark
+  :ensure t
+  :bind
+  (("C-<escape>" . embark-act)         ;; pick some comfortable binding
+;   ("C-;" . embark-dwim)        ;; good alternative: M-.
+;   ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
+)
+  :init
+
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  :config
+
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
 
 (use-package exec-path-from-shell
   :ensure t
@@ -715,6 +826,7 @@ line instead."
 ;;                   (minibuffer . t)
 ;;                   (menu-bar-lines . t)
 ;;                   )))
+
 
 (use-package atomic-chrome
   ;; dependency Atomic Chrome extension (in Chrome)

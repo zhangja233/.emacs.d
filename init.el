@@ -24,6 +24,10 @@
 (define-prefix-command 'my-prefix-keymap)
 (global-set-key (kbd "C-z") 'my-prefix-keymap)
 
+;; make M-c a secondary mode specific prefix 
+(define-prefix-command 'mode-prefix-keymap)
+(global-set-key (kbd "M-c") 'mode-prefix-keymap) 
+
 ;; package management
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -58,6 +62,13 @@
 (keyfreq-mode 1)
 (keyfreq-autosave-mode 1)
 (global-set-key (kbd "C-z S") 'keyfreq-show)
+(setq keyfreq-excluded-commands
+      '(lsp-ui-doc--handle-mouse-movement
+	disable-mouse--handle)))
+
+(when (display-graphic-p)
+(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
+(define-key input-decode-map (kbd "C-m") (kbd "H-m"))
 )
 
 (unless (display-graphic-p)

@@ -12,14 +12,12 @@
 ;	      ("C-<return>" . org-insert-heading)
 	      ("C-<return>" . org-meta-return)	      
 	      ("C-;" . my-org-insert-todo-heading)
-;	      ("<up>" . org-previous-visible-heading)
-;	      ("<down>" . org-next-visible-heading)
-;	      ("<right>" . org-forward-heading-same-level)
-;	      ("<left>" . org-backward-heading-same-level)
+	      ("M-p" . org-backward-paragraph)
+	      ("M-n" . org-forward-paragraph)	      
 	      ("C-<right>" . org-metaright)
 	      ("C-<left>" . org-metaleft)
-	      ("C-'" . org-metaright)
-	      ("M-'" . org-metaleft)	      
+;	      ("M-;" . org-metaright)
+;	      ("M-'" . org-metaleft)	      
 	      ("C-<up>" . org-metaup)
 	      ("C-<down>" . org-metadown)	      
 	      ("M-;" . org-insert-todo-subheading)
@@ -32,28 +30,60 @@
 	      ("C-c n" . org-narrow-to-subtree)
 	      ("C-c N" . widen)
 	      ("C-c w". org-cut-subtree)
+	      ("C-c y" . org-paste-subtree)
 	      ("C-c o" . org-create-list-item-above)
 	      ("C-c ]" . org-ref-insert-link)
-	      ("C-c e" . insert-equation)
 	      ("C-c E" . org-set-effort)
 	      ("C-<up>" . org-timestamp-up-day) ; timestamp
 ;	      ("C-c C-n" . org-timestamp-down-day)
 	      )
+   
+;;; org-table   
+   
+   (define-prefix-command 'org-table-prefix-keymap)
+   (define-key org-mode-map (kbd "C-c t") 'org-table-prefix-keymap)   
    (bind-keys :map org-mode-map
 	      ("C-c j" . org-table-copy-down)
 	      ("C-|" . org-table-hline-and-move)
-	      ("C-c r" . org-table-insert-row)
 	      ("C-c c" . org-table-insert-column)
+	      ("C-c a" . org-table-beginning-of-field)
+	      ("C-c e" . org-table-end-of-field)	      
 	      ("C-c x" . org-table-delete-column)
-	      ("C-c -" . org-table-insert-hline))
-	 (eval-after-load "org-agenda"
-	 '(progn
-   (bind-keys :map org-agenda-mode-map
-	      ("C-;" . org-agenda-columns))))
-   (bind-keys :map global-map
-	      ("C-z m" . org-store-link)
-	      ("C-z G" . org-clock-goto)
-	      ("C-z M-c" . calendar))
+	      ("C-c -" . org-table-insert-hline)
+	      ("｜" . (lambda() (interactive) (insert "|")))
+	      ("C-c t p" . org-table-insert-row-above)
+	      ("C-c t b" . org-table-insert-column)
+	      ("C-c t f" . org-table-insert-column-right)
+	      ("C-c t n" . org-table-insert-row-below))
+   
+(defun org-table-insert-column-right()
+  "Insert a new column into the table on the right."
+  (interactive)
+  (unless (org-at-table-p) (user-error "Not at a table"))
+  (search-forward "|") 
+  (org-table-insert-column))
+
+(defun org-table-insert-row-above()
+  "Insert a new row above, and also make the point be at the cell
+   above where it was"
+  (interactive)
+  (save-excursion (org-table-insert-row))
+  (previous-line))
+
+(defun org-table-insert-row-below()
+  "Insert a new row below, and also make the point be at the cell
+   below where it was"
+  (interactive)
+  (save-excursion (org-table-insert-row t))
+  (next-line))
+
+(eval-after-load "org-agenda"
+  '(progn
+     (bind-keys :map org-agenda-mode-map
+		("C-;" . org-agenda-columns))))
+(bind-keys :map global-map
+	   ("C-z m" . org-store-link)
+	   ("C-z M-c" . calendar))
    
 ;;; document structure
 (defun my-org-insert-todo-heading(&optional arg)
@@ -75,7 +105,7 @@
   (interactive "P")
   (call-interactively (cond ((org-at-table-p) #'my-org-previous-row)
 			    (t #'previous-line))))
-
+(setq org-yank-adjusted-subtrees t)
    
 ;;; org-agenda   
 (setq org-agenda-start-on-weekday nil) ; make org-agenda start at the current day
@@ -97,7 +127,7 @@
 (setq org-agenda-custom-commands
       '(("p" tags "+pwd")
 ;	("n" ((tags-todo) (tags "+next")) )
-	("n"  tags "+next")	
+	("n"  tags "+next+pwd")	
 	("P" tags "pwd+{c[0-9].*}")
 	("T" tags "+today")
 	("3" tags "+30")))
@@ -105,22 +135,34 @@
 
 
 ;; column view
-(setq org-columns-default-format "%30ITEM(Task) %TODO %CLOCKSUM{:} %CLOCKSUM_W %6Effort(Estim){:} %DEADLINE %TAGS")
+(setq org-columns-default-format "%30ITEM(Task)  %daily %CLOCKSUM_T
+%CLOCKSUM{:} %6Effort(Estim){:} %DEADLINE %ALLTAGS")
+
+;; org-property
+(bind-keys :map org-mode-map
+	   ("C-c p" . org-set-property))
 
 
 ; tags
 (setq org-tags-match-list-sublevels nil) ;don't list sublevels when searching for tags
-(setq org-use-tag-inheritance nil)
-;; org-capture
-(global-set-key (kbd "C-z c") 'org-capture)
+; (setq org-use-tag-inheritance nil)
+(setq org-use-tag-inheritance t)
 
-; Define the custum capture templates
+;;; org-capture
+(global-set-key (kbd "C-z c") 'org-capture)
+;; Define the custum capture templates
 (setq org-capture-templates
        '(("t" "todo" entry (file "") "* TODO %? \n%U\n%i\n")
+	 ("T" "Todo" entry (file+headline "~/Dropbox/org/roam/work.org" "two minutes tasks")
+"* TODO %? \n%U\n%i\n")
 	 ("i" "Idea" entry (file org-default-notes-file)
 	  "* %? :IDEA: \n%t")
 	 ("n" "Notes" entry (file org-default-notes-file)
 	  "* %? :NOTES: \n%t")))
+;; org-refile
+(setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+;(setq org-refile-use-outline-path nil)
+
 
 ;   (setq org-support-shift-select t)
      ;;  (org-map-entries
@@ -153,31 +195,60 @@
 
 ;(define-key org-mode-map (kbd "M-h") nil) ; override org-mode key binding
 (define-key org-mode-map (kbd "C-,") nil) ; override org-mode key binding
-;(define-key org-mode-map (kbd "S-<right>") nil) ; override org-mode key binding
-;(define-key org-mode-map (kbd "S-<left>") nil) ; override org-mode key binding
 
-
-
-
-; clock
-(global-set-key (kbd "C-z i") 'org-clock-in)
+;; org-clock
+;;(global-set-key (kbd "C-z i") 'org-clock-in)
+(define-key org-mode-map (kbd "C-c i") 'org-clock-in)
 (global-set-key (kbd "C-z o") 'org-clock-out)
+
+(setq org-clock-persist 'history) 
+(org-clock-persistence-insinuate) ; save the clock history across emacs sessions
+
+(when (eq system-type 'darwin)
+  (require 'org-clock-budget)
+  (setq org-clock-budget-daily-budgetable-hours '14))
+
+
+(defun my-org-clocktable-indent-string (level)
+  (if (= level 1)
+      ""
+    (let ((str "<"))
+      (while (> level 2)
+        (setq level (1- level)
+              str (concat str "--")))
+      (concat str "-> "))))
+
+(advice-add 'org-clocktable-indent-string :override #'my-org-clocktable-indent-string)
 
 (setq org-clock-mode-line-total 'today)
 (setq org-duration-format (quote h:mm))
 
-(define-key org-mode-map (kbd "C-c a") 'org-metaleft)
-(define-key org-mode-map (kbd "C-c d") 'org-metaright)
-; miscellaneous
-(define-key org-mode-map (kbd "C-c v") 'org-latex-preview)
+(use-package counsel-org-clock
+  :ensure t
+  :bind (:map global-map
+ ;             ("C-z j" . counsel-org-clock-history)
+)
+)
 
+(use-package org-mru-clock
+  :ensure t
+  :bind* (("C-z i" . org-mru-clock-in)
+          ("C-z j" . org-mru-clock-select-recent-task))
+  :config
+  (setq org-mru-clock-how-many 100)
+  (setq org-mru-clock-completing-read #'helm--completing-read-default)
+;  (add-hook 'minibuffer-setup-hook #'org-mru-clock-embark-minibuffer-hook)
+)
+
+;; miscellaneous
+;;(define-key org-mode-map (kbd "C-c v") 'org-latex-preview)
+
+;;; org-babel
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((python . t) (latex . t)))
 
-(defun my-org-confirm-babel-evaluate (lang body)
-    (not (string= lang "python")))  ; don't ask 
-(setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
+(setq org-confirm-babel-evaluate nil) ; don't ask for confirmation
 
 ;; setup about todo
 (define-key org-mode-map (kbd "C-c C-SPC") 'org-todo)
@@ -197,17 +268,36 @@
 ;; mark-up
 ))
 
+(define-key org-mode-map (kbd "M-u") (defhydra hydra-org (:hint nil)
+;; https://github-wiki-see.page/m/abo-abo/hydra/wiki/Smartparens
+;;   "
+;;  Moving^^^^                       Slurp & Barf^^   Wrapping^^            Sexp juggling^^^^               Destructive
+;; ------------------------------------------------------------------------------------------------------------------------
+;;  [_a_] beginning  [_n_] down      [_h_] bw slurp   [_R_]   rewrap        [_S_] split   [_t_] transpose   [_c_] change inner  [_w_] copy
+;;  [_e_] end        [_N_] bw down   [_H_] bw barf    [_u_]   unwrap        [_s_] splice  [_A_] absorb      [_C_] change outer
+;;  [_f_] forward    [_p_] up        [_l_] slurp      [_U_]   bw unwrap     [_r_] raise   [_E_] emit        [_k_] kill          [_g_] quit
+;;  [_b_] backward   [_P_] bw up     [_L_] barf       [_(__{__[_] wrap (){}[]   [_j_] join    [_o_] convolute   [_K_] bw kill       [_q_] quit"
+  ;; Moving
+  ("n" org-next-visible-heading)
+  ("p" org-previous-visible-heading)
+  ("f" org-forward-heading-same-level)
+  ("b" org-backward-heading-same-level)
+  ("u" outline-up-heading)
+  ("q" nil)
+  ("g" nil)))
+
 (use-package helm-org-rifle
   :ensure t
   :bind (:map my-mode-map
-              ("C-r C-r" . helm-org-rifle-current-buffer)))
+              ("C-r r" . helm-org-rifle-current-buffer)
+	      ("C-r C-r" . helm-org-rifle)))
 
 (setq-default org-catch-invisible-edits 'smart)
 
 (global-set-key (kbd "C-z a") 'org-agenda)
 
 (add-hook 'org-mode-hook 'flyspell-mode)
-;(add-hook 'org-mode-hook 'auto-fill-mode)
+(add-hook 'org-mode-hook 'auto-fill-mode)
 ;(add-hook 'org-mode-hook 'visual-line-mode)
 
 (use-package org-roam
@@ -215,8 +305,7 @@
   :config
   (setq org-roam-directory "~/Dropbox/org/roam")
   (org-roam-db-autosync-mode)
-  (define-key org-mode-map (kbd "C-c i") 'org-roam-node-insert)
-  (define-key org-mode-map (kbd "C-c t") 'org-id-get-create)
+  (define-key org-mode-map (kbd "C-c T") 'org-id-get-create)
   :bind
   ("C-z f" . org-roam-node-find))
 
@@ -230,7 +319,9 @@
 
 (use-package valign ; visual alignment for org tables when using Chinese
 :ensure t
-:diminish valign-mode)
+:diminish valign-mode
+)
+
 ;(add-hook 'org-mode-hook #'valign-mode)
 
 
@@ -247,6 +338,10 @@
                         '(("^ *\\([+]\\) "
                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "◦"))))))
 
-
+(use-package ledger-mode
+  :ensure t
+  :init
+  (add-to-list 'auto-mode-alist
+	       '("ledger.*\\.dat$" . ledger-mode)))
 
 (provide 'init-org)

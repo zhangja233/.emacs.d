@@ -15,6 +15,8 @@
 	   ("C-M-a" . f90-beginning-of-defun)
 	   ("C-M-e" . f90-end-of-defun)
 	   ("C-c C-f" . f90-next-block)
+	   ("C-c C-r" . f90-fill-region)
+	   ("M-h" . f90-mark-block)
 	   ("C-c C-b" . f90-previous-block))
 
 (defconst f90-defun-re
@@ -22,6 +24,18 @@
           (regexp-opt '("function" "subroutine"))
           "\\)\\_>\\)")
   "Regexp potentially indicating a \"defun\" of F90 code.")
+
+(defun f90-mark-block ()
+  "Put mark at end of F90 block, point at beginning, push mark."
+  (interactive)
+  (let ((pos (point)) my-block)
+    (f90-end-of-block)
+    (push-mark)
+    (goto-char pos)
+    (setq my-block (f90-beginning-of-block))
+    (setq mark-active t
+          deactivate-mark nil)
+    my-block))
 
 (defun f90-beginning-of-defun (&optional arg)
   (interactive "p")

@@ -1,5 +1,6 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
 (setq inhibit-startup-screen t) ;do not show welcome page
 (setq initial-scratch-message "Have fun!\n\n")
 (setq visible-bell nil)
@@ -27,5 +28,6 @@
 
 (setq-default fill-column 80)
 (global-set-key (kbd "C-z h") 'fill-paragraph)
+
 
 (provide 'init-display)

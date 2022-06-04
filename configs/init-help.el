@@ -8,7 +8,8 @@
 (use-package which-key
   :ensure t
   :config
-  (which-key-mode 1)
+;  (which-key-mode 1)
+  :diminish which-key-mode
   )
 
 (provide 'init-help)

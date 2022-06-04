@@ -11,9 +11,19 @@
 	 (call-interactively 'compile))))))
 
 
-(global-set-key (kbd "C-z C-z") 'my-compile)
+(bind-keys :map global-map
+	   ("C-z C-z" . my-compile)
+	   ("C-z z" . recompile))
 
-(add-hook 'prog-mode-hook #'auto-fill-mode)
+(defhydra hydra-error (global-map "C-x e")
+  "goto-error"
+  ("a" first-error "first")
+  ("n" next-error "next")
+  ("p" previous-error "prev")
+  ("q" nil "quit"))
+
+
+;(add-hook 'prog-mode-hook #'auto-fill-mode)
 
 (bind-keys :map compilation-mode-map
 	   ("M-n" . my-forward-paragraph)
@@ -30,7 +40,10 @@
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (setq lsp-keymap-prefix "M-u")
   (setq lsp-diagnostic-package :none)
-
+  (setq lsp-diagnostics-provider :none)
+  (setq lsp-ui-sideline-enable nil)
+(setq lsp-ui-sideline-show-diagnostics nil)
+  
   (setq lsp-ui-doc-enable nil)
   (setq lsp-eldoc-enable-hover nil)
   (setq lsp-signature-auto-activate nil)
@@ -50,8 +63,8 @@
 (with-eval-after-load 'lsp-mode
   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.build\\'"))
 
-(use-package lsp-ui
-  :ensure t)
+;(use-package lsp-ui
+;  :ensure t)
 
 (use-package cmake-mode
   :ensure t)
@@ -60,6 +73,14 @@
   '(progn  
      (bind-keys :map sh-mode-map
 		("C-;" . insert-number-sign))))
+
+;; (use-package flycheck
+;;   :ensure t
+;;   :config
+;;   (flycheck-add-mode 'python-flake8 'python-mode)
+;;   )
+
+
 
 (use-package ggtags
   :ensure t)

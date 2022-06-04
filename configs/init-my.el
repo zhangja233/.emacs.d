@@ -130,13 +130,15 @@ With argument ARG, do this that many times."
       (concat
        "[ \t]*$"       
        "\\|^[ \t]*!+[ \t]*$" ; line with only !
-       "\\|^[ \t]*end subroutine"       
+;;       "\\|^[ \t]*end subroutine"
+       "\\|^[ \t]*end.*"              
        ))
 (setq my-paragraph-separate
       (concat
        "[ \t]*$"       
        "\\|^[ \t]*!+[ \t]*$" ; line with only !
-       "\\|^[ \t]*end subroutine"
+;;       "\\|^[ \t]*end subroutine"
+       "\\|^[ \t]*end.*" 
        ))
 )
 (add-hook 'f90-mode-hook 'my-f90-set-paragraph)
