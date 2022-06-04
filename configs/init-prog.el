@@ -118,6 +118,7 @@
   :bind 
 (:map markdown-mode-map
       ("M-p" . nil)
+      ("C-c C-v" . markdown-preview)
       ("M-n" . nil)))
 
 (use-package json-mode
