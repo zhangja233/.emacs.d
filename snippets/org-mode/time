@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: time
+# key: time
+# --
+
+| $0      |      |
+|-------+------|
+| total |      |
+#+TBLFM: T::@>\$2=vsum(@1\$2..@-1\$2);U

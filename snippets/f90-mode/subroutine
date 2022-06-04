@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# contributor: Jonas Kalderstam <jonas@kalderstam.se>
+# name: subroutine .. end subroutine
+# key: s
+# --
+subroutine $1($2)
+  $0
+end subroutine $1

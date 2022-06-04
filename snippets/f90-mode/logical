@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: logical
+# key: l
+# --
+logical :: $0

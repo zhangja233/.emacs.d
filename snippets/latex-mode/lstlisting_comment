@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: lstlisting_comment
+# key: lc
+# --
+(*\Comment[${1:variable}]*)

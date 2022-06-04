@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: linalg
+# key: l
+# group : general
+# --
+np.linalg

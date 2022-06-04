@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: osx
+# key: osx
+# --
+(when (eq system-type 'darwin)
+  $0)

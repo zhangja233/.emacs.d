@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: equation_star
+# key: e*
+# --
+\begin{equation*}
+$0
+\end{equation*}

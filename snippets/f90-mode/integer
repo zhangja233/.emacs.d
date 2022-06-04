@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: integer
+# key: int
+# --
+integer :: $0

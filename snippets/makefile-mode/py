@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: py
+# expand-env: ((yas-indent-line 'fixed))
+# key: py
+# --
+run:
+	python3 $0.py

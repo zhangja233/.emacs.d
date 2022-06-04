@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: bib
+# key: bib
+# --
+\bibliography{$HOME/lib/bib/zhangja, $HOME/lib/bib/url,$HOME/Dropbox/research/literature/main}
+\bibliographystyle{unsrt}

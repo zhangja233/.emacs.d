@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: bind
+# key: b
+# --
+:bind (:map $1-mode-map
+              ("$2" . $0))

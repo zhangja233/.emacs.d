@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: module ... end module ...
+# expand-env: ((yas-indent-line 'fixed))
+# key: mod
+# --
+module $1
+  implicit none
+contains
+  $0
+end module $1
