@@ -93,7 +93,8 @@
    ("C-c F" . LaTeX-fill-buffer)
    ("C-c C-." . LaTeX-mark-environment-inner)
    ("C-c c" . LaTeX-copy-environment)   
-   ("C-c C-=" . latex-append-ampersand))
+   ("C-c C-=" . latex-append-ampersand)
+   ("C-c l" . latex-wrap-left-right))
   (defun LaTeX-mark-environment-inner (&optional count)
     "modified based on the auctex function LaTeX-mark-environment.
      mark inner content of the environment"
@@ -204,9 +205,25 @@
  (define-key LaTeX-mode-map (kbd "C-c b")  'insert-bold)
  (define-key LaTeX-mode-map (kbd "C-c C-b") 'insert-bold)
 
-   (defun insert-rm()
-    (interactive) (insert "\\mathrm{}") (backward-char))
+ (defun insert-rm()
+   (interactive) (insert "\\mathrm{}") (backward-char))
  (define-key LaTeX-mode-map (kbd "C-c C-r")  'insert-rm)  
+
+ (defun latex-wrap-left-right(arg)
+   (interactive (list
+		 (char-to-string (read-char "wrap the delimeter:"))))
+   (search-backward arg)
+   (if (equal arg "{")
+       (backward-char))
+   (insert "\\left")   
+   (let ((conjugate (cond ((equal arg "(") ")")
+			  ((equal arg "[") "]")
+			  ((equal arg "{") "\\}"))))
+     (search-forward conjugate)
+     (if (equal arg "{")
+	 (backward-char 2)
+       (backward-char))
+     (insert "\\right")))
  
  ;; setting marks
  (defun LaTeX-mark-inner(delim)
@@ -265,7 +282,7 @@
  (defun insert-lstlisting()
    (interactive)
    (insert-latex-env "lstlisting"))
- (define-key LaTeX-mode-map (kbd "C-c l") 'insert-lstlisting)
+; (define-key LaTeX-mode-map (kbd "C-c l") 'insert-lstlisting)
 
  (defun latex-insert-inline-src()
    (interactive)
