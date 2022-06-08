@@ -410,9 +410,9 @@ _d_: subtree
 ;;; buffer, window, frame and file management
 
 (global-set-key (kbd "<f2>") 'recenter-top-bottom)
-(global-set-key (kbd "C-x x") 'delete-window)
-(global-set-key (kbd "C-x X") 'delete-frame)
-(bind-keys :map global-map
+(global-set-key (kbd "C-z x") 'delete-window)
+(global-set-key (kbd "C-z X") 'delete-frame)
+(bind-keys :map my-mode-map
 	   ("C-1" . delete-other-windows)
 	   ("C-." . other-window)
 	   ("C-。" . other-window)
