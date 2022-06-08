@@ -24,13 +24,18 @@
 (define-prefix-command 'my-prefix-keymap)
 (global-set-key (kbd "C-z") 'my-prefix-keymap)
 
+(define-prefix-command 'my-secondary-prefix-keymap)
+(global-set-key (kbd "C-z C-x") 'my-secondary-prefix-keymap)
+
 ;; make M-c a secondary mode specific prefix 
 (define-prefix-command 'mode-prefix-keymap)
 (global-set-key (kbd "M-c") 'mode-prefix-keymap) 
 
 ;; package management
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")))
+;; default value: (("gnu" . "https://elpa.gnu.org/packages/"))
+;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;(add-to-list 'package-archives '("melpa" . "http://elpa.emacs-china.org/melpa/") t)
 ;(add-to-list 'package-archives '("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/") t) ; see https://mirror.tuna.tsinghua.edu.cn/help/elpa/ for more
 (package-initialize)
@@ -64,7 +69,8 @@
 (global-set-key (kbd "C-z S") 'keyfreq-show)
 (setq keyfreq-excluded-commands
       '(lsp-ui-doc--handle-mouse-movement
-	disable-mouse--handle)))
+	disable-mouse--handle))
+(setq keyfreq-excluded-regexp '("wspecial.*")))
 
 (when (display-graphic-p)
 (define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
