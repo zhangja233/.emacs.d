@@ -51,17 +51,20 @@
 ;; avy-mode
 (use-package avy
   :ensure t
+  :bind (("C-l" . avy-goto-word-1)
+	 ("M-l" . avy-goto-char-timer)
+	 ("M-g" . avy-goto-line)
+	 ("C-<esc>" . avy-resume))
   :config
-(global-set-key (kbd "M-l") 'avy-goto-char)  
-(global-set-key (kbd "C-l") 'avy-goto-word-1)
-(global-set-key (kbd "M-g") 'avy-goto-line)
-;(setq avy-keys (nconc (number-sequence ?a ?z)
-;		      ))
+  (avy-setup-default)
 (setq avy-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?j ?k ?l ?o ?p ?q ?r ?s ?u ?v ?w))
-(setq avy-keys-alist nil)
-(add-to-list 'avy-orders-alist '(avy-goto-line . avy-order-closest))
-(add-to-list 'avy-orders-alist '(avy-goto-word-1 . avy-order-closest))
-(add-to-list 'avy-orders-alist '(avy-goto-char . avy-order-closest))
+;(setq avy-keys-alist nil)
+(setq avy-orders-alist
+      '((avy-goto-char-timer . avy-order-closest)
+        (avy-goto-word-1 . avy-order-closest)
+	(avy-goto-line . avy-order-closest)
+	(avy-kill-region . avy-order-closest)))
+
 ;;(setq avy-all-windows nil)
 ;;(setq avy-all-windows-alt t)
 (setq avy-timeout-seconds 0.2)
@@ -71,8 +74,7 @@
   (activate-mark)
   (goto-char pt))
 
-(setf (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char) ; space as
-					; mark to char
+(setf (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char) ; space as mark to char
 )
 
 (use-package elisp-slime-nav
@@ -112,7 +114,7 @@
   :config
   (bind-keys :map my-mode-map
    ("C-M-s" . vr/isearch-forward)
-   ("C-z r" . vr/replace)))
+   ("C-z R" . vr/replace)))
 
 (when (eq system-type 'darwin)
 (use-package pcre2el
@@ -298,7 +300,7 @@ line instead."
   
   ;; Sexp juggling
   ("S" sp-split-sexp)
-  ("s" sp-kill-symbol)
+  ("s" sp-kill-symbol :exit t)
   ("r" sp-raise-sexp)
   ("j" sp-join-sexp)
   ("t" sp-transpose-sexp)
@@ -478,14 +480,16 @@ _d_: subtree
 (use-package projectile
   :ensure t
   :diminish projectile-mode
-  :bind (:map projectile-mode-map
-	       ("M-j" . projectile-command-map)
-	       :map projectile-command-map
-	       ("j" . projectile-switch-project)
-	       ("A" . projectile-add-known-project)
-	       ("r" . projectile-ripgrep)
-	       ("C-r" . projectile-replace)
-	       ("R" . projectile-remove-known-project))  
+  :bind (;; :map projectile-mode-map
+	 ;; ("M-j" . projectile-command-map)
+	 :map my-mode-map
+	      ("M-j" . projectile-command-map)
+	 :map projectile-command-map
+	 ("j" . projectile-switch-project)
+	 ("A" . projectile-add-known-project)
+	 ("r" . projectile-ripgrep)
+	 ("C-r" . projectile-replace)
+	 ("R" . projectile-remove-known-project))  
   :config
   (projectile-mode +1)
   (setq projectile-indexing-method 'hybrid)
@@ -497,6 +501,7 @@ _d_: subtree
   (setq projectile-current-project-on-switch 'keep) ; leave the current project at the default position
 ;  (setq projectile-dynamic-mode-line nil)
 ;  (setq-default projectile-mode-line-function nil)
+  (add-to-list 'projectile-other-file-alist '("tex" "org"))
 
   (defun projectile-find-notes()
   (interactive)
@@ -585,8 +590,10 @@ _d_: subtree
 
 (global-set-key (kbd "C-z C-v") 'find-file-other-window)
 
-(defun find-scratch()
-  (interactive) (switch-to-buffer "*scratch*"))
+(defun find-scratch ()
+  (interactive)
+  (switch-to-buffer-other-window
+   "*scratch*"))
 (global-set-key (kbd "C-z s") 'find-scratch)
 (global-set-key (kbd "C-z N") 'make-frame)
 
@@ -617,10 +624,6 @@ _d_: subtree
   (interactive)
   (insert "~"))
 (define-key minibuffer-local-map (kbd "C-;") 'insert-tilde)
-
-;; magit
-(use-package magit
-:ensure t)
 
 ;; input method
 
@@ -757,12 +760,6 @@ _d_: subtree
       (call-interactively #'evil-repeat-find-char)
     (call-interactively #'evil-find-char-backward)
     )))
-
-
-
-;; (use-package worf
-;;   :ensure
-;;   t)
 
 (use-package marginalia
   :ensure t
