@@ -89,6 +89,7 @@
 
 ; my personal configs
 (add-to-list 'load-path (expand-file-name "configs" user-emacs-directory))
+(require 'init-base)
 (require 'init-linux)
 (require 'init-osx)
 (require 'init-windows)

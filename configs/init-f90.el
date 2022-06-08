@@ -3,15 +3,12 @@
 (setq auto-mode-alist
       (cons '("\\.F$" . f90-mode) auto-mode-alist))
 
-(defun insert-exclamation()
-  (interactive)
-  (insert "!"))
 (eval-after-load "f90"
 '(progn
 (bind-keys :map f90-mode-map
 	   ("C-j" . newline-and-indent)
 	   ("RET" . newline-and-indent)
-	   ("C-;" . insert-exclamation)
+	   ("C-;" . comment-line)
 	   ("C-M-a" . f90-beginning-of-defun)
 	   ("C-M-e" . f90-end-of-defun)
 	   ("C-c C-f" . f90-next-block)

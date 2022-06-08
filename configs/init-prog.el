@@ -91,19 +91,15 @@
   (ggtags-mode 1))))
 
 ;; perl
-;(fset 'perl-mode 'cperl-mode)
 ;(setq-default cperl-invalid-face nil)
-
-
-(defun insert-number-sign () (interactive) (insert "#"))
 
 (defalias 'perl-mode 'cperl-mode)
 
-(eval-after-load "cperl"
-'(progn
-   (bind-keys :map cperl-mode-map
-	      ("C-;" . insert-single-dollar)
-	      ("M-;" . insert-number-sign))))   
+(add-hook 'cperl-mode-hook
+	  (lambda ()
+	    (bind-keys :map cperl-mode-map
+		       ("C-;" . insert-single-dollar)
+		       ("M-;" . insert-number-sign))))
 
 (use-package matlab
   :ensure matlab-mode

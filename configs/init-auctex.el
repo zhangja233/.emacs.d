@@ -24,18 +24,6 @@
     (setq TeX-view-program-list '(("skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b" )))
     (setq TeX-view-program-selection '((output-pdf "skim"))))
 					; some facilites
-  (defun insert-backslash() 
-    (interactive)(insert "\\"))
-  (defun insert-dollar() 
-    (interactive)
-    (insert "$$")
-    (backward-char))
-  (defun insert-single-dollar() 
-    (interactive)
-    (insert "$"))
-  (defun insert-percent() 
-    (interactive)
-    (insert "%"))  
   (defun latex-insert-prime() 
     (interactive)(insert "^{\\prime }"))
   
