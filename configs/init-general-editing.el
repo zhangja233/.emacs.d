@@ -796,10 +796,10 @@ _d_: subtree
     (call-interactively #'evil-find-char-backward)
     )))
 
-(use-package marginalia
-  :ensure t
-  :config
-  (marginalia-mode))
+;; (use-package marginalia
+;;   :ensure t
+;;   :config
+;;   (marginalia-mode))
 
 (use-package embark
   :ensure t
