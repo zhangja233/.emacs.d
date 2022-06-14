@@ -1,5 +1,4 @@
-(eval-after-load "org"
-'(progn
+(require 'org)
    (defun org-create-list-item-above()
      (interactive)
      (beginning-of-line)
@@ -12,8 +11,8 @@
 ;	      ("C-<return>" . org-insert-heading)
 	      ("C-<return>" . org-meta-return)	      
 	      ("C-;" . my-org-insert-todo-heading)
-	      ("M-p" . org-backward-paragraph)
-	      ("M-n" . org-forward-paragraph)	      
+;	      ("M-p" . org-backward-paragraph)
+;	      ("M-n" . org-forward-paragraph)	      
 	      ("C-<right>" . org-metaright)
 	      ("C-<left>" . org-metaleft)
 ;	      ("M-;" . org-metaright)
@@ -31,19 +30,31 @@
 	      ("C-c N" . widen)
 	      ("C-c w". org-cut-subtree)
 	      ("C-c y" . org-paste-subtree)
-	      ("C-c o" . org-create-list-item-above)
 	      ("C-c ]" . org-ref-insert-link)
 	      ("C-c E" . org-set-effort)
 	      ("C-<up>" . org-timestamp-up-day) ; timestamp
 ;	      ("C-c C-n" . org-timestamp-down-day)
 	      )
    
-;;; org-table   
+;;; structure
+(when (eq system-type 'darwin)
+  (require 'worf)
+  (add-hook 'org-mode-hook 'worf-mode)
+  (bind-keys :map org-mode-map
+	     ("C-c g" . worf-goto))
+  (bind-keys :map worf-mode-map
+	     ("C-d" . nil)))
+
+(bind-keys :map org-mode-map
+	   ("C-c r" . avy-org-refile-as-child)
+	   ("C-c J" . avy-org-goto-heading-timer))
    
+;;; org-table   
+ 
    (define-prefix-command 'org-table-prefix-keymap)
    (define-key org-mode-map (kbd "C-c t") 'org-table-prefix-keymap)   
    (bind-keys :map org-mode-map
-	      ("C-c j" . org-table-copy-down)
+	      ("C-c C-j" . org-table-copy-down)
 	      ("C-|" . org-table-hline-and-move)
 	      ("C-c t a" . org-table-beginning-of-field)
 	      ("C-c t e" . org-table-end-of-field)	      
@@ -158,6 +169,7 @@
 	  "* %? :IDEA: \n%t")
 	 ("n" "Notes" entry (file org-default-notes-file)
 	  "* %? :NOTES: \n%t")))
+
 ;; org-refile
 (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
 ;(setq org-refile-use-outline-path nil)
@@ -193,19 +205,25 @@
 (define-key org-mode-map (kbd "C-S-<return>") 'org-insert-superheading)
 
 ;(define-key org-mode-map (kbd "M-h") nil) ; override org-mode key binding
-(define-key org-mode-map (kbd "C-,") nil) ; override org-mode key binding
+;; (define-key org-mode-map (kbd "C-,") nil)
+					; override org-mode key binding
 
 ;; org-clock
-;;(global-set-key (kbd "C-z i") 'org-clock-in)
-(define-key org-mode-map (kbd "C-c i") 'org-clock-in)
+(bind-keys :map org-mode-map
+	   ("C-c i" . org-clock-in)
+	   ("C-c o" . org-clock-out))
 (global-set-key (kbd "C-z o") 'org-clock-out)
 
-(setq org-clock-persist 'history) 
+(setq org-clock-persist 'history)
+(setq org-clock-history-length 100)
 (org-clock-persistence-insinuate) ; save the clock history across emacs sessions
 
 (when (eq system-type 'darwin)
   (require 'org-clock-budget)
-  (setq org-clock-budget-daily-budgetable-hours '14))
+  (define-key my-mode-map (kbd "C-z r") 'org-clock-budget-report)
+  (setq org-clock-budget-daily-budgetable-hours '12)
+  (setq org-clock-budget-intervals '(("BUDGET_MONTH" org-clock-budget-interval-this-month)
+				    ("BUDGET_WEEK" org-clock-budget-interval-this-week))))
 
 
 (defun my-org-clocktable-indent-string (level)
@@ -224,20 +242,22 @@
 
 (use-package counsel-org-clock
   :ensure t
-  :bind (:map global-map
- ;             ("C-z j" . counsel-org-clock-history)
+  :bind (:map my-mode-map
+              ("C-z j" . counsel-org-clock-history)
 )
 )
 
 (use-package org-mru-clock
   :ensure t
   :bind* (("C-z i" . org-mru-clock-in)
-          ("C-z j" . org-mru-clock-select-recent-task))
+          ;; ("C-z j" . org-mru-clock-select-recent-task)
+	  )
   :config
   (setq org-mru-clock-how-many 100)
-  (setq org-mru-clock-completing-read #'helm--completing-read-default)
-;  (add-hook 'minibuffer-setup-hook #'org-mru-clock-embark-minibuffer-hook)
-)
+  ;; (setq org-mru-clock-completing-read #'helm--completing-read-default)
+  (setq org-mru-clock-completing-read #'ivy-completing-read)
+  ;;  (add-hook 'minibuffer-setup-hook #'org-mru-clock-embark-minibuffer-hook)
+  )
 
 ;; miscellaneous
 ;;(define-key org-mode-map (kbd "C-c v") 'org-latex-preview)
@@ -245,7 +265,7 @@
 ;;; org-babel
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((python . t) (latex . t)))
+ '((python . t) (latex . t) (perl . t)))
 
 (setq org-confirm-babel-evaluate nil) ; don't ask for confirmation
 
@@ -265,7 +285,7 @@
 (setq org-return-follows-link t) ; use return to open link
 
 ;; mark-up
-))
+
 
 (define-key org-mode-map (kbd "M-u") (defhydra hydra-org (:hint nil)
 ;; https://github-wiki-see.page/m/abo-abo/hydra/wiki/Smartparens
@@ -285,11 +305,16 @@
   ("q" nil)
   ("g" nil)))
 
+;;; counsel-org
+(bind-keys :map my-mode-map
+	   ("C-z C-j" . counsel-org-goto-all)
+	   ("C-c j" . counsel-org-goto)
+	   )
+
 (use-package helm-org-rifle
   :ensure t
   :bind (:map my-mode-map
-              ("C-r r" . helm-org-rifle-current-buffer)
-	      ("C-r C-r" . helm-org-rifle)))
+	      ("C-r r" . helm-org-rifle)))
 
 (setq-default org-catch-invisible-edits 'smart)
 
@@ -336,6 +361,11 @@
 (font-lock-add-keywords 'org-mode
                         '(("^ *\\([+]\\) "
                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "◦"))))))
+
+(setq initial-major-mode 'org-mode)
+
+
+(bind-keys ("C-z C-x o" . org-open-at-point-global))
 
 (use-package ledger-mode
   :ensure t

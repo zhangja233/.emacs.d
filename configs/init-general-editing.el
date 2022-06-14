@@ -9,8 +9,36 @@
   :ensure t
   :init
   :config
-  (setq hydra-hint-display-type 'message)
+  (setq hydra-hint-display-type 'message))
+
+
+(use-package counsel
+  :ensure t
+  :bind (:map global-map
+	      ("C-s" . swiper)
+	      ;; ("M-y" . counsel-yank-pop)
+	      ("C-z C-x u" . counsel-unicode-char)
+	      ("C-z C-x s" . counsel-set-variable)
+	      ("C-z C-x h" . counsel-descbinds)
+	      ;; ivy-view
+	      ("C-z v" . ivy-push-view)
+	      ("C-z C-v" . ivy-switch-view)
+	      ("C-z V" . ivy-pop-view)
+	      :map my-mode-map
+	      ("C-," . ivy-switch-buffer)
+	      ("C-，" . ivy-switch-buffer)
+	      ("M-x" . counsel-M-x)
+	      ("C-r C-r" . counsel-rg))
+  :config
+  (counsel-mode 1)
+  (ivy-mode 1)
+  ;; Enable bookmarks and recentf
+  (setq ivy-use-virtual-buffers t) 
+  ;; (counsel-mode 1)
   )
+
+(use-package ivy-hydra
+  :ensure t)
 
 (defun forward-half-sentence(&optional arg)
   (interactive)
@@ -32,9 +60,14 @@
 	   ("M-p" . my-backward-paragraph)
 	   ("M-n" . my-forward-paragraph)
 	   ("M-h" . my-mark-paragraph)
+	   ("C-z M-l" . global-display-line-numbers-mode))
+
+(bind-keys :map global-map
+	   ("M-t" . transpose-chars)
 	   ("C-M-l" . downcase-word)
 	   ("C-M-c" . capitalize-word)
-	   ("C-z M-l" . global-display-line-numbers-mode))
+	   )
+
 
 ;; (defadvice upcase-word (before upcase-word-advice activate)
 ;;   (unless (looking-back "\\b")
@@ -54,39 +87,36 @@
   :bind (("C-l" . avy-goto-word-1)
 	 ("M-l" . avy-goto-char-timer)
 	 ("M-g" . avy-goto-line)
-	 ("C-<esc>" . avy-resume))
+	 ;; ("C-<esc>" . avy-resume)
+	 )
   :config
   (avy-setup-default)
-(setq avy-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?j ?k ?l ?o ?p ?q ?r ?s ?u ?v ?w))
-;(setq avy-keys-alist nil)
-(setq avy-orders-alist
-      '((avy-goto-char-timer . avy-order-closest)
-        (avy-goto-word-1 . avy-order-closest)
-	(avy-goto-line . avy-order-closest)
-	(avy-kill-region . avy-order-closest)))
+  (setq avy-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?j ?k ?l ?o ?p ?q ?r ?s ?u ?v ?w))
+					;(setq avy-keys-alist nil)
+  (setq avy-orders-alist
+	'((avy-goto-char-timer . avy-order-closest)
+          (avy-goto-word-1 . avy-order-closest)
+	  (avy-goto-line . avy-order-closest)
+	  (avy-kill-region . avy-order-closest)))
 
-;;(setq avy-all-windows nil)
-;;(setq avy-all-windows-alt t)
-(setq avy-timeout-seconds 0.2)
+  ;;(setq avy-all-windows nil)
+  ;;(setq avy-all-windows-alt t)
+  (setq avy-timeout-seconds 0.2)
 
-;; https://karthinks.com/software/avy-can-do-anything/
-(defun avy-action-mark-to-char (pt)
-  (activate-mark)
-  (goto-char pt))
+  ;; https://karthinks.com/software/avy-can-do-anything/
+  (defun avy-action-mark-to-char (pt)
+    (activate-mark)
+    (goto-char pt))
 
-(setf (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char) ; space as mark to char
-)
-
-(use-package elisp-slime-nav
-  :ensure t
-  :config
-  (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-  (add-hook hook 'turn-on-elisp-slime-nav-mode))
+  (setf (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char) ; space as mark to char
   )
-
 
 (define-key my-mode-map (kbd "M-a") 'beginning-of-buffer)
 (define-key my-mode-map (kbd "M-e") 'end-of-buffer)
+
+(setq view-read-only t)
+(defadvice read-only-mode (before read-only-mode-advice activate)
+  (lispy-mode -1))
 
 (use-package drag-stuff
   :ensure t
@@ -217,7 +247,7 @@ line instead."
   :config
   (global-undo-tree-mode)
   :bind
-  ("C-?" . 'undo-tree-redo)
+  ("M-/" . 'undo-tree-redo)
   :diminish undo-tree-mode)
 
 ;; About sexps 
@@ -384,6 +414,8 @@ _d_: subtree
 
 (use-package company
 :ensure t
+:bind (:map my-mode-map
+	   ("M-i" . company-complete))
 :diminish company-mode
 :config
 (global-company-mode) 
@@ -397,8 +429,6 @@ _d_: subtree
       (goto-char (point-min)))
     (display-buffer doc-buffer t)))
 
-(bind-keys :map global-map
-	   ("M-i" . company-complete))
 (setq company-dabbrev-downcase nil) ;make completion case sensitive
 (setq company-idle-delay nil) ; do not give suggestions unless invoked manually
 (setq company-async-timeout 120)
@@ -419,9 +449,6 @@ _d_: subtree
 	   ("C-\\" . split-window-right))
 
 ;; register
-
-(define-prefix-command 'my-register-prefix-keymap)
-(define-key my-mode-map (kbd "C-r") 'my-register-prefix-keymap)
 
 (defun my-window-configuration-to-register()
   (interactive)
@@ -452,21 +479,22 @@ _d_: subtree
 
 ;(global-set-key (kbd "C-z ,") 'winner-undo)
 ;(global-set-key (kbd "C-z .") 'winner-redo)
-(bind-keys :map global-map
-	   ("M-/" . winner-undo)
-	   ("M-?" . winner-redo))
+(bind-keys :map my-mode-map
+	   ("C-<escape>" . winner-undo)
+	   ("M-<escape>" . winner-redo))
 
 (use-package ace-window
   :ensure t
+  :bind (:map my-mode-map
+	      ("M-o" . ace-window))
   :config
-  (global-set-key (kbd "M-o") 'ace-window)
   (setq aw-keys '(?j ?k ?l ?\; ?h ?f ?g))
   (setq aw-dispatch-always t)
-  (defun aw-helm-buffers-list-in-window (window)
+  (defun my-aw-switch-buffer-in-window (window)
     (aw-switch-to-window window)
-    (call-interactively 'helm-buffers-list))
-  (add-to-list 'aw-dispatch-alist '(?b aw-helm-buffers-list-in-window "switch"))
-)
+    (call-interactively 'ivy-switch-buffer))
+  (add-to-list 'aw-dispatch-alist '(?b my-aw-switch-buffer-in-window "switch"))
+  )
 
 (use-package window-purpose
   :ensure t
@@ -483,7 +511,7 @@ _d_: subtree
   :bind (;; :map projectile-mode-map
 	 ;; ("M-j" . projectile-command-map)
 	 :map my-mode-map
-	      ("M-j" . projectile-command-map)
+	 ("M-j" . projectile-command-map)
 	 :map projectile-command-map
 	 ("j" . projectile-switch-project)
 	 ("A" . projectile-add-known-project)
@@ -491,22 +519,25 @@ _d_: subtree
 	 ("C-r" . projectile-replace)
 	 ("R" . projectile-remove-known-project))  
   :config
-  (projectile-mode +1)
-  (setq projectile-indexing-method 'hybrid)
-;  (setq projectile-ignored-projects '("~") )
+  (projectile-mode 1)
+  (setq projectile-completion-system 'ivy)
+  (setq projectile-indexing-method 'alien)
+					;  (setq projectile-ignored-projects '("~") )
   (setq projectile-track-known-projects-automatically nil) ; only allow manually adding projects
   (setq projectile-auto-discover nil)
   (setq projectile-sort-order 'recentf)
-  (setq projectile-switch-project-action 'projectile-commander)  
-  (setq projectile-current-project-on-switch 'keep) ; leave the current project at the default position
-;  (setq projectile-dynamic-mode-line nil)
-;  (setq-default projectile-mode-line-function nil)
+  (setq projectile-switch-project-action 'counsel-projectile-find-file)
+  ;; (setq projectile-switch-project-action 'projectile-commander)  
+  ;; (setq projectile-current-project-on-switch 'keep)
+					; leave the current project at the default position
+					;  (setq projectile-dynamic-mode-line nil)
+					;  (setq-default projectile-mode-line-function nil)
   (add-to-list 'projectile-other-file-alist '("tex" "org"))
 
   (defun projectile-find-notes()
-  (interactive)
-  (let ((default-directory "~/Dropbox/notes"))
-    (projectile-find-file)))
+    (interactive)
+    (let ((default-directory "~/Dropbox/notes"))
+      (projectile-find-file)))
   
   (global-set-key (kbd "C-z n") 'projectile-find-notes)
   
@@ -515,12 +546,17 @@ _d_: subtree
     (find-file (projectile-project-root)))
   (global-set-key (kbd "C-z C-r") 'projectile-find-root))
 
-(use-package helm-projectile
+;; (use-package helm-projectile
+;;   :ensure t
+;;   :config
+;;   (helm-projectile-on))
+
+(use-package counsel-projectile
   :ensure t)
 
 (recentf-mode 1)
-(bind-keys :map my-mode-map
-	   ("C-x C-r" . helm-recentf))
+;; (bind-keys :map my-mode-map
+;; 	   ("C-x C-r" . helm-recentf))
 (setq recentf-max-saved-items 1000)
 
 ;; dired mode
@@ -588,8 +624,6 @@ _d_: subtree
     (call-interactively #'dired-do-rename)))
 (define-key dired-mode-map (kbd "L") 'dired-move-to-literature)
 
-(global-set-key (kbd "C-z C-v") 'find-file-other-window)
-
 (defun find-scratch ()
   (interactive)
   (switch-to-buffer-other-window
@@ -628,24 +662,24 @@ _d_: subtree
 ;; input method
 
 ;; Chinese
-(global-set-key (kbd "C-z \\") 'toggle-input-method)
-(use-package pyim
-  :ensure t
-  :config
-  ;; 拼音词库设置
-  (use-package pyim-basedict
-    :ensure t)
-  (pyim-basedict-enable)
-  )
+;; (global-set-key (kbd "C-z \\") 'toggle-input-method)
+;; (use-package pyim
+;;   :ensure t
+;;   :config
+;;   ;; 拼音词库设置
+;;   (use-package pyim-basedict
+;;     :ensure t)
+;;   (pyim-basedict-enable)
+;;   )
 
-(setq default-input-method "pyim")
-;(setq pyim-punctuation-translate-p '(yes no auto))   ;使用全角标点。
-(setq pyim-punctuation-dict nil)
-;(setq pyim-punctuation-translate-p '(no yes auto))   ;使用半角标点。
-(setq pyim-page-tooltip 'popup)
+;; (setq default-input-method "pyim")
+;; ;(setq pyim-punctuation-translate-p '(yes no auto))   ;使用全角标点。
+;; (setq pyim-punctuation-dict nil)
+;; ;(setq pyim-punctuation-translate-p '(no yes auto))   ;使用半角标点。
+;; (setq pyim-page-tooltip 'popup)
 
-(use-package cnfonts
-  :ensure t)
+;; (use-package cnfonts
+;;   :ensure t)
 
 ; japanese
 (defun set-japanese()
@@ -679,7 +713,7 @@ _d_: subtree
 (defun find-emacs-configs()
   (interactive)
   (let ((default-directory "~/.emacs.d/configs/"))
-    (projectile-commander)))  
+    (projectile-find-file)))  
 
 (global-set-key (kbd "C-z E") 'find-dot-emacs)
 (global-set-key (kbd "C-z e") 'find-emacs-configs)
@@ -738,7 +772,8 @@ _d_: subtree
 (global-set-key (kbd "C-z b") 'browse-file-directory)
 
 (use-package rg
-  :ensure t)
+  :ensure t
+  :bind ("C-z C-x r" . rg-menu))
 
 
 (use-package evil
@@ -769,10 +804,11 @@ _d_: subtree
 (use-package embark
   :ensure t
   :bind
-  (("C-<escape>" . embark-act)         ;; pick some comfortable binding
+  (;; ("C-<escape>" . embark-act)
+   ;; pick some comfortable binding
 ;   ("C-;" . embark-dwim)        ;; good alternative: M-.
 ;   ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
-)
+   )
   :init
 
   ;; Optionally replace the key help with a completing-read interface
@@ -825,16 +861,13 @@ _d_: subtree
 ;;                   )))
 
 
-(use-package atomic-chrome
-  ;; dependency Atomic Chrome extension (in Chrome)
-  :ensure t
-  :init
-  (setq atomic-chrome-default-major-mode 'org-mode)
-;  (setq atomic-chrome-extension-type-list '(atomic-chrome))
-  :config
-  (atomic-chrome-start-server))
-
-
-(setq initial-major-mode 'org-mode)
+;; (use-package atomic-chrome
+;;   ;; dependency Atomic Chrome extension (in Chrome)
+;;   :ensure t
+;;   :init
+;;   (setq atomic-chrome-default-major-mode 'org-mode)
+;; ;  (setq atomic-chrome-extension-type-list '(atomic-chrome))
+;;   :config
+;;   (atomic-chrome-start-server))
 
 (provide 'init-general-editing)

@@ -1,3 +1,4 @@
+;;; compile
 (defun my-compile(&optional arg)
   (interactive "P") 
   (save-some-buffers 1) 
@@ -21,9 +22,6 @@
   ("n" next-error "next")
   ("p" previous-error "prev")
   ("q" nil "quit"))
-
-
-;(add-hook 'prog-mode-hook #'auto-fill-mode)
 
 (bind-keys :map compilation-mode-map
 	   ("M-n" . my-forward-paragraph)
@@ -61,13 +59,22 @@
   :commands lsp)
 
 (with-eval-after-load 'lsp-mode
-  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.build\\'"))
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]build.*\\'"))
 
 ;(use-package lsp-ui
 ;  :ensure t)
 
+(use-package dumb-jump
+  :ensure t
+  :config
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+  (setq xref-show-definitions-function #'xref-show-definitions-completing-read))
+
 (use-package cmake-mode
   :ensure t)
+
+;(add-hook 'prog-mode-hook #'auto-fill-mode)
+
 
 (eval-after-load "sh-script"
   '(progn  

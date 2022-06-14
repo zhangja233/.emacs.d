@@ -29,5 +29,10 @@
 (setq-default fill-column 80)
 (global-set-key (kbd "C-z h") 'fill-paragraph)
 
+(defhydra hydra-zoom (global-map "C-z Z")
+  "zoom"
+  ("+" text-scale-increase "in")
+  ("-" text-scale-decrease "out"))
+
 
 (provide 'init-display)

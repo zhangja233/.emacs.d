@@ -24,8 +24,12 @@
 (define-prefix-command 'my-prefix-keymap)
 (global-set-key (kbd "C-z") 'my-prefix-keymap)
 
+(define-prefix-command 'my-register-prefix-keymap)
+(define-key my-mode-map (kbd "C-r") 'my-register-prefix-keymap)
+
 (define-prefix-command 'my-secondary-prefix-keymap)
 (global-set-key (kbd "C-z C-x") 'my-secondary-prefix-keymap)
+(global-set-key (kbd "C-x C-z") nil)
 
 ;; make M-c a secondary mode specific prefix 
 (define-prefix-command 'mode-prefix-keymap)
@@ -56,6 +60,7 @@
               (server-start))))
 
 (setq custom-file "~/.emacs.d/emacs-custom.el")
+;;(message "helo")
 (load custom-file)
 
 (setq echo-keystrokes 0.01) ; echo unfinished commands(e.g., C-x) immediately
@@ -104,6 +109,7 @@
 (require 'init-c)
 (require 'init-f90)
 (require 'init-python)
+(require 'init-elisp)
 (require 'init-helm)
 (require 'init-magit)
 

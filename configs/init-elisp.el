@@ -11,6 +11,8 @@
 
 (use-package lispy
   :ensure t
+  :bind (:map lispy-mode-map
+	      ("M-m" . nil))
   :hook (emacs-lisp-mode . lispy-mode)
   :config
 )
@@ -21,3 +23,5 @@
   (setq electric-indent-chars (delq 10 electric-indent-chars)))
 
 (add-hook 'emacs-lisp-mode-hook #'electric-indent-mode-configure)
+
+(provide 'init-elisp)

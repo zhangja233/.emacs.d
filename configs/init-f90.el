@@ -11,10 +11,10 @@
 	   ("C-;" . comment-line)
 	   ("C-M-a" . f90-beginning-of-defun)
 	   ("C-M-e" . f90-end-of-defun)
-	   ("C-c C-f" . f90-next-block)
+	   ("C-c C-f" . f90-end-of-block)
 	   ("C-c C-r" . f90-fill-region)
 	   ("M-h" . f90-mark-block)
-	   ("C-c C-b" . f90-previous-block))
+	   ("C-c C-b" . f90-beginning-of-block))
 
 (defconst f90-defun-re
   (concat "\\(\\(?:block[ \t]*data\\|"

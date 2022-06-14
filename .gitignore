@@ -1,5 +1,10 @@
 /.DS_Store
-/elpa/
+/auto-save-list
+/transient
+/elpa/*
+/eshell
+/my-packages
+/py
 /.org-id-locations
 /bookmarks
 /eshell/

@@ -2,6 +2,7 @@
 :ensure  t
 :init
 (global-auto-revert-mode) ; revert any buffer if the file changes on disk
+:bind (("C-z C-x c" . magit-clone))
   )
 
 ; refresh the status buffer whenever a buffer within the corresponding repo
