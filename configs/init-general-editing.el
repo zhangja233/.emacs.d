@@ -756,11 +756,11 @@ _d_: subtree
 	   ("C-z P" . find-non-agenda)	   
 	   ("C-z M-p" . find-phone)	   
 	   ("C-z C-c" . find-capture)
-	   ("C-z C-d" . find-download)
 	   ("C-z M-s" . find-stack)
 	   ("C-z F" . find-my-info))
 ) ; end os x
-
+(bind-keys :map global-map
+	   ("C-z C-d" . find-download))
 ;; interact with the world outside emacs
 
 ; to open file browser from emacs
