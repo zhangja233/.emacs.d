@@ -774,7 +774,12 @@ _d_: subtree
 
 (use-package rg
   :ensure t
-  :bind ("C-z C-x r" . rg-menu))
+  :bind
+  ("C-z C-x r" . rg-menu)
+  (:map my-mode-map
+	("C-r C-f" . rg-dwim-current-file)
+	("C-r C-d" . rg-dwim-current-dir)
+	("C-r C-p" . rg-dwim-project-dir)))
 
 
 (use-package evil
