@@ -33,7 +33,9 @@
   (counsel-mode 1)
   (ivy-mode 1)
   ;; Enable bookmarks and recentf
-  (setq ivy-use-virtual-buffers t) 
+  (setq ivy-use-virtual-buffers t)
+  ;; C-p/C-n cycles when at first/last
+  (setq ivy-wrap t) 			
   ;; (counsel-mode 1)
   )
 

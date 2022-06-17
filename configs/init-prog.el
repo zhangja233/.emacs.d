@@ -79,7 +79,7 @@
 (eval-after-load "sh-script"
   '(progn  
      (bind-keys :map sh-mode-map
-		("C-;" . insert-number-sign))))
+		("C-;" . comment-line))))
 
 ;; (use-package flycheck
 ;;   :ensure t
