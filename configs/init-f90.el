@@ -55,5 +55,8 @@
 (setq f90-type-indent 2)
 (setq f90-program-indent 2)
 
+;; (defadvice f90-mode (after f90-insert-end-advice activate)
+;;   (kill-whole-line))
+
 
 (provide 'init-f90)

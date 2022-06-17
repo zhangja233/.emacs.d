@@ -70,6 +70,11 @@
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   (setq xref-show-definitions-function #'xref-show-definitions-completing-read))
 
+(eval-after-load 'makefile-mode
+    '(bind-keys :map makefile-mode-map
+	   ("M-p" . nil)
+	   ("M-n" . nil)))
+
 (use-package cmake-mode
   :ensure t)
 
