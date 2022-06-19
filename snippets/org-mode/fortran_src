@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: fortran src
+# key: >sf
+# --
+  
+#+BEGIN_SRC f90
+$0
+#+END_SRC

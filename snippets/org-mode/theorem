@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: theorem
+# key: theo
+# --
+*theorem* ($1). $0
