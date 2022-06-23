@@ -7,18 +7,6 @@
 		       ("C-c <tab>" . hs-show-block)
 		       ("C-c C-SPC" . hs-hide-all))
 ;	    (flycheck-mode)
-	    ;; (setq 'hs-special-modes-alist 
-	    ;; 		 '((c-mode . #1=(#2="{" #3="}" #4="/[*/]" nil . #5=(nil)))
-	    ;; 		 (c++-mode . #1#)
-	    ;; 		 (bibtex-mode
-	    ;; 		  ("@\\S(*\\(\\s(\\)" 1))
-	    ;; 		 (java-mode . #1#)
-	    ;; 		 (js-mode #2# #3# #4# . #5#)
-	    ;; 		 (f90-mode "\\s-∗\\_<\\(?:subroutine\\|function\\)\\_>"
-	    ;; 			      ""
-	    ;; 			      "!"
-	    ;; 			      f90-end-of-block				      
-	    ;; 			      nil)))
 	    ;; (auto-fill-mode)	    
 	    ))
 
