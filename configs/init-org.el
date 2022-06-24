@@ -1,10 +1,23 @@
 (require 'org)
-   (defun org-create-list-item-above()
-     (interactive)
-     (beginning-of-line)
-     (open-line 1)
-     (insert ?-)
-     (insert ? ))
+;; moving the cursor
+(defun org-beginning-of-headline-text ()
+  "when on a heading line, move the cursor to the beginning of the text. E.g.,
+  * ba|r  will become * |bar
+  * TODO foo| will become * TODO |foo"
+  (interactive)
+  (let ((org-special-ctrl-a t))
+    (org-beginning-of-line)
+    ))
+
+(bind-keys :map org-mode-map
+	   ("C-c a" . org-beginning-of-headline-text))
+
+(defun org-create-list-item-above()
+  (interactive)
+  (beginning-of-line)
+  (open-line 1)
+  (insert ?-)
+  (insert ? ))
    (setq org-export-with-sub-superscripts nil)
    (bind-keys :map org-mode-map
 	      ("C-j" . newline-and-indent)
@@ -43,7 +56,9 @@
   (bind-keys :map org-mode-map
 	     ("C-c g" . worf-goto))
   (bind-keys :map worf-mode-map
-	     ("C-d" . nil)))
+	     ("C-d" . nil)
+	     ("x" . wspecial-worf-cut-subtree))
+  )
 
 (bind-keys :map org-mode-map
 	   ("C-c r" . avy-org-refile-as-child)
@@ -118,6 +133,7 @@
 (setq org-yank-adjusted-subtrees t)
    
 ;;; org-agenda   
+(global-set-key (kbd "C-z a") 'org-agenda)
 (setq org-agenda-start-on-weekday nil) ; make org-agenda start at the current day
 (setq org-agenda-show-future-repeats 'next)
 
@@ -137,7 +153,7 @@
 (setq org-agenda-custom-commands
       '(("p" tags "+pwd")
 ;	("n" ((tags-todo) (tags "+next")) )
-	("n"  tags "+next+pwd")	
+	("n"  tags "+next")	
 	("P" tags "pwd+{c[0-9].*}")
 	("T" tags "+today")
 	("3" tags "+30")))
@@ -153,10 +169,15 @@
 	   ("C-c p" . org-set-property))
 
 
-; tags
-(setq org-tags-match-list-sublevels nil) ;don't list sublevels when searching for tags
-; (setq org-use-tag-inheritance nil)
-(setq org-use-tag-inheritance t)
+;; tags
+;; (setq org-tags-match-list-sublevels nil)
+					;don't list sublevels when searching for tags
+(setq org-use-tag-inheritance nil)
+(setq org-fast-tag-selection-single-key t) ; fast tag selection exits after first change
+(setq org-use-fast-tag-selection t)
+;; shortcuts to tags
+(setq org-tag-alist '(("next" . ?n) ("pwd" . ?p) ("easy" . ?e) ("short" . ?s) ("best" . ?b)))
+
 
 ;;; org-capture
 (global-set-key (kbd "C-z c") 'org-capture)
@@ -318,20 +339,25 @@
 
 (setq-default org-catch-invisible-edits 'smart)
 
-(global-set-key (kbd "C-z a") 'org-agenda)
-
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)
 ;(add-hook 'org-mode-hook 'visual-line-mode)
 
 (use-package org-roam
   :ensure t
+  :bind
+  (:map global-map
+	("C-z f" . org-roam-node-find)
+	:map org-mode-map
+	("C-c S" . org-roam-db-sync))
   :config
   (setq org-roam-directory "~/Dropbox/org/roam")
+  (setq org-roam-capture-templates '(("d" "default" plain "%?" :target
+  (file+head "${slug}.org" "#+title: ${title}
+")
+  :unnarrowed t))) ; remove date info from the default value 		 
   (org-roam-db-autosync-mode)
-  (define-key org-mode-map (kbd "C-c T") 'org-id-get-create)
-  :bind
-  ("C-z f" . org-roam-node-find))
+  (define-key org-mode-map (kbd "C-c T") 'org-id-get-create))
 
 (use-package org-ref
   :ensure t
