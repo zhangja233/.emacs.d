@@ -33,42 +33,52 @@
 (global-set-key (kbd "C-z C-s") 'shell-command)
 (global-set-key (kbd "C-z M-e") 'eshell)
 
-(use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "M-u")
-  (setq lsp-diagnostic-package :none)
-  (setq lsp-diagnostics-provider :none)
-  (setq lsp-ui-sideline-enable nil)
-(setq lsp-ui-sideline-show-diagnostics nil)
+;; (use-package eglot
+;;   :ensure t
+;;   :bind (:map eglot-mode-map
+;; 	      ("C-c r" . eglot-rename)
+;; 	      ("C-c h" . eldoc))
+;;   :config
+;;   (add-to-list 'eglot-stay-out-of 'flymake)
+;;   )
+;; (add-hook 'python-mode-hook 'eglot-ensure)
+
+;; (use-package lsp-mode
+;;   :init
+;;   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+;;   (setq lsp-keymap-prefix "M-u")
+;;   (setq lsp-diagnostic-package :none)
+;;   (setq lsp-diagnostics-provider :none)
+;;   (setq lsp-ui-sideline-enable nil)
+;; (setq lsp-ui-sideline-show-diagnostics nil)
   
-  (setq lsp-ui-doc-enable nil)
-  (setq lsp-eldoc-enable-hover nil)
-  (setq lsp-signature-auto-activate nil)
-  (setq lsp-enable-symbol-highlighting nil)
-  ; don't show distraction when cursor is on an object
-  (setq lsp-ui-doc-show-with-cursor nil)
-  (setq lsp-ui-doc-show-with-mouse nil)
+;;   (setq lsp-ui-doc-enable nil)
+;;   (setq lsp-eldoc-enable-hover nil)
+;;   (setq lsp-signature-auto-activate nil)
+;;   (setq lsp-enable-symbol-highlighting nil)
+;;   ; don't show distraction when cursor is on an object
+;;   (setq lsp-ui-doc-show-with-cursor nil)
+;;   (setq lsp-ui-doc-show-with-mouse nil)
   
   
 
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-        ((python-mode c-mode f90-mode) . lsp))
-         ;; if you want which-key integration
-;         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
+;;   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+;;         ((python-mode c-mode f90-mode) . lsp))
+;;          ;; if you want which-key integration
+;; ;         (lsp-mode . lsp-enable-which-key-integration))
+;;   :commands lsp)
 
-(with-eval-after-load 'lsp-mode
-  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]build.*\\'"))
+;; (with-eval-after-load 'lsp-mode
+;;   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]build.*\\'"))
 
-;(use-package lsp-ui
-;  :ensure t)
+					;(use-package lsp-ui
+					;  :ensure t)
 
-(use-package dumb-jump
-  :ensure t
-  :config
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-  (setq xref-show-definitions-function #'xref-show-definitions-completing-read))
+;; (use-package dumb-jump
+;;   :ensure t
+;;   :config
+;;   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+;;   (setq xref-show-definitions-function #'xref-show-definitions-completing-read))
 
 (eval-after-load 'makefile-mode
     '(bind-keys :map makefile-mode-map
