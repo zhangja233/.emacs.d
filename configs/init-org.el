@@ -265,7 +265,7 @@
 ;;; org-babel
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((python . t) (latex . t) (perl . t)))
+ '((python . t) (latex . t) (perl . t) (shell . t)))
 
 (setq org-confirm-babel-evaluate nil) ; don't ask for confirmation
 
