@@ -131,8 +131,17 @@
 
 (use-package json-mode
   :ensure t
+  :bind (:map json-mode-map
+	      ("C-;" . json-pretty-print-buffer)
+	      ("M-c M-b" . hs-hide-block)
+	      ("M-c b" . hs-show-block))
   :config
-  (define-key json-mode-map (kbd "C-;") 'json-pretty-print-buffer))
+  )
+;; (use-package origami
+;;   :ensure t)
+
+;; (use-package yafolding
+;;   :ensure t)
 
 (provide 'init-prog)
 
