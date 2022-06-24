@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: src_perl
+# key: >sp
+# --
+  
+#+BEGIN_SRC perl :results output
+  $0
+#+END_SRC
