@@ -75,7 +75,8 @@
 (setq keyfreq-excluded-commands
       '(lsp-ui-doc--handle-mouse-movement
 	disable-mouse--handle))
-(setq keyfreq-excluded-regexp '("wspecial.*")))
+;; (setq keyfreq-excluded-regexp '("wspecial.*"))
+)
 
 (when (display-graphic-p)
 (define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
@@ -114,3 +115,4 @@
 (require 'init-magit)
 
 
+(put 'downcase-region 'disabled nil)
