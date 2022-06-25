@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: write
+# key: w2
+# --
+write(2333,*) $0
