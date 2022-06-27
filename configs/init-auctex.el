@@ -16,14 +16,33 @@
 
 (use-package latex
   :ensure auctex
-  :defer t
+  :bind (:map LaTeX-mode-map
+	      ("C-;" . insert-backslash)
+	      ("M-;" . insert-dollar)
+	      ("C-:" . insert-percent)
+	      ("`" . latex-insert-inline-src)
+	      ("M-:" . insert-single-dollar)
+	      ("M-2" . latex-insert-sub-2)
+	      ("C-c '" . latex-insert-prime)
+	      ("C-c i" . TeX-complete-symbol)
+	      ("C-c m" . LaTeX-mark-section)
+	      ("C-c w" . latex-kill-section)
+	      ("C-c A" . latex-convert-equation-to-aligned)
+	      ("C-c B" . latex-bold-region)
+	      ("C-c F" . LaTeX-fill-buffer)
+	      ("C-c C-." . LaTeX-mark-environment-inner)
+	      ("C-c c" . LaTeX-copy-environment)   
+	      ("C-c C-=" . latex-append-ampersand)
+	      ("C-c l" . latex-wrap-left-right))
   :config
 					; to be able to jump to the relevant page in the PDF document
   (TeX-source-correlate-mode)
   (when (eq system-type 'darwin)
     (setq TeX-view-program-list '(("skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b" )))
     (setq TeX-view-program-selection '((output-pdf "skim"))))
-					; some facilites
+  )
+
+
   (defun latex-insert-prime() 
     (interactive)(insert "^{\\prime }"))
   
@@ -46,14 +65,12 @@
 
   (defun latex-convert-equation-to-aligned()
     (interactive)
-    (beginning-of-line)
-    (kill-line)
+    (LaTeX-mark-environment-inner)
+    (kill-region (mark) (point) 'region)
+    (open-line-above)
     (insert-latex-env "aligned")
     (yank)
-    (latex-append-ampersand)
-    (end-of-line)
-    (insert "\\\\")
-    (newline-and-indent))
+    (delete-char -1))
   
   (defun latex-bold-region()
     (interactive)
@@ -64,25 +81,6 @@
     (yank)
     (insert "}"))
   
-  (bind-keys* 
-   :map LaTeX-mode-map
-   ("C-;" . insert-backslash)
-   ("M-;" . insert-dollar)
-   ("C-:" . insert-percent)
-   ("`" . latex-insert-inline-src)
-   ("M-:" . insert-single-dollar)
-   ("M-2" . latex-insert-sub-2)
-   ("C-c '" . latex-insert-prime)
-   ("C-c i" . TeX-complete-symbol)
-   ("C-c m" . LaTeX-mark-section)
-   ("C-c w" . latex-kill-section)
-   ("C-c A" . latex-convert-equation-to-aligned)
-   ("C-c B" . latex-bold-region)
-   ("C-c F" . LaTeX-fill-buffer)
-   ("C-c C-." . LaTeX-mark-environment-inner)
-   ("C-c c" . LaTeX-copy-environment)   
-   ("C-c C-=" . latex-append-ampersand)
-   ("C-c l" . latex-wrap-left-right))
   (defun LaTeX-mark-environment-inner (&optional count)
     "modified based on the auctex function LaTeX-mark-environment.
      mark inner content of the environment"
@@ -104,12 +102,12 @@
       (push-mark end)
       (goto-char beg)
       (TeX-activate-region)))
-  (defun LaTeX-copy-environment()
-    (interactive)
-    (save-excursion (LaTeX-mark-environment)
-		    (kill-ring-save (mark) (point) 'region))
-    (message "environment copied"))
-  )
+
+(defun LaTeX-copy-environment()
+  (interactive)
+  (save-excursion (LaTeX-mark-environment)
+		  (kill-ring-save (mark) (point) 'region))
+  (message "environment copied"))
 
 ;;; minor modes
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
