@@ -777,58 +777,49 @@ _d_: subtree
 (use-package rg
   :ensure t
   :bind
-  ("C-z C-x r" . rg-menu)
   (:map my-mode-map
+	("C-r m" . rg-menu)
 	("C-r C-f" . rg-dwim-current-file)
 	("C-r C-d" . rg-dwim-current-dir)
 	("C-r C-p" . rg-dwim-project-dir)))
 
-
 (use-package evil
   :ensure t
-  :bind (:map my-mode-map
-             ("H-\[" . my-find-char-backward)
-	     ("C-]" . my-find-char))
-  :config
-  (defun my-find-char()
-  (interactive)
-  (if (equal last-command 'my-find-char)      
-      (call-interactively #'evil-repeat-find-char)
-    (call-interactively #'evil-find-char)
-    ))
+  :bind 
+  :config)
 
-(defun my-find-char-backward()
-  (interactive)
-  (if (equal last-command 'my-find-char-backward)      
-      (call-interactively #'evil-repeat-find-char)
-    (call-interactively #'evil-find-char-backward)
-    )))
+(define-key my-mode-map (kbd "C-]") (defhydra my-find-char (:body-pre (progn (setq my-vim-f-char (read-char))
+									     (evil-find-char 1 my-vim-f-char))
+								      :post (setq my-vim-f-char nil)
+								      :hint nil)
+				      (";" (evil-repeat-find-char))))
 
-;; (use-package marginalia
+(define-key my-mode-map (kbd "H-[") (defhydra my-find-char-backward (:body-pre (progn (setq my-vim-F-char (read-char))
+										      (evil-find-char-backward 1 my-vim-F-char))
+									       :post (setq my-vim-F-char nil)
+									       :hint nil)
+				      (";" (evil-repeat-find-char))))
+
+;; (use-package embark
 ;;   :ensure t
+;;   :bind
+;;   (:map ivy-minibuffer-map ("C-'" . embark-act)
+;; 	;; pick some comfortable binding
+;; 					;   ("C-;" . embark-dwim)        ;; good alternative: M-.
+;; 					;   ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
+;; 	)
+;;   :init
+
+;;   ;; Optionally replace the key help with a completing-read interface
+;;   (setq prefix-help-command #'embark-prefix-help-command)
+
 ;;   :config
-;;   (marginalia-mode))
 
-(use-package embark
-  :ensure t
-  :bind
-  (;; ("C-<escape>" . embark-act)
-   ;; pick some comfortable binding
-;   ("C-;" . embark-dwim)        ;; good alternative: M-.
-;   ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
-   )
-  :init
-
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
-
-  :config
-
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
+;;   ;; Hide the mode line of the Embark live/completions buffers
+;;   (add-to-list 'display-buffer-alist
+;;                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+;;                  nil
+;;                  (window-parameters (mode-line-format . none)))))
 
 (use-package exec-path-from-shell
   :ensure t
