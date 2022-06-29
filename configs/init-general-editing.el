@@ -12,36 +12,6 @@
   (setq hydra-hint-display-type 'message))
 
 
-(use-package counsel
-  :ensure t
-  :bind (:map global-map
-	      ("C-s" . swiper)
-	      ;; ("M-y" . counsel-yank-pop)
-	      ("C-z C-x u" . counsel-unicode-char)
-	      ("C-z C-x s" . counsel-set-variable)
-	      ("C-z C-x h" . counsel-descbinds)
-	      ;; ivy-view
-	      ("C-z v" . ivy-push-view)
-	      ("C-z C-v" . ivy-switch-view)
-	      ("C-z V" . ivy-pop-view)
-	      :map my-mode-map
-	      ("C-," . ivy-switch-buffer)
-	      ("C-，" . ivy-switch-buffer)
-	      ("M-x" . counsel-M-x)
-	      ("C-r C-r" . counsel-rg))
-  :config
-  (counsel-mode 1)
-  (ivy-mode 1)
-  ;; Enable bookmarks and recentf
-  (setq ivy-use-virtual-buffers t)
-  ;; C-p/C-n cycles when at first/last
-  (setq ivy-wrap t) 			
-  ;; (counsel-mode 1)
-  )
-
-(use-package ivy-hydra
-  :ensure t)
-
 (defun forward-half-sentence(&optional arg)
   (interactive)
   (re-search-forward "[;,]" nil nil arg))
@@ -134,7 +104,7 @@
 ;(global-set-key (kbd "<next>") 'scroll-other-window)
 
 ; simple editing
-(global-set-key (kbd "<deletechar>") 'quoted-insert)
+(global-set-key (kbd "C-z q") 'quoted-insert)
 
 ;;; search and replace
 (bind-keys :map global-map
@@ -174,19 +144,17 @@
   )
 
 (define-prefix-command 'my-mark-prefix-keymap)
-(define-key my-mode-map (kbd "H-m") 'my-mark-prefix-keymap)
-(bind-keys :map my-mode-map
-	   ("H-m H-m" . my-mark-line))
+(define-key global-map (kbd "H-m") 'my-mark-prefix-keymap)
+
 (defun my-mark-line()
   (interactive)
   (beginning-of-line)
   (set-mark-command nil)
   (end-of-line))
 
-
-;(global-set-key (kbd "H-m") 'open-line-below)
-
-;(define-key input-decode-map (kbd "C-\[") (kbd "H-\["))
+(bind-keys :map global-map
+	   ("H-m H-m" . my-mark-line)
+	   ("H-m m" . mark-word))
 
 (defun open-line-above()
   (interactive)
@@ -298,57 +266,57 @@ line instead."
   :diminish smartparens-mode)
 
 (define-key my-mode-map (kbd "M-s") (defhydra hydra-smartparens (:hint nil)
-;; https://github-wiki-see.page/m/abo-abo/hydra/wiki/Smartparens
-;;  Moving^^^^                       Slurp & Barf^^   Wrapping^^            Sexp juggling^^^^               Destructive
-;;------------------------------------------------------------------------------------------------------------------------				      
-  "
+				      ;; https://github-wiki-see.page/m/abo-abo/hydra/wiki/Smartparens
+				      ;;  Moving^^^^                       Slurp & Barf^^   Wrapping^^            Sexp juggling^^^^               Destructive
+				      ;;------------------------------------------------------------------------------------------------------------------------				      
+				      "
  [_a_] beginning  [_n_] down      [_h_] bw slurp   [_R_]   rewrap        [_S_] split   [_t_] transpose   [_c_] change inner  [_w_] copy
  [_e_] end        [_N_] bw down   [_H_] bw barf    [_u_]   unwrap        [_s_] kill-symbol  [_A_] absorb      [_C_] change outer
  [_f_] forward    [_p_] up        [_l_] slurp      [_U_]   bw unwrap     [_r_] raise   [_E_] emit        [_k_] kill          [_g_] quit
  [_b_] backward   [_P_] bw up     [_L_] barf       [_(__{__[_] wrap (){}[]   [_j_] join    [_o_] convolute   [_K_] bw kill       [_q_] quit"
-  ;; Moving
-  ("a" sp-beginning-of-sexp)
-  ("e" sp-end-of-sexp)
-  ("f" sp-forward-symbol)
-  ("b" sp-backward-symbol)
-  ("n" sp-down-sexp)
-  ("N" sp-backward-down-sexp)
-  ("p" sp-up-sexp)
-  ("P" sp-backward-up-sexp)
+				      ;; Moving
+				      ("a" sp-beginning-of-sexp)
+				      ("e" sp-end-of-sexp)
+				      ("f" sp-forward-symbol)
+				      ("b" sp-backward-symbol)
+				      ("n" sp-down-sexp)
+				      ("N" sp-backward-down-sexp)
+				      ("p" sp-up-sexp)
+				      ("P" sp-backward-up-sexp)
   
-  ;; Slurping & barfing
-  ("h" sp-backward-slurp-sexp)
-  ("H" sp-backward-barf-sexp)
-  ("l" sp-forward-slurp-sexp)
-  ("L" sp-forward-barf-sexp)
+				      ;; Slurping & barfing
+				      ("h" sp-backward-slurp-sexp)
+				      ("H" sp-backward-barf-sexp)
+				      ("l" sp-forward-slurp-sexp)
+				      ("L" sp-forward-barf-sexp)
   
-  ;; Wrapping
-  ("R" sp-rewrap-sexp)
-  ("u" sp-unwrap-sexp)
-  ("U" sp-backward-unwrap-sexp)
-  ("(" sp-wrap-round)
-  ("{" sp-wrap-curly)
-  ("[" sp-wrap-square)
+				      ;; Wrapping
+				      ("R" sp-rewrap-sexp)
+				      ("u" sp-unwrap-sexp)
+				      ("U" sp-backward-unwrap-sexp)
+				      ("(" sp-wrap-round)
+				      ("{" sp-wrap-curly)
+				      ("[" sp-wrap-square)
   
-  ;; Sexp juggling
-  ("S" sp-split-sexp)
-  ("s" sp-kill-symbol :exit t)
-  ("r" sp-raise-sexp)
-  ("j" sp-join-sexp)
-  ("t" sp-transpose-sexp)
-  ("A" sp-absorb-sexp)
-  ("E" sp-emit-sexp)
-  ("o" sp-convolute-sexp)
+				      ;; Sexp juggling
+				      ("S" sp-split-sexp)
+				      ("s" sp-kill-symbol :exit t)
+				      ("r" sp-raise-sexp)
+				      ("j" sp-join-sexp)
+				      ("t" sp-transpose-sexp)
+				      ("A" sp-absorb-sexp)
+				      ("E" sp-emit-sexp)
+				      ("o" sp-convolute-sexp)
   
-  ;; Destructive editing
-  ("c" sp-change-inner :exit t)
-  ("C" sp-change-enclosing :exit t)
-  ("k" sp-kill-sexp)
-  ("K" sp-backward-kill-sexp)
-  ("w" sp-copy-sexp)
+				      ;; Destructive editing
+				      ("c" sp-change-inner :exit t)
+				      ("C" sp-change-enclosing :exit t)
+				      ("k" sp-kill-sexp)
+				      ("K" sp-backward-kill-sexp)
+				      ("w" sp-copy-sexp)
 
-  ("q" nil)
-  ("g" nil)))
+				      ("q" nil)
+				      ("g" nil)))
 
 (use-package wrap-region
   :ensure t
@@ -367,7 +335,7 @@ _t_: body          _e_: entry       _n_: next visible
 _o_: other         _i_: children    _p_: previous visible
 _c_: entry         _k_: branches    _f_: forward same level
 _l_: leaves        _s_: subtree     _b_: backward same level
-_d_: subtree
+_S_: subtree
 
 "
   ;; Hide
@@ -376,7 +344,7 @@ _d_: subtree
   ("o" hide-other)        ; Hide other branches
   ("c" hide-entry)        ; Hide this entry's body
   ("l" hide-leaves)       ; Hide body lines in this entry and sub-entries
-  ("d" hide-subtree)      ; Hide everything in this entry and sub-entries
+  ("S" hide-subtree)      ; Hide everything in this entry and sub-entries
   ;; Show
   ("a" show-all)          ; Show (expand) everything
   ("e" show-entry)        ; Show this heading's body
@@ -392,53 +360,6 @@ _d_: subtree
   ("g" nil "leave"))
 
 
-;;; snippets
-(use-package yasnippet 
-:ensure t
-:config
-(global-set-key (kbd "C-z <tab>") 'yas-expand-from-trigger-key) ; sometimes <tab> is redefined in certain modes, use this as a backup solution
-(global-set-key (kbd "C-z R") 'yas-reload-all)
-(define-key yas-minor-mode-map (kbd "C-c &") nil)
-(yas-global-mode)
-:diminish yas-minor-mode)
-
-(when (eq system-type 'darwin)
-  (use-package yasnippet-snippets
-    :ensure t
-    :config)
-)
-;;; completion
-(when (display-graphic-p)
-(define-key input-decode-map (kbd "C-i") (kbd "H-i"))
-)
-(global-set-key (kbd "H-i") 'dabbrev-expand)
-(global-set-key (kbd "C-z C-e") 'hippie-expand) 
-
-(use-package company
-:ensure t
-:bind (:map my-mode-map
-	   ("M-i" . company-complete))
-:diminish company-mode
-:config
-(global-company-mode) 
-(defun my-company-show-doc-buffer ()
-  "Temporarily show the documentation buffer for the selection."
-  (interactive)
-  (let* ((selected (nth company-selection company-candidates))
-         (doc-buffer (or (company-call-backend 'doc-buffer selected)
-                         (error "No documentation available"))))
-    (with-current-buffer doc-buffer
-      (goto-char (point-min)))
-    (display-buffer doc-buffer t)))
-
-(setq company-dabbrev-downcase nil) ;make completion case sensitive
-(setq company-idle-delay nil) ; do not give suggestions unless invoked manually
-(setq company-async-timeout 120)
-(define-key company-active-map (kbd "<tab>") 'company-complete-selection))
-
-(setq-default abbrev-mode t)
-(setq abbrev-file-name "~/.emacs.d/.abbrev_defs") 
-
 ;;; buffer, window, frame and file management
 
 (global-set-key (kbd "<f2>") 'recenter-top-bottom)
@@ -449,6 +370,9 @@ _d_: subtree
 	   ("C-." . other-window)
 	   ("C-。" . other-window)
 	   ("C-\\" . split-window-right))
+
+(use-package bufler
+  :ensure t)
 
 ;; register
 
@@ -470,11 +394,23 @@ _d_: subtree
   (interactive)
   (jump-to-register ? ))
 
+(defun my-string-to-register ()
+  (interactive)
+  (copy-to-register ?s (mark) (point)))
+
+(defun my-insert-register-string ()
+  (interactive)
+  (insert-register ?s))
+
 (bind-keys :map my-mode-map
-	   ("C-r C-w" . my-window-configuration-to-register)
-	   ("C-r W" . my-jump-to-saved-window)
-	   ("C-r C-SPC" . my-point-to-register)
-	   ("C-r S-SPC" . my-jump-to-saved-location))
+	   ("C-r w" . my-jump-to-saved-window)
+	   ("C-r SPC" . my-jump-to-saved-location)
+	   ("C-r s" . my-insert-register-string))
+
+(bind-keys :map global-map
+	   ("H-m w" . my-window-configuration-to-register)
+	   ("H-m SPC" . my-point-to-register)
+	   ("H-m s" . my-string-to-register))
 
 (setq winner-dont-bind-my-keys t)
 (winner-mode 1)
@@ -528,7 +464,8 @@ _d_: subtree
   (setq projectile-track-known-projects-automatically nil) ; only allow manually adding projects
   (setq projectile-auto-discover nil)
   (setq projectile-sort-order 'recentf)
-  (setq projectile-switch-project-action 'counsel-projectile-find-file)
+  ;; (setq projectile-switch-project-action 'counsel-projectile-find-file)
+  (setq projectile-switch-project-action 'counsel-projectile-find-dir)
   ;; (setq projectile-switch-project-action 'projectile-commander)  
   ;; (setq projectile-current-project-on-switch 'keep)
 					; leave the current project at the default position
@@ -554,7 +491,9 @@ _d_: subtree
 ;;   (helm-projectile-on))
 
 (use-package counsel-projectile
-  :ensure t)
+  :ensure t
+  :config
+  (counsel-projectile-mode))
 
 (recentf-mode 1)
 ;; (bind-keys :map my-mode-map
@@ -570,25 +509,6 @@ _d_: subtree
 (setq dired-omit-files "\\`[.]?#\\|\\`[.][.]?\\'\\|\.org_archive")
 (define-key my-mode-map (kbd "C-x j") 'dired-jump)
 (define-key my-mode-map (kbd "C-x J") 'dired-jump-other-window)
-
-
-;; (cl-flet ((always-yes (&rest _) t))
-;;   (defun no-confirm (fun &rest args)
-;;     "Apply FUN to ARGS, skipping user confirmations."
-;;     (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
-;;               ((symbol-function 'yes-or-no-p) #'always-yes))
-;;       (apply fun args))))
-
-;; (defun my-dired-folder-to-file()
-;;   "delete the folder at point (if it's empty) and find a file with the same
-;; name"
-;;   (interactive)
-;;   (dired-copy-filename-as-kill)
-;;   (let ((file-name (current-kill 0 t))
-;; 	(dired-deletion-confirmer 'no-confirm))
-;;     (dired-do-delete 1)
-;;   (message file-name))
-;;   )
 
 
 (bind-keys :map dired-mode-map
@@ -629,7 +549,7 @@ _d_: subtree
 
 (defun find-scratch ()
   (interactive)
-  (switch-to-buffer-other-window
+  (switch-to-buffer
    "*scratch*"))
 (global-set-key (kbd "C-z s") 'find-scratch)
 (global-set-key (kbd "C-z N") 'make-frame)
@@ -656,11 +576,9 @@ _d_: subtree
 ;; setup of minibuffer
 (define-key minibuffer-local-map (kbd "C-p") 'previous-history-element) ; for the rare case to go to the previous line just use the arrow key
 (define-key minibuffer-local-map (kbd "C-n") 'next-history-element) 
-
-(defun insert-tilde()
-  (interactive)
-  (insert "~"))
 (define-key minibuffer-local-map (kbd "C-;") 'insert-tilde)
+
+
 
 ;; input method
 
@@ -684,7 +602,7 @@ _d_: subtree
 ;; (use-package cnfonts
 ;;   :ensure t)
 
-; japanese
+					; japanese
 (defun set-japanese()
   (interactive)
   (set-input-method "japanese"))
@@ -716,7 +634,7 @@ _d_: subtree
 (defun find-emacs-configs()
   (interactive)
   (let ((default-directory "~/.emacs.d/configs/"))
-    (projectile-find-file)))  
+    (counsel-rg)))  
 
 (global-set-key (kbd "C-z E") 'find-dot-emacs)
 (global-set-key (kbd "C-z e") 'find-emacs-configs)

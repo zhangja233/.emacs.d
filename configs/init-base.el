@@ -26,4 +26,8 @@
   (interactive)
   (insert "!"))
 
+(defun insert-tilde()
+  (interactive)
+  (insert "~"))
+
 (provide 'init-base)

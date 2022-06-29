@@ -102,6 +102,7 @@
 (require 'init-my)
 (require 'init-display)
 (require 'init-prelude)
+(require 'init-completion)
 (require 'init-general-editing)
 (require 'init-help)
 (require 'init-org)
@@ -111,8 +112,7 @@
 (require 'init-f90)
 (require 'init-python)
 (require 'init-elisp)
-(require 'init-helm)
 (require 'init-magit)
-
+(require 'init-app)
 
 (put 'downcase-region 'disabled nil)
