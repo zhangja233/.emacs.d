@@ -3,11 +3,10 @@
 	    (setq-default indent-tabs-mode t)
 	    ;; (modify-syntax-entry ?_ "w" python-mode-syntax-table)	    
 	    (hs-minor-mode)
+	    (flyspell-prog-mode)
 	    (bind-keys :map hs-minor-mode-map
 		       ("C-c <tab>" . hs-show-block)
 		       ("C-c C-SPC" . hs-hide-all))
-;	    (flycheck-mode)
-	    ;; (auto-fill-mode)	    
 	    ))
 
 (eval-after-load "python"

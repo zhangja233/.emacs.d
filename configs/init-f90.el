@@ -67,6 +67,7 @@ Argument ARG is ignored."
 	       nil))
      
 	    (hs-minor-mode)
+	    (flyspell-prog-mode)
 	    (bind-keys :map f90-mode-map
 		       ("S-<tab>" . hs-hide-all)
 		       ("C-c <tab>" . hs-show-block))
