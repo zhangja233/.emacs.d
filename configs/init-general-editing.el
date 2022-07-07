@@ -760,31 +760,4 @@ _S_: subtree
 (global-set-key (kbd "C-z G") 'google-this-mode-submap)
 (global-set-key (kbd "C-z g") 'google-this-noconfirm))
 
-;; (use-package edit-server
-;;   :ensure t
-;;   :commands edit-server-start
-;;   :init (if after-init-time
-;;               (edit-server-start)
-;;             (add-hook 'after-init-hook
-;;                       #'(lambda() (edit-server-start))))
-;;   :config (setq edit-server-new-frame-alist
-;;                 '((name . "Edit with Emacs FRAME")
-;;                   (top . 200)
-;;                   (left . 200)
-;;                   (width . 80)
-;;                   (height . 25)
-;;                   (minibuffer . t)
-;;                   (menu-bar-lines . t)
-;;                   )))
-
-
-;; (use-package atomic-chrome
-;;   ;; dependency Atomic Chrome extension (in Chrome)
-;;   :ensure t
-;;   :init
-;;   (setq atomic-chrome-default-major-mode 'org-mode)
-;; ;  (setq atomic-chrome-extension-type-list '(atomic-chrome))
-;;   :config
-;;   (atomic-chrome-start-server))
-
 (provide 'init-general-editing)
