@@ -81,7 +81,19 @@
     (goto-char pt))
 
   (setf (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char) ; space as mark to char
-  )
+  ;; i as the action to correct spelling mistake
+  (defun avy-action-flyspell (pt)
+    (flyspell-correct-previous pt))
+  (setf (alist-get ?i  avy-dispatch-alist) 'avy-action-flyspell)
+  
+  (defun avy-action-copy-latex-inline-equation (pt)
+    "copy inline equation in LaTeX mode, or in general copy things inside $ $"
+    ;; note that this save-excursion trick doesn't work when calling avy across different buffers
+    (save-excursion
+      (goto-char pt)
+      (copy-region-as-kill (+ (search-backward "$") 1)
+			   (- (search-forward "$" nil nil 2) 1))))
+  (setf (alist-get ?4 avy-dispatch-alist) 'avy-action-copy-latex-inline-equation))
 
 (define-key my-mode-map (kbd "M-a") 'beginning-of-buffer)
 (define-key my-mode-map (kbd "M-e") 'end-of-buffer)
