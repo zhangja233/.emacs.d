@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: doc
+# key: doc
+# --
+\begin{table}[H]
+  \centering
+  \begin{tabular}{ccc}
+    \hline 
+    name& type& meaning\\\\
+   \hline
+    $0& & \\\\
+    \hline 
+  \end{tabular}
+\end{table}

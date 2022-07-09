@@ -280,14 +280,13 @@
   ;;  (add-hook 'minibuffer-setup-hook #'org-mru-clock-embark-minibuffer-hook)
   )
 
-;; miscellaneous
-;;(define-key org-mode-map (kbd "C-c v") 'org-latex-preview)
-
 ;;; org-babel
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((python . t) (latex . t) (perl . t) (shell . t)))
+ '((python . t) (latex . t) (perl . t) (shell . t) (fortran . t) (R . t)))
 
+(add-to-list 'org-src-lang-modes '("fortran" . f90)) ; use f90-mode when specify fortran language
+(add-to-list 'org-src-lang-modes '("R" . ess-r))
 (setq org-confirm-babel-evaluate nil) ; don't ask for confirmation
 
 ;; setup about todo
@@ -325,6 +324,18 @@
   ("u" outline-up-heading)
   ("q" nil)
   ("g" nil)))
+
+;;; org-display
+(setq org-startup-with-inline-images t)
+;; display inline image that's in pdf format
+(use-package org-inline-pdf
+  :ensure t
+  :hook (org-mode . org-inline-pdf-mode))
+(bind-keys :map org-mode-map
+	    ("C-c H-i" . org-redisplay-inline-images))
+;; org-latex
+(define-key org-mode-map (kbd "C-c l") 'org-latex-preview)
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
 
 ;;; counsel-org
 (bind-keys :map my-mode-map

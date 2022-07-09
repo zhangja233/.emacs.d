@@ -13,8 +13,8 @@
   (c-context-open-line)
   (indent-for-tab-command)
   )
-(add-hook 'c-mode-hook 'auto-fill-mode)
-(add-hook 'c++-mode-hook 'auto-fill-mode)
+(add-hook 'c-mode-hook 'flyspell-prog-mode)
+(add-hook 'c++-mode-hook 'flyspell-prog-mode)
 (add-hook 'c-mode-common-hook '(lambda () (modify-syntax-entry ?_ "w" c-mode-syntax-table) ))
 
 
