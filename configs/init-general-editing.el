@@ -13,7 +13,12 @@
   :config
   (setq hydra-hint-display-type 'message))
 
-(repeat-mode 1)
+(when (eq system-type 'darwin)
+(use-package pcre2el
+ :ensure t))
+
+(when (version<= "28" emacs-version)
+  (repeat-mode 1))
 
 (defun forward-half-sentence(&optional arg)
   (interactive)
