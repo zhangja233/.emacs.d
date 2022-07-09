@@ -9,7 +9,7 @@
 
 (use-package company
 :ensure t
-:bind (:map global-map
+:bind (:map my-mode-map
 	   ("M-i" . company-complete))
 :diminish company-mode
 :config

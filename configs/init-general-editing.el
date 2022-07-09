@@ -1,3 +1,5 @@
+;; general editing
+
 ;;; moving the cursor
 (bind-keys :map my-mode-map
 	   ("C-q" . backward-word)
@@ -11,6 +13,7 @@
   :config
   (setq hydra-hint-display-type 'message))
 
+(repeat-mode 1)
 
 (defun forward-half-sentence(&optional arg)
   (interactive)
@@ -201,19 +204,11 @@ line instead."
      (list (line-beginning-position)
            (line-beginning-position 2)))))
 
-(use-package expand-region
-  :ensure t
-  :config
-  (define-key my-mode-map (kbd "C-=") 'er/expand-region))
-
-(define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
-(global-set-key (kbd "C-h") (kbd "<backspace>"))
-
 (delete-selection-mode) ; using C-d to delete a selected region
 (setq delete-active-region 'kill) ; kill the selected region while using delete and backspace. Note that you can still use C-d to delete a region.
 
-(require 'misc)
-(global-set-key (kbd "M-z") 'zap-up-to-char)
+;; (require 'misc)
+;; (global-set-key (kbd "M-z") 'zap-up-to-char)
 
 (define-key my-mode-map (kbd "C-k") 'kill-line)
 (global-set-key (kbd "C-<backspace>") 'kill-whole-line)
@@ -330,14 +325,7 @@ line instead."
 				      ("q" nil)
 				      ("g" nil)))
 
-(use-package wrap-region
-  :ensure t
-  :diminish wrap-region-mode
-  :config
-  (wrap-region-mode))
-
-
-(defhydra hydra-outline (:color pink :hint nil)
+(defhydra hydra-outline (:color pink :hint nil :foregign-keys nil)
 ;; https://github.com/abo-abo/hydra/wiki/Emacs  
   "
 ^Hide^             ^Show^           ^Move
@@ -371,6 +359,21 @@ _S_: subtree
   ("b" outline-backward-same-level)       ; Backward - same level
   ("g" nil "leave"))
 
+
+;;; region
+(bind-keys :map global-map
+	   ("C-z w" . widen))
+
+(use-package expand-region
+  :ensure t
+  :config
+  (define-key my-mode-map (kbd "C-=") 'er/expand-region))
+
+(use-package wrap-region
+  :ensure t
+  :diminish wrap-region-mode
+  :config
+  (wrap-region-mode))
 
 ;;; buffer, window, frame and file management
 
@@ -505,7 +508,8 @@ _S_: subtree
 (use-package counsel-projectile
   :ensure t
   :config
-  (counsel-projectile-mode))
+  ;; (counsel-projectile-mode)
+  )
 
 (recentf-mode 1)
 ;; (bind-keys :map my-mode-map
@@ -588,9 +592,6 @@ _S_: subtree
 ;; setup of minibuffer
 (define-key minibuffer-local-map (kbd "C-p") 'previous-history-element) ; for the rare case to go to the previous line just use the arrow key
 (define-key minibuffer-local-map (kbd "C-n") 'next-history-element) 
-(define-key minibuffer-local-map (kbd "C-;") 'insert-tilde)
-
-
 
 ;; input method
 
@@ -645,8 +646,11 @@ _S_: subtree
   (find-file "~/.emacs.d/init.el"))
 (defun find-emacs-configs()
   (interactive)
-  (let ((default-directory "~/.emacs.d/configs/"))
-    (counsel-rg)))  
+  (if current-prefix-arg
+      (find-file "~/.emacs.d/configs/")
+    (let ((default-directory "~/.emacs.d/configs/"))
+	(counsel-rg)
+	)))   
 
 (global-set-key (kbd "C-z E") 'find-dot-emacs)
 (global-set-key (kbd "C-z e") 'find-emacs-configs)
@@ -771,5 +775,8 @@ _S_: subtree
 :init
 (global-set-key (kbd "C-z G") 'google-this-mode-submap)
 (global-set-key (kbd "C-z g") 'google-this-noconfirm))
+
+(bind-keys :map global-map
+	   ("C-z C-q" . exit-recursive-edit))
 
 (provide 'init-general-editing)
