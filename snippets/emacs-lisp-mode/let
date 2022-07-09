@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: let
-# key: l
+# key: let
 # --
 (let ((${1:variable} ${2:value}))
   (${0:body})
