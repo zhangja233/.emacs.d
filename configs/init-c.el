@@ -44,11 +44,11 @@
     )
 (advice-add 'c-indent-new-comment-line :around #'my-prettify-c-block-comment)
 
-(bind-keys :map c-mode-base-map
-	   ("C-;" . c-insert-comment)
-	   ("M-;" . c-indent-new-comment-line)
-;	   ("C-o" . open-line-above)
-	   )  
+;; (bind-keys :map c-mode-base-map
+;; 	   ("C-;" . c-insert-comment)
+;; 	   ("M-;" . c-indent-new-comment-line)
+;; 	   )  
+
 ; completion of headers
 (use-package company-c-headers
   :ensure t

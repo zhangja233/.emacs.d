@@ -342,7 +342,7 @@
 ;;; counsel-org
 (bind-keys :map my-mode-map
 	   ("C-z C-j" . counsel-org-goto-all)
-	   ("C-c j" . counsel-org-goto)
+	   ("C-c g" . counsel-org-goto)
 	   )
 
 (use-package helm-org-rifle
