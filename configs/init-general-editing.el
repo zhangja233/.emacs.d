@@ -391,9 +391,6 @@ _S_: subtree
 	   ("C-。" . other-window)
 	   ("C-\\" . split-window-right))
 
-(use-package bufler
-  :ensure t)
-
 ;; register
 
 (defun my-window-configuration-to-register()
