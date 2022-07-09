@@ -1,5 +1,5 @@
 (require 'org)
-;; moving the cursor
+;;; moving the cursor
 (defun org-beginning-of-headline-text ()
   "when on a heading line, move the cursor to the beginning of the text. E.g.,
   * ba|r  will become * |bar
@@ -57,6 +57,8 @@
 	     ("C-c g" . worf-goto))
   (bind-keys :map worf-mode-map
 	     ("C-d" . nil)
+	     ("[" . nil)
+	     ("]" . nil)
 	     ("x" . wspecial-worf-cut-subtree))
   )
 
@@ -159,7 +161,6 @@
 	("3" tags "+30")))
 (setq org-agenda-skip-function-global '(org-agenda-skip-entry-if 'todo 'done))
 
-
 ;; column view
 (setq org-columns-default-format "%30ITEM(Task)  %daily %CLOCKSUM_T
 %CLOCKSUM{:} %6Effort(Estim){:} %DEADLINE %ALLTAGS")
@@ -238,7 +239,7 @@
 (setq org-clock-persist 'history)
 (setq org-clock-history-length 100)
 (org-clock-persistence-insinuate) ; save the clock history across emacs sessions
-
+(setq org-clock-continuously t)
 (when (eq system-type 'darwin)
   (require 'org-clock-budget)
   (define-key my-mode-map (kbd "C-z r") 'org-clock-budget-report)
@@ -295,6 +296,7 @@
 ;      '((sequence  "TODO" "NEXT"  "|" "DONE" "CANCELED")))
 (setq calendar-week-start-day 1) ;start week on Mon
 
+;; osx specific stuff
 (when (eq system-type 'darwin)
   (setq org-agenda-files (directory-files-recursively "~/Dropbox/org" "\.org$"));my personal org files which store my to-do lists
 (setq org-default-notes-file "~/Dropbox/org/capture.org") ; the file to store captured items
@@ -403,11 +405,5 @@
 
 
 (bind-keys ("C-z C-x o" . org-open-at-point-global))
-
-(use-package ledger-mode
-  :ensure t
-  :init
-  (add-to-list 'auto-mode-alist
-	       '("ledger.*\\.dat$" . ledger-mode)))
 
 (provide 'init-org)
