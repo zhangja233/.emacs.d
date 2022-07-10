@@ -13,6 +13,10 @@
   (global-set-key (kbd "C-z p") 'find-linux-dot-org)
   (custom-set-variables
    '(markdown-command "/usr/bin/pandoc"))
+  
+  (define-key key-translation-map [(control ?\h)]  [127]) ; bind C-h to Backspace, otherwise in searching C-h just literally becomes ^H
+  (global-set-key (kbd "C-h") (kbd "<backspace>"))
+  
   )
 
 (provide 'init-linux)
