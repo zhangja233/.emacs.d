@@ -37,15 +37,14 @@
 
 ;; package management
 (require 'package)
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")))
-;; default value: (("gnu" . "https://elpa.gnu.org/packages/"))
-;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;(add-to-list 'package-archives '("melpa" . "http://elpa.emacs-china.org/melpa/") t)
 ;(add-to-list 'package-archives '("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/") t) ; see https://mirror.tuna.tsinghua.edu.cn/help/elpa/ for more
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents)
 )
+;; (package-refresh-contents)
 
 ; install use-package if it's not installed
 (unless (package-installed-p 'use-package)
@@ -101,9 +100,9 @@
 (require 'init-windows)
 (require 'init-my)
 (require 'init-display)
+(require 'init-general-editing)
 (require 'init-prelude)
 (require 'init-completion)
-(require 'init-general-editing)
 (require 'init-help)
 (require 'init-org)
 (require 'init-auctex)
