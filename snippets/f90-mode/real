@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: real
+# key: r
+# --
+real(8) :: $0

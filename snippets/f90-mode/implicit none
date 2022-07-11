@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: implicit none
-# key: i
+# key: I
 # --
 implicit none
