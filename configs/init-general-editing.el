@@ -6,8 +6,8 @@
 	   ("C-t" . forward-word)
 	   ("C-a" . my-beginning-of-line)
 	   ("C-e" . my-end-of-line)
-	   ("M-[" . isearch-forward)
-	   ("M-]" . isearch-backward))
+	   ("M-[" . isearch-backward)
+	   ("M-]" . isearch-forward))
 
 (use-package hydra
   :ensure t
