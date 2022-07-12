@@ -16,7 +16,7 @@
 	   ("C-z C-z" . my-compile)
 	   ("C-z z" . recompile))
 
-(defhydra hydra-error (global-map "C-x e")
+(defhydra hydra-error (global-map "C-z C-x e")
   "goto-error"
   ("a" first-error "first")
   ("n" next-error "next")
@@ -88,20 +88,10 @@
 (use-package cmake-mode
   :ensure t)
 
-;(add-hook 'prog-mode-hook #'auto-fill-mode)
-
-
 (eval-after-load "sh-script"
   '(progn  
      (bind-keys :map sh-mode-map
 		("C-;" . comment-line))))
-
-;; (use-package flycheck
-;;   :ensure t
-;;   :config
-;;   (flycheck-add-mode 'python-flake8 'python-mode)
-;;   )
-
 
 
 (use-package ggtags
@@ -122,6 +112,11 @@
 	    (bind-keys :map cperl-mode-map
 		       ("C-;" . insert-single-dollar)
 		       ("M-;" . insert-number-sign))))
+
+(use-package ess
+  :ensure t
+  :config
+  (require 'ess-site))
 
 (use-package matlab
   :ensure matlab-mode

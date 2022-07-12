@@ -12,10 +12,13 @@
 (use-package lispy
   :ensure t
   :bind (:map lispy-mode-map
-	      ("M-m" . nil))
+	      ("M-m" . nil)
+	      ("C-2" . nil)
+	      ("C-c <tab>" . lispy-tab)
+	      ("[" . nil)
+	      ("]" . nil))
   :hook (emacs-lisp-mode . lispy-mode)
-  :config
-)
+  :config)
 
 ;; solve the problem that electric-indent-mode makes intent too much after return
 (defun electric-indent-mode-configure ()
