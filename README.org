@@ -18,6 +18,8 @@ The following is a list of my most frequently used functionalities and their key
 | =M-a/e=       | beginning/end of buffer                                  |
 | =C-l=         | =avy-goto-word-1=                                        |
 | =C/M-v=       | next/previous page                                       |
+| ~C-[/]~       | vim-F/f                                                  |
+| ~M-[/]~       | isearch-backward/forward                                 |
 
 *** Kill, delete, copy and paste
 | keybinding(s) | description                                                   |
@@ -42,7 +44,8 @@ The following is a list of my most frequently used functionalities and their key
 | =C-dot=       | switch to other window |
 | ~M-o~         | [[https://github.com/abo-abo/ace-window][ace-window]]             |
 | =C-1=         | =delete-other-windows= |
-| =C-x x=       | =delete-window=        |
+| =C-z x=       | =delete-window=        |
+| =C-z X=       | =delete-frame=         |
 
 *** Other editing functionalities 
 | keybinding(s)   | description                                                     |
