@@ -109,8 +109,8 @@
 (setq view-read-only t)
 (defadvice read-only-mode (before read-only-mode-advice activate)
   (lispy-mode -1))
-(bind-keys :map view-mode-map
-	   ("G" . end-of-buffer))
+(add-hook 'view-mode-hook (lambda () (bind-keys :map view-mode-map
+	   ("G" . end-of-buffer))))
 
 (use-package drag-stuff
   :ensure t
