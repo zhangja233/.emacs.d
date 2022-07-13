@@ -30,6 +30,7 @@
 	      ("C-c i" . TeX-complete-symbol)
 	      ("C-c m" . LaTeX-mark-section)
 	      ("C-c w" . latex-kill-section)
+	      ("C-c C-w" . latex-kill-environment)
 	      ("C-c g" . counsel-imenu)
 	      ("C-c A" . latex-convert-equation-to-aligned)
 	      ("C-c B" . latex-bold-region)
@@ -112,6 +113,12 @@
   (save-excursion (LaTeX-mark-environment)
 		  (kill-ring-save (mark) (point) 'region))
   (message "environment copied"))
+
+(defun latex-kill-environment()
+  (interactive)
+  (save-excursion (LaTeX-mark-environment)
+		  (kill-region (mark) (point) 'region))
+  (message "environment killed"))
 
 ;;; minor modes
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
