@@ -69,6 +69,7 @@ Argument ARG is ignored."
      
 	    (hs-minor-mode)
 	    (flyspell-prog-mode)
+	    (view-mode)
 	    (bind-keys :map f90-mode-map
 		       ("S-<tab>" . hs-hide-all)
 		       ("C-c <tab>" . hs-show-block))
@@ -80,9 +81,5 @@ Argument ARG is ignored."
 (setq f90-if-indent 2)
 (setq f90-type-indent 2)
 (setq f90-program-indent 2)
-
-;; (defadvice f90-mode (after f90-insert-end-advice activate)
-;;   (kill-whole-line))
-
 
 (provide 'init-f90)
