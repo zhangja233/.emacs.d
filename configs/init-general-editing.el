@@ -447,7 +447,7 @@ _S_: subtree
   :bind (:map my-mode-map
 	      ("M-o" . ace-window))
   :config
-  (setq aw-keys '(?j ?k ?l ?\; ?h ?f ?g))
+  (setq aw-keys '(?j ?k ?l ?\; ?h ?f))
   (setq aw-dispatch-always t)
   (defun my-aw-switch-buffer-in-window (window)
     (aw-switch-to-window window)
