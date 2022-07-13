@@ -486,8 +486,8 @@ _S_: subtree
   (setq projectile-auto-discover nil)
   (setq projectile-sort-order 'recentf)
   ;; (setq projectile-switch-project-action 'counsel-projectile-find-file)
-  (setq projectile-switch-project-action 'counsel-projectile-find-dir)
-  ;; (setq projectile-switch-project-action 'projectile-commander)  
+  ;; (setq projectile-switch-project-action 'counsel-projectile-find-dir)
+  (setq projectile-switch-project-action 'projectile-commander)
   ;; (setq projectile-current-project-on-switch 'keep)
 					; leave the current project at the default position
 					;  (setq projectile-dynamic-mode-line nil)
