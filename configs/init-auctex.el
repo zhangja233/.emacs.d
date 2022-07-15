@@ -157,8 +157,6 @@
  (setq outline-minor-mode-prefix nil)
  (diminish outline-minor-mode)
  ;; easier outline keybindings
- (define-key LaTeX-mode-map (kbd "M-u") 'hydra-outline/body) 
-; (define-key LaTeX-mode-map (kbd "C-c C-c") 'outline-show-subtree)
  (define-key LaTeX-mode-map (kbd "C-c C-SPC") 'outline-hide-body)
  (define-key LaTeX-mode-map (kbd "S-<tab>") 'outline-hide-body)
 ;; (define-key LaTeX-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
@@ -175,164 +173,168 @@
  (define-key LaTeX-mode-map (kbd "M-<left>") 'outline-promote)
  (define-key LaTeX-mode-map (kbd "M-<right>") 'outline-demote)))
 
+(add-hook 'outline-minor-mode-hook
+	  (lambda () (local-set-key "\M-u"
+				    outline-mode-prefix-map)))
+
 (eval-after-load "LaTeX"  
-'(progn
-   (setq-local company-backends
-	       (append '((company-math-symbols-latex company-latex-commands))
-		       company-backends))
+  '(progn
+     (setq-local company-backends
+		 (append '((company-math-symbols-latex company-latex-commands))
+			 company-backends))
 
-   (setq LaTeX-section-label nil)
-   (setq TeX-insert-macro-default-style 'mandatory-args-only)
+     (setq LaTeX-section-label nil)
+     (setq TeX-insert-macro-default-style 'mandatory-args-only)
 
  
 
-   (define-key LaTeX-mode-map (kbd "\"")  (lambda() (interactive) (insert "\"\"") (backward-char))) ; prevent latex quote 
+     (define-key LaTeX-mode-map (kbd "\"")  (lambda() (interactive) (insert "\"\"") (backward-char))) ; prevent latex quote 
 
-   (define-key LaTeX-mode-map (kbd "C-j") 'newline-and-indent)
+     (define-key LaTeX-mode-map (kbd "C-j") 'newline-and-indent)
 
-   (define-key LaTeX-mode-map (kbd "C-c N") 'TeX-normal-mode)
-   (define-key LaTeX-mode-map (kbd "<f5>") 'TeX-font)
+     (define-key LaTeX-mode-map (kbd "C-c N") 'TeX-normal-mode)
+     (define-key LaTeX-mode-map (kbd "<f5>") 'TeX-font)
 
-   (define-key LaTeX-mode-map (kbd "C-c <return>") 'LaTeX-insert-item)
-   (define-key LaTeX-mode-map (kbd "C-c C-j") 'TeX-insert-macro)
-   (define-key LaTeX-mode-map (kbd "C-c j") 'TeX-insert-macro)
-   (define-key LaTeX-mode-map (kbd "C-c $") 'LaTeX-mark-inline-equation)
+     (define-key LaTeX-mode-map (kbd "C-c <return>") 'LaTeX-insert-item)
+     (define-key LaTeX-mode-map (kbd "C-c C-j") 'TeX-insert-macro)
+     (define-key LaTeX-mode-map (kbd "C-c j") 'TeX-insert-macro)
+     (define-key LaTeX-mode-map (kbd "C-c $") 'LaTeX-mark-inline-equation)
 
 
-   (defun insert-bold()
-     (interactive) (insert "\\b{}") (backward-char))
-   (define-key LaTeX-mode-map (kbd "C-c b")  'insert-bold)
-   (define-key LaTeX-mode-map (kbd "C-c C-b") 'insert-bold)
+     (defun insert-bold()
+       (interactive) (insert "\\b{}") (backward-char))
+     (define-key LaTeX-mode-map (kbd "C-c b")  'insert-bold)
+     (define-key LaTeX-mode-map (kbd "C-c C-b") 'insert-bold)
 
-   (defun insert-rm()
-     (interactive) (insert "\\mathrm{}") (backward-char))
-   (define-key LaTeX-mode-map (kbd "C-c C-r")  'insert-rm)  
+     (defun insert-rm()
+       (interactive) (insert "\\mathrm{}") (backward-char))
+     (define-key LaTeX-mode-map (kbd "C-c C-r")  'insert-rm)  
 
-   (defun latex-wrap-left-right(arg)
-     (interactive (list
-		   (char-to-string (read-char "wrap the delimeter:"))))
-     (search-backward arg)
-     (if (equal arg "{")
-	 (backward-char))
-     (insert "\\left")   
-     (let ((conjugate (cond ((equal arg "(") ")")
-			    ((equal arg "[") "]")
-			    ((equal arg "{") "\\}"))))
-       (search-forward conjugate)
+     (defun latex-wrap-left-right(arg)
+       (interactive (list
+		     (char-to-string (read-char "wrap the delimeter:"))))
+       (search-backward arg)
        (if (equal arg "{")
-	   (backward-char 2)
-	 (backward-char))
-       (insert "\\right")))
+	   (backward-char))
+       (insert "\\left")   
+       (let ((conjugate (cond ((equal arg "(") ")")
+			      ((equal arg "[") "]")
+			      ((equal arg "{") "\\}"))))
+	 (search-forward conjugate)
+	 (if (equal arg "{")
+	     (backward-char 2)
+	   (backward-char))
+	 (insert "\\right")))
  
-   ;; setting marks
-   (defun LaTeX-mark-inner(delim)
-     "mark the content inside a pair of delimiters"
-     (search-forward delim)
-     (backward-char)
-     (push-mark nil t t)
-     (search-backward delim nil nil 1)
-     (forward-char))
+     ;; setting marks
+     (defun LaTeX-mark-inner(delim)
+       "mark the content inside a pair of delimiters"
+       (search-forward delim)
+       (backward-char)
+       (push-mark nil t t)
+       (search-backward delim nil nil 1)
+       (forward-char))
   
-   (defun LaTeX-mark-inline-equation()
-     "mark the content inside an inline equation"
-     (interactive) 
-     (LaTeX-mark-inner "$"))
+     (defun LaTeX-mark-inline-equation()
+       "mark the content inside an inline equation"
+       (interactive) 
+       (LaTeX-mark-inner "$"))
  
-   ;; table editing 
-   (defun LaTeX-mark-cell()
-     "mark a cell in table, array etc."
-     (interactive) 
-     (LaTeX-mark-inner "&"))
+     ;; table editing 
+     (defun LaTeX-mark-cell()
+       "mark a cell in table, array etc."
+       (interactive) 
+       (LaTeX-mark-inner "&"))
 
-   (define-key LaTeX-mode-map (kbd "C-c &") 'LaTeX-mark-cell)
+     (define-key LaTeX-mode-map (kbd "C-c &") 'LaTeX-mark-cell)
  
-   (defun LaTeX-next-cell(&optional count)
-     "go to next cell or previous cell according to count"
-     (interactive "p")
-     (setq count (if count count 1))
-     (search-forward "&" nil t count)
-     (unless (or (equal (if (> count 0) (char-after) (char-after (+ (point) count) ))
-			?&)
-		 (equal (char-after) ?\C-j) )
-       (forward-char count))
-     (align-current))
-   (define-key LaTeX-mode-map (kbd "C-<right>") 'LaTeX-next-cell)
-   (define-key LaTeX-mode-map (kbd "C-<left>") (lambda() (interactive) (LaTeX-next-cell -1)))
+     (defun LaTeX-next-cell(&optional count)
+       "go to next cell or previous cell according to count"
+       (interactive "p")
+       (setq count (if count count 1))
+       (search-forward "&" nil t count)
+       (unless (or (equal (if (> count 0) (char-after) (char-after (+ (point) count) ))
+			  ?&)
+		   (equal (char-after) ?\C-j) )
+	 (forward-char count))
+       (align-current))
+     (define-key LaTeX-mode-map (kbd "C-<right>") 'LaTeX-next-cell)
+     (define-key LaTeX-mode-map (kbd "C-<left>") (lambda() (interactive) (LaTeX-next-cell -1)))
  
-   (defun insert-latex-env (env-name)
-     (interactive)
-     (insert (concat "\\begin{" env-name "}"))
-     (newline-and-indent)
-     (newline)
-     (insert (concat "\\end{" env-name "}"))
-     (previous-line)
-     (indent-for-tab-command))
+     (defun insert-latex-env (env-name)
+       (interactive)
+       (insert (concat "\\begin{" env-name "}"))
+       (newline-and-indent)
+       (newline)
+       (insert (concat "\\end{" env-name "}"))
+       (previous-line)
+       (indent-for-tab-command))
  
-   (defun insert-equation()
-     (interactive)
-     (insert-latex-env "equation"))
-   (define-key LaTeX-mode-map (kbd "C-c e") 'insert-equation)
+     (defun insert-equation()
+       (interactive)
+       (insert-latex-env "equation"))
+     (define-key LaTeX-mode-map (kbd "C-c e") 'insert-equation)
  
-   (defun insert-equation-aligned()
-     (interactive)
-     (insert-latex-env "equation")
-     (insert-latex-env "aligned"))
-   (define-key LaTeX-mode-map (kbd "C-c a") 'insert-equation-aligned)
+     (defun insert-equation-aligned()
+       (interactive)
+       (insert-latex-env "equation")
+       (insert-latex-env "aligned"))
+     (define-key LaTeX-mode-map (kbd "C-c a") 'insert-equation-aligned)
 
-   (defun insert-lstlisting()
-     (interactive)
-     (insert-latex-env "lstlisting"))
+     (defun insert-lstlisting()
+       (interactive)
+       (insert-latex-env "lstlisting"))
 					; (define-key LaTeX-mode-map (kbd "C-c l") 'insert-lstlisting)
 
-   (defun latex-insert-inline-src()
-     (interactive)
-     (insert "\\lstinline;;")
-     (backward-char))
+     (defun latex-insert-inline-src()
+       (interactive)
+       (insert "\\lstinline;;")
+       (backward-char))
  
-   (defun insert-frac()
-     (interactive)
-     (yas-expand-snippet (yas-lookup-snippet "frac")))
+     (defun insert-frac()
+       (interactive)
+       (yas-expand-snippet (yas-lookup-snippet "frac")))
 
-   (define-key LaTeX-mode-map (kbd "C-c f") 'insert-frac)
+     (define-key LaTeX-mode-map (kbd "C-c f") 'insert-frac)
  
-   (defun insert-sqrt()
-     (interactive)
-     (insert "\\sqrt{}") (backward-char))
-   (define-key LaTeX-mode-map (kbd "C-c s") 'insert-sqrt)
+     (defun insert-sqrt()
+       (interactive)
+       (insert "\\sqrt{}") (backward-char))
+     (define-key LaTeX-mode-map (kbd "C-c s") 'insert-sqrt)
 
-   (setq TeX-save-query nil)		;don't ask for saving, just save it
+     (setq TeX-save-query nil)		;don't ask for saving, just save it
 
-   (defun latex-save-and-compile()
-     (interactive)
-     (save-some-buffers 1)
-     (let ((TeX-command-force "LaTeX"))
-       (TeX-command-master nil)))
+     (defun latex-save-and-compile()
+       (interactive)
+       (save-some-buffers 1)
+       (let ((TeX-command-force "LaTeX"))
+	 (TeX-command-master nil)))
 
-   (define-key LaTeX-mode-map (kbd "C-x C-s") 'latex-save-and-compile) ; compile tex file every time hit C-x C-s, thus making it up to date.
+     (define-key LaTeX-mode-map (kbd "C-x C-s") 'latex-save-and-compile) ; compile tex file every time hit C-x C-s, thus making it up to date.
 
-   (load "~/lib/el/preamble.el" nil t t) ; let auctex parse the auto style file
+     (load "~/lib/el/preamble.el" nil t t) ; let auctex parse the auto style file
 					;(defun LaTeX-label (name &optional type no-insert)) ; make LaTeX-label function do nothing
 					;(setq TeX-auto-private '("~/lib/auto/" ) )
 
 					; some plain text environments or macros
-   (setq LaTeX-verbatim-environments '("verbatim" "lstlisting" ))
+     (setq LaTeX-verbatim-environments '("verbatim" "lstlisting" ))
 
 
-   (setq LaTeX-verbatim-macros-with-braces '("input" ))
-   (setq LaTeX-verbatim-macros-with-delims '("l" ))
+     (setq LaTeX-verbatim-macros-with-braces '("input" ))
+     (setq LaTeX-verbatim-macros-with-delims '("l" ))
 
 					; Update PDF buffers after successful LaTeX runs
 					;(add-hook 'TeX-after-compilation-finished-functions
 					;          #'TeX-revert-document-buffer)
 
-   (setq TeX-auto-save t)		;parse on load
-   (setq TeX-parse-self t)		;parse on save
+     (setq TeX-auto-save t)		;parse on load
+     (setq TeX-parse-self t)		;parse on save
 					;(setq-default TeX-master nil) ; let auctex ask for a master file
 
-   ;; So that RefTeX finds my bibliography
-   (setq reftex-plug-into-AUCTeX t)
-   (setq reftex-default-bibliography '("~/lib/bib/zhangja.bib" "~/lib/bib/url.bib"
-				       "~/Dropbox/research/literature/main.bib")))) ; be aware, eval-after-load ends here
+     ;; So that RefTeX finds my bibliography
+     (setq reftex-plug-into-AUCTeX t)
+     (setq reftex-default-bibliography '("~/lib/bib/zhangja.bib" "~/lib/bib/url.bib"
+					 "~/Dropbox/research/literature/main.bib")))) ; be aware, eval-after-load ends here
 
 (setq TeX-engine 'xetex)
 ;(setq TeX-engine 'default)
