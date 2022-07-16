@@ -2,8 +2,6 @@
 
 ;;; moving the cursor
 (bind-keys :map my-mode-map
-	   ("C-q" . backward-word)
-	   ("C-t" . forward-word)
 	   ("C-a" . my-beginning-of-line)
 	   ("C-e" . my-end-of-line)
 	   ("M-[" . isearch-backward)
@@ -246,8 +244,8 @@ line instead."
   :ensure t
   :init
   (smartparens-global-mode)
-  (define-key my-mode-map (kbd "M-f") 'sp-forward-sexp)
-  (define-key my-mode-map (kbd "M-b") 'sp-backward-sexp)
+  (define-key my-mode-map (kbd "C-M-f") 'sp-forward-sexp)
+  (define-key my-mode-map (kbd "C-M-b") 'sp-backward-sexp)
   (define-key smartparens-mode-map (kbd "C-M-]") 'sp-select-next-thing)
   (define-key smartparens-mode-map (kbd "C-M-[") 'sp-select-previous-thing)  
   (define-key my-mode-map (kbd "C-M-i") 'sp-change-enclosing)
@@ -447,7 +445,7 @@ _S_: subtree
   :bind (:map my-mode-map
 	      ("M-o" . ace-window))
   :config
-  (setq aw-keys '(?j ?k ?l ?\; ?h ?f))
+  (setq aw-keys '(?j ?k ?l ?\; ?h))
   (setq aw-dispatch-always t)
   (defun my-aw-switch-buffer-in-window (window)
     (aw-switch-to-window window)
