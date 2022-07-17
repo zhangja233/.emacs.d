@@ -383,6 +383,9 @@ _S_: subtree
   (wrap-region-mode))
 
 ;;; buffer, window, frame and file management
+(bind-keys :map global-map
+	   ("C-x k" . kill-this-buffer)
+	   ("C-x K" . kill-buffer))
 
 (global-set-key (kbd "<f2>") 'recenter-top-bottom)
 (global-set-key (kbd "C-z x") 'delete-window)
