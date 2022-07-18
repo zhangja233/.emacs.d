@@ -230,11 +230,17 @@
 ;; (define-key org-mode-map (kbd "C-,") nil)
 					; override org-mode key binding
 
-;; org-clock
+;;; org-clock
 (bind-keys :map org-mode-map
 	   ("C-c i" . org-clock-in)
-	   ("C-c o" . org-clock-out))
+	   ("C-c o" . org-clock-out)
+	   ("C-c I" . org-clock-in-from-now))
 (global-set-key (kbd "C-z o") 'org-clock-out)
+
+(defun org-clock-in-from-now ()
+  (interactive)
+  (let ((org-clock-continuously nil))
+    (org-clock-in)))
 
 (setq org-clock-persist 'history)
 (setq org-clock-history-length 100)
