@@ -5,7 +5,9 @@
 	   ("C-a" . my-beginning-of-line)
 	   ("C-e" . my-end-of-line)
 	   ("M-[" . isearch-backward)
-	   ("M-]" . isearch-forward))
+	   ("M-]" . isearch-forward)
+	   ("C-q" . (lambda () (interactive) (message "use M-b")))
+	   ("C-t" . (lambda () (interactive) (message "use M-f"))))
 
 (use-package hydra
   :ensure t
