@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: real_allocatable
+# key: ra
+# --
+real(${1:8}), allocatable :: $0(:)
