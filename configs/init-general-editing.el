@@ -696,16 +696,16 @@ _S_: subtree
 
 (when (eq system-type 'darwin)
 (bind-keys :map global-map
-	   ("C-z l" . find-literature)
 	   ("C-z p" . find-planer)
-	   ("C-z P" . find-non-agenda)	   
 	   ("C-z M-p" . find-phone)	   
-	   ("C-z C-c" . find-capture)
-	   ("C-z M-s" . find-stack)
-	   ("C-z F" . find-my-info))
+	   ("C-z M-s" . find-stack))
 ) ; end os x
 (bind-keys :map global-map
-	   ("C-z C-d" . find-download))
+	   ("C-z C-d" . find-download)
+	   ("C-z l" . find-literature)
+	   ("C-z C-c" . find-capture)
+	   ("C-z F" . find-my-info)
+	   ("C-z P" . find-non-agenda))
 ;; interact with the world outside emacs
 
 ; to open file browser from emacs
