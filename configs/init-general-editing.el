@@ -202,6 +202,12 @@
 (define-key my-mode-map (kbd "C-w") 'backward-kill-word-or-kill-region)
 
 (bind-keys :map my-mode-map
+	   ("C-w" . backward-kill-word-or-kill-region)
+	   ("M-k" . kill-whole-line)
+	   ("C-<backspace>" . (lambda () (interactive) (message "use M-k"))))
+
+
+(bind-keys :map my-mode-map
 	   ("C-z d" . prelude-duplicate-current-line-or-region))
 
 (defadvice kill-ring-save (before slick-copy activate compile)
@@ -218,10 +224,6 @@ line instead."
 
 ;; (require 'misc)
 ;; (global-set-key (kbd "M-z") 'zap-up-to-char)
-
-(define-key my-mode-map (kbd "C-k") 'kill-line)
-;; (global-set-key (kbd "C-<backspace>") 'kill-whole-line)
-
 
 ;(global-set-key (kbd "C-S-w") 'my-copy-line)
 
@@ -255,7 +257,6 @@ line instead."
   (define-key smartparens-mode-map (kbd "C-M-u") 'sp-unwrap-sexp)
   :bind(
   :map smartparens-mode-map
-  ("M-k" . sp-kill-symbol)
   ("C-M-k" . sp-kill-sexp)
   ("C-M-w" . sp-backward-kill-sexp)
 ;  ("C-M-f" . sp-forward-whitespace)
