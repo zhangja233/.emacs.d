@@ -220,7 +220,7 @@ line instead."
 ;; (global-set-key (kbd "M-z") 'zap-up-to-char)
 
 (define-key my-mode-map (kbd "C-k") 'kill-line)
-(global-set-key (kbd "C-<backspace>") 'kill-whole-line)
+;; (global-set-key (kbd "C-<backspace>") 'kill-whole-line)
 
 
 ;(global-set-key (kbd "C-S-w") 'my-copy-line)

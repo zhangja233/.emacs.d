@@ -2,4 +2,4 @@
 # name: real
 # key: r
 # --
-real(8) :: $0
+real(${1:8}) :: $0
