@@ -41,9 +41,6 @@
 ;(add-to-list 'package-archives '("melpa" . "http://elpa.emacs-china.org/melpa/") t)
 ;(add-to-list 'package-archives '("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/") t) ; see https://mirror.tuna.tsinghua.edu.cn/help/elpa/ for more
 (package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents)
-)
 ;; (package-refresh-contents)
 
 ; install use-package if it's not installed
@@ -58,9 +55,10 @@
             (unless (server-running-p)
               (server-start))))
 
-(setq custom-file "~/.emacs.d/emacs-custom.el")
-;;(message "helo")
-(load custom-file)
+(when (file-exists-p (expand-file-name "emacs-custom.el"))
+  (setq custom-file (expand-file-name "emacs-custom.el"))
+  (load custom-file))
+
 
 (setq echo-keystrokes 0.01) ; echo unfinished commands(e.g., C-x) immediately
 
@@ -113,6 +111,8 @@
 (require 'init-elisp)
 (require 'init-magit)
 (require 'init-app)
-
+;; allow some local adjustments
+(when (file-exists-p (expand-file-name "configs/init-local.el"))
+  (require 'init-local))
 (put 'downcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
