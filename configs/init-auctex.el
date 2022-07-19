@@ -159,6 +159,7 @@
  ;; easier outline keybindings
  (define-key LaTeX-mode-map (kbd "C-c C-SPC") 'outline-hide-body)
  (define-key LaTeX-mode-map (kbd "S-<tab>") 'outline-hide-body)
+ (define-key LaTeX-mode-map (kbd "<backtab>") 'outline-hide-body)
 ;; (define-key LaTeX-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
 ;; (define-key outline-minor-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading) ; override preview-map
 ; (define-key LaTeX-mode-map (kbd "<up>") 'outline-previous-visible-heading)
