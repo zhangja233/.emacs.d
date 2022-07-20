@@ -55,9 +55,8 @@
             (unless (server-running-p)
               (server-start))))
 
-(when (file-exists-p (expand-file-name "emacs-custom.el"))
-  (setq custom-file (expand-file-name "emacs-custom.el"))
-  (load custom-file))
+(setq custom-file (expand-file-name "emacs-custom.el"))
+(load custom-file t)
 
 
 (setq echo-keystrokes 0.01) ; echo unfinished commands(e.g., C-x) immediately
@@ -112,7 +111,6 @@
 (require 'init-magit)
 (require 'init-app)
 ;; allow some local adjustments
-(when (file-exists-p (expand-file-name "configs/init-local.el"))
-  (require 'init-local))
+(require 'init-local nil t)
 (put 'downcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
