@@ -302,11 +302,10 @@
 ;      '((sequence  "TODO" "NEXT"  "|" "DONE" "CANCELED")))
 (setq calendar-week-start-day 1) ;start week on Mon
 
-;; osx specific stuff
-(when (eq system-type 'darwin)
-  (setq org-agenda-files (directory-files-recursively "~/Dropbox/org" "\.org$"));my personal org files which store my to-do lists
-(setq org-default-notes-file "~/Dropbox/org/capture.org") ; the file to store captured items
-) ; end osx
+(unless (eq system-type 'windows-nt)
+  (setq org-agenda-files (directory-files-recursively "~/Dropbox/org" "\.org$")) ;my personal org files which store my to-do lists
+  (setq org-default-notes-file "~/Dropbox/org/capture.org") ; the file to store captured items
+  )
 
 (setq org-adapt-indentation nil) ; do not indent when using c-j after a title
 ; '(org-startup-truncated nil)
