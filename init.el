@@ -43,10 +43,8 @@
 (package-initialize)
 ;; (package-refresh-contents)
 
-; install use-package if it's not installed
 (unless (package-installed-p 'use-package)
-  (package-install 'use-package)
-  )
+  (package-install 'use-package))
 
 ; make the existing emacs process as a server
 (add-hook 'after-init-hook

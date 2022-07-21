@@ -16,7 +16,8 @@
 		       ("C-c C-f" . f90-end-of-block)
 		       ("C-c C-r" . f90-fill-region)
 		       ("M-h" . f90-mark-block)
-		       ("C-c C-b" . f90-beginning-of-block))
+		       ("C-c C-b" . f90-beginning-of-block)
+		       ("C-c C-l" . downcase-region))
 	    
 	    (defconst f90-defun-re
 	      (concat "\\(\\(?:block[ \t]*data\\|"

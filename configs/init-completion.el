@@ -117,10 +117,10 @@
   (yas-global-mode)
   :diminish yas-minor-mode)
 
-(when (eq system-type 'darwin)
-  (use-package yasnippet-snippets
-    :ensure t
-    :config)
-  )
+;; (when (eq system-type 'darwin)
+;;   (use-package yasnippet-snippets
+;;     :ensure t
+;;     :config)
+;;   )
 
 (provide 'init-completion)
