@@ -162,8 +162,8 @@
 (setq org-agenda-skip-function-global '(org-agenda-skip-entry-if 'todo 'done))
 
 ;; column view
-(setq org-columns-default-format "%30ITEM(Task)  %daily %CLOCKSUM_T
-%CLOCKSUM{:} %6Effort(Estim){:} %DEADLINE %ALLTAGS")
+(setq org-columns-default-format "%30ITEM(Task)  %CLOCKSUM_T  %CLOCKSUM_W
+%CLOCKSUM{:} %6Effort(Estim){:} %ALLTAGS")
 
 ;; org-property
 (bind-keys :map org-mode-map
@@ -303,10 +303,10 @@
 (setq calendar-week-start-day 1) ;start week on Mon
 
 ;; osx specific stuff
-(when (eq system-type 'darwin)
-  (setq org-agenda-files (directory-files-recursively "~/Dropbox/org" "\.org$"));my personal org files which store my to-do lists
-(setq org-default-notes-file "~/Dropbox/org/capture.org") ; the file to store captured items
-) ; end osx
+;(when (eq system-type 'darwin)
+  (setq org-agenda-files (directory-files-recursively "~/Dropbox/org" "\.org$")) ;my personal org files which store my to-do lists
+  (setq org-default-notes-file "~/Dropbox/org/capture.org") ; the file to store captured items
+;  ) ; end osx
 
 (setq org-adapt-indentation nil) ; do not indent when using c-j after a title
 ; '(org-startup-truncated nil)
