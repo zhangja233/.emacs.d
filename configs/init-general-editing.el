@@ -771,12 +771,12 @@ _S_: subtree
   (unless (eq system-type 'windows-nt)
     (exec-path-from-shell-initialize)	;get $PATH from shell
     ))
-(use-package disable-mouse
-:ensure t
-:diminish disable-mouse-global-mode
-:config
-(global-disable-mouse-mode) ; in case I move the mouse accidentally
-)
+;; (use-package disable-mouse
+;; :ensure t
+;; :diminish disable-mouse-global-mode
+;; :config
+;; (global-disable-mouse-mode) ; in case I move the mouse accidentally
+;; )
 
 ;; interacting with the world outside emacs
 
