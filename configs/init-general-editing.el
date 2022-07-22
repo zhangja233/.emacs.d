@@ -19,8 +19,11 @@
 (use-package pcre2el
  :ensure t))
 
+;;; it bears repeating
 (when (version<= "28" emacs-version)
   (repeat-mode 1))
+(bind-keys :map global-map
+	   ("<f9>" . repeat))
 
 (defun forward-half-sentence(&optional arg)
   (interactive)
@@ -659,8 +662,7 @@ _S_: subtree
   (if current-prefix-arg
       (find-file "~/.emacs.d/configs/")
     (let ((default-directory "~/.emacs.d/configs/"))
-	(counsel-rg)
-	)))   
+	(counsel-rg))))   
 
 (global-set-key (kbd "C-z E") 'find-dot-emacs)
 (global-set-key (kbd "C-z e") 'find-emacs-configs)
