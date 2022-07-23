@@ -419,7 +419,7 @@ line instead."
   :bind (:map my-mode-map
 	      ("M-o" . ace-window))
   :config
-  (setq aw-keys '(?j ?k ?l ?\; ?h))
+  (setq aw-keys '(?j ?k ?l ?\; ?h ?f ?g ?d ?s ?a))
   (setq aw-dispatch-always t)
   (defun my-aw-switch-buffer-in-window (window)
     (aw-switch-to-window window)
