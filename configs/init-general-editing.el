@@ -6,8 +6,7 @@
 	   ("C-e" . my-end-of-line)
 	   ("M-[" . isearch-backward)
 	   ("M-]" . isearch-forward)
-	   ("C-q" . (lambda () (interactive) (message "use M-b")))
-	   ("C-t" . (lambda () (interactive) (message "use M-f"))))
+	   ("C-q" . (lambda () (interactive) (message "use M-b"))))
 
 (use-package hydra
   :ensure t
@@ -48,10 +47,8 @@
 	   ("C-z M-l" . global-display-line-numbers-mode))
 
 (bind-keys :map global-map
-	   ("M-t" . transpose-chars)
 	   ("C-M-l" . downcase-word)
-	   ("C-M-c" . capitalize-word)
-	   )
+	   ("C-M-c" . capitalize-word))
 
 
 ;; (defadvice upcase-word (before upcase-word-advice activate)
@@ -520,7 +517,7 @@ line instead."
               ("X" . dired-ranger-move)
               ("Y" . dired-ranger-paste)))
 
-; a trick to make dired be able to access ~/Downloads and folders alike
+;; a trick to make dired be able to access ~/Downloads and folders alike
 (when (eq system-type 'darwin)
   (setq insert-directory-program "gls" dired-use-ls-dired t))
 
@@ -738,12 +735,12 @@ line instead."
   (unless (eq system-type 'windows-nt)
     (exec-path-from-shell-initialize)	;get $PATH from shell
     ))
-(use-package disable-mouse
-:ensure t
-:diminish disable-mouse-global-mode
-:config
-(global-disable-mouse-mode) ; in case I move the mouse accidentally
-)
+;; (use-package disable-mouse
+;; :ensure t
+;; :diminish disable-mouse-global-mode
+;; :config
+;; (global-disable-mouse-mode) ; in case I move the mouse accidentally
+;; )
 
 ;; interacting with the world outside emacs
 
