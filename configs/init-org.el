@@ -50,7 +50,9 @@
 	      )
    
 ;;; structure
-(when (file-exists-p (expand-file-name "../local/worf.el"))
+(when (file-exists-p "~/.emacs.d/local/worf.el")
+  (use-package ace-link
+    :ensure t)
   (require 'worf)
   (add-hook 'org-mode-hook 'worf-mode)
   (bind-keys :map org-mode-map
