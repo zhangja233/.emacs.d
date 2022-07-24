@@ -50,7 +50,7 @@
 	      )
    
 ;;; structure
-(when (eq system-type 'darwin)
+(when (file-exists-p (expand-file-name "../local/worf.el"))
   (require 'worf)
   (add-hook 'org-mode-hook 'worf-mode)
   (bind-keys :map org-mode-map
@@ -59,8 +59,7 @@
 	     ("C-d" . nil)
 	     ("[" . nil)
 	     ("]" . nil)
-	     ("x" . wspecial-worf-cut-subtree))
-  )
+	     ("x" . wspecial-worf-cut-subtree)))
 
 (bind-keys :map org-mode-map
 	   ("C-c r" . avy-org-refile-as-child)
@@ -311,27 +310,6 @@
 ; '(org-startup-truncated nil)
 (setq org-return-follows-link t) ; use return to open link
 
-;; mark-up
-
-
-(define-key org-mode-map (kbd "M-u") (defhydra hydra-org (:hint nil)
-;; https://github-wiki-see.page/m/abo-abo/hydra/wiki/Smartparens
-;;   "
-;;  Moving^^^^                       Slurp & Barf^^   Wrapping^^            Sexp juggling^^^^               Destructive
-;; ------------------------------------------------------------------------------------------------------------------------
-;;  [_a_] beginning  [_n_] down      [_h_] bw slurp   [_R_]   rewrap        [_S_] split   [_t_] transpose   [_c_] change inner  [_w_] copy
-;;  [_e_] end        [_N_] bw down   [_H_] bw barf    [_u_]   unwrap        [_s_] splice  [_A_] absorb      [_C_] change outer
-;;  [_f_] forward    [_p_] up        [_l_] slurp      [_U_]   bw unwrap     [_r_] raise   [_E_] emit        [_k_] kill          [_g_] quit
-;;  [_b_] backward   [_P_] bw up     [_L_] barf       [_(__{__[_] wrap (){}[]   [_j_] join    [_o_] convolute   [_K_] bw kill       [_q_] quit"
-  ;; Moving
-  ("n" org-next-visible-heading)
-  ("p" org-previous-visible-heading)
-  ("f" org-forward-heading-same-level)
-  ("b" org-backward-heading-same-level)
-  ("u" outline-up-heading)
-  ("q" nil)
-  ("g" nil)))
-
 ;;; org-display
 (setq org-startup-with-inline-images t)
 ;; display inline image that's in pdf format
@@ -410,5 +388,6 @@
 
 
 (bind-keys ("C-z C-x o" . org-open-at-point-global))
+
 
 (provide 'init-org)

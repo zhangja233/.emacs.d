@@ -1,7 +1,6 @@
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'control)
   (setq mac-option-modifier 'meta)
-  (add-to-list 'load-path "/Users/zja/.emacs.d/local")
   (require 'ob-applescript)
   (unless (package-installed-p 'hyperbole)
     (package-refresh-contents)
