@@ -24,14 +24,14 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
+(set-face-attribute 'region nil :background "blue")
+
 (use-package diminish
   :ensure t
   :config
   (diminish 'my-mode)
   (diminish 'eldoc-mode)
-  (diminish 'abbrev-mode)
-;  (diminish 'auto-fill-mode)
-  )
+  (diminish 'abbrev-mode))
 
 (defun set-font-size(size)
    "190 for external; 220 for normal; 170 for internal double"
