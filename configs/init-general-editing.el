@@ -695,12 +695,12 @@ _S_: subtree
   (find-file "~/Downloads/"))
 
 (when (eq system-type 'darwin)
-(bind-keys :map global-map
-	   ("C-z p" . find-planer)
+  (bind-keys :map global-map
 	   ("C-z M-p" . find-phone)	   
 	   ("C-z M-s" . find-stack))
 ) ; end os x
 (bind-keys :map global-map
+	   ("C-z p" . find-planer)	   
 	   ("C-z C-d" . find-download)
 	   ("C-z l" . find-literature)
 	   ("C-z C-c" . find-capture)
