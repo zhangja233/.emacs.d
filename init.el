@@ -53,7 +53,7 @@
             (unless (server-running-p)
               (server-start))))
 
-(setq custom-file ("~/.emacs.d/emacs-custom.el"))
+(setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file t)
 
 
