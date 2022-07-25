@@ -234,6 +234,7 @@ line instead."
   :ensure t
   :config
   (global-undo-tree-mode)
+  (setq undo-tree-auto-save-history nil)
   :bind
   ("M-/" . 'undo-tree-redo)
   :diminish undo-tree-mode)
