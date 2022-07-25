@@ -17,7 +17,7 @@
 	  "https://terrytao.wordpress.com/feed/"
 	  "http://nullprogram.com/feed/"
 	  "https://batsov.com/atom.xml" ; bbatsov
-	  "https://sachachua.com/blog/feed/"
+	  ;; "https://sachachua.com/blog/feed/"
           ;; "https://planet.emacslife.com/atom.xml"
 	  )))
 

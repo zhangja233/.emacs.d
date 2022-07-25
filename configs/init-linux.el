@@ -7,10 +7,6 @@
    ;; If there is more than one, they won't work right.
    '(default ((t (:foundry "outline" :slant normal :weight normal :height 165 :width normal)))))
   (set-face-attribute 'region nil :background "yellow")    
-  (defun find-linux-dot-org()
-    (interactive)
-    (find-file "~/org/linux.org"))
-  (global-set-key (kbd "C-z p") 'find-linux-dot-org)
   (custom-set-variables
    '(markdown-command "/usr/bin/pandoc"))
   

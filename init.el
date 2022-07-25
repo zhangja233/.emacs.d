@@ -53,7 +53,7 @@
             (unless (server-running-p)
               (server-start))))
 
-(setq custom-file (expand-file-name "emacs-custom.el"))
+(setq custom-file ("~/.emacs.d/emacs-custom.el"))
 (load custom-file t)
 
 
@@ -87,6 +87,8 @@
   (define-key key-translation-map (kbd "M-7") (kbd "C-'"))
 )
 
+(add-to-list 'load-path "~/.emacs.d/local")
+
 ; my personal configs
 (add-to-list 'load-path (expand-file-name "configs" user-emacs-directory))
 (require 'init-base)
@@ -108,7 +110,7 @@
 (require 'init-elisp)
 (require 'init-magit)
 (require 'init-app)
-;; allow some local adjustments
 (require 'init-local nil t)
+
 (put 'downcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
