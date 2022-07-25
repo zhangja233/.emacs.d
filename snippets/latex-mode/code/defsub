@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: defsub
+# key: sub
+# --
+\begin{defsub}[\Symbol{$1}]
+$0
+\end{defsub}

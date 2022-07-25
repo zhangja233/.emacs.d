@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: defvar
+# key: var
+# --
+\begin{defvar}[\Symbol{$1}]
+$0
+\end{defvar}
