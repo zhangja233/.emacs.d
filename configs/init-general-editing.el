@@ -283,7 +283,7 @@ line instead."
   (advice-remove 'delete-backward-char #'ad-Advice-delete-backward-char) ;prevent smartparens from deleting the whole \right) when using backspace
   :diminish smartparens-mode)
 
-(define-key my-mode-map (kbd "M-s") (defhydra hydra-smartparens (:hint nil)
+(define-key my-mode-map (kbd "C-z M-s") (defhydra hydra-smartparens (:hint nil)
 				      ;; https://github-wiki-see.page/m/abo-abo/hydra/wiki/Smartparens
 				      ;;  Moving^^^^                       Slurp & Barf^^   Wrapping^^            Sexp juggling^^^^               Destructive
 				      ;;------------------------------------------------------------------------------------------------------------------------				      
@@ -588,6 +588,9 @@ _S_: subtree
   (save-some-buffers 1)
   (message "all buffers saved"))
 (global-set-key (kbd "C-x C-s")  'save-all-buffers)
+
+(bind-keys :map my-mode-map
+	   ("M-s" . save-all-buffers))
 (global-set-key (kbd "C-x C-S-s") 'save-buffer)
 
 (defun my-quit-emacs()
