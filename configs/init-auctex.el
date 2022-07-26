@@ -40,8 +40,7 @@
 	      ("C-c C-=" . latex-append-ampersand)
 	      ("C-c l" . latex-wrap-left-right))
   :config
-					; to be able to jump to the relevant page in the PDF document
-  (TeX-source-correlate-mode)
+  (TeX-source-correlate-mode) ; to be able to jump to the relevant page in the PDF document
   (when (eq system-type 'darwin)
     (setq TeX-view-program-list '(("skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b" )))
     (setq TeX-view-program-selection '((output-pdf "skim"))))

@@ -503,9 +503,12 @@ line instead."
 (define-key my-mode-map (kbd "C-x J") 'dired-jump-other-window)
 
 
+
 (bind-keys :map dired-mode-map
 	   ("f" . find-file)
-	   ("l" . find-file))
+	   ("r" . (lambda() (interactive)
+		    (let ((dired-dwim-target nil))
+		      (dired-do-rename)))))
 (define-key dired-mode-map (kbd "C-/") (lambda() (interactive) (message "C-/ is disabled in dired")))
 (define-key dired-mode-map (kbd "SPC") 'browse-url-of-dired-file)
 (define-key dired-mode-map (kbd "E") 'wdired-change-to-wdired-mode)
