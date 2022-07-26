@@ -54,4 +54,7 @@
   (toggle-read-only))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
+;;; the cursor
+(blink-cursor-mode 0)
+
 (provide 'init-display)
