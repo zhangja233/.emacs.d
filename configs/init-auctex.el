@@ -41,10 +41,14 @@
 	      ("C-c l" . latex-wrap-left-right))
   :config
   (TeX-source-correlate-mode) ; to be able to jump to the relevant page in the PDF document
+  ;; osx
   (when (eq system-type 'darwin)
     (setq TeX-view-program-list '(("skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b" )))
     (setq TeX-view-program-selection '((output-pdf "skim"))))
-  )
+  ;; linux
+  (when (eq system-type 'gnu/linux)
+    (setq TeX-view-program-list '(("Evince" "evince --page-index=%(outpage) %o")))
+    (setq TeX-view-program-selection '((output-pdf "Evince")))))
 
 
   (defun latex-insert-prime() 
