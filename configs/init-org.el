@@ -58,6 +58,7 @@
   (bind-keys :map org-mode-map
 	     ("C-c g" . worf-goto))
   (bind-keys :map worf-mode-map
+	     ("S-<iso-lefttab>" . nil)
 	     ("C-d" . nil)
 	     ("[" . nil)
 	     ("]" . nil)
