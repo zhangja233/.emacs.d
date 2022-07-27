@@ -211,6 +211,7 @@
      (define-key LaTeX-mode-map (kbd "C-c C-r")  'insert-rm)  
 
      (defun latex-wrap-left-right(arg)
+       "given a delimeter, wrap the sexp with \\left and \\right. E.g., [x,p] becomes \\left[x,p\\right]"
        (interactive (list
 		     (char-to-string (read-char "wrap the delimeter:"))))
        (search-backward arg)
