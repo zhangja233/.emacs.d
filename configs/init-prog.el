@@ -33,6 +33,9 @@
 (global-set-key (kbd "C-z C-s") 'shell-command)
 (global-set-key (kbd "C-z M-e") 'eshell)
 
+(use-package vterm
+    :ensure t)
+
 ;; (use-package eglot
 ;;   :ensure t
 ;;   :bind (:map eglot-mode-map
@@ -81,9 +84,9 @@
 ;;   (setq xref-show-definitions-function #'xref-show-definitions-completing-read))
 
 (eval-after-load 'makefile-mode
-    '(bind-keys :map makefile-mode-map
-	   ("M-p" . nil)
-	   ("M-n" . nil)))
+  '(bind-keys :map makefile-mode-map
+	      ("M-p" . nil)
+	      ("M-n" . nil)))
 
 (use-package cmake-mode
   :ensure t)
