@@ -474,12 +474,10 @@ line instead."
   (defun projectile-find-root()
     (interactive)
     (find-file (projectile-project-root)))
-  (global-set-key (kbd "C-z C-r") 'projectile-find-root))
-
-;; (use-package helm-projectile
-;;   :ensure t
-;;   :config
-;;   (helm-projectile-on))
+  (global-set-key (kbd "C-z C-r") 'projectile-find-root)
+  (def-projectile-commander-method ?r
+    "run rg"
+    (counsel-rg))))
 
 (use-package counsel-projectile
   :ensure t
