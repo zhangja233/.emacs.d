@@ -146,10 +146,10 @@
 (use-package pcre2el
  :ensure t))
 
-(defun backward-upcase-word()
-  (interactive)
-  (upcase-word -1))
-(global-set-key (kbd "C-z U") 'backward-upcase-word)
+;; (defun backward-upcase-word()
+;;   (interactive)
+;;   (upcase-word -1))
+(global-set-key (kbd "C-z U") 'upcase-word)
 
 (electric-indent-mode -1)
 
