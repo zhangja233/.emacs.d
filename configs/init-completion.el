@@ -66,7 +66,7 @@
   (setq counsel-search-engine 'google)
   ;; C-p/C-n cycles when at first/last
   (setq ivy-wrap t) 			
-  ;; (counsel-mode 1)
+  (setq counsel-find-file-ignore-regexp "\\(?:^[#.]\\)\\|\\(?:[#~]$\\)\\|\\(?:^Icon?\\)")
   )
 
 (use-package ivy-hydra
