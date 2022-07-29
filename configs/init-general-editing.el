@@ -477,7 +477,7 @@ line instead."
   (global-set-key (kbd "C-z C-r") 'projectile-find-root)
   (def-projectile-commander-method ?r
     "run rg"
-    (counsel-rg))))
+    (counsel-rg)))
 
 (use-package counsel-projectile
   :ensure t
