@@ -33,7 +33,7 @@
 	      ("C-<up>" . org-metaup)
 	      ("C-<down>" . org-metadown)	      
 	      ("M-;" . org-insert-todo-subheading)
-	      ("M-<return>" . org-insert-subheading)
+	      ;; ("M-<return>" . org-insert-subheading)
 	      ("S-<return>" . my-org-shiftreturn)	      
 ;	      ("M-<return>" . org-meta-return)
 	      ;; ("M-[" . org-metaleft)
