@@ -241,15 +241,8 @@
 ; copy to clipboard when M-w
 (setq x-select-enable-clipboard t)
 
-(use-package undo-tree
-  :ensure t
-  :config
-  (global-undo-tree-mode)
-  (setq undo-tree-auto-save-history nil)
-  :bind
-  ("M-/" . 'undo-tree-redo)
-  :diminish undo-tree-mode)
-
+(bind-keys :map my-mode-map
+	   ("M-/" . undo-redo))
 ;; About sexps 
 (show-paren-mode 1)
 
