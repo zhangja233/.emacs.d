@@ -176,9 +176,18 @@
   (set-mark-command nil)
   (end-of-line))
 
+(defun my-copy-line ()
+  (interactive)
+  (beginning-of-line)
+  (set-mark-command nil)
+  (end-of-line)
+  (kill-ring-save (mark) (point) 'region)
+  (message "copied line"))
+
 (bind-keys :map global-map
-	   ("H-m H-m" . my-mark-line)
-	   ("H-m m" . mark-word))
+	   ("H-m H-m" . my-copy-line)
+	   ("H-m l" . my-mark-line)
+	   ("H-m C-s" . er/mark-symbol))
 
 (defun open-line-above()
   (interactive)
@@ -189,9 +198,12 @@
   )
 (global-set-key (kbd "C-o") 'open-line-above)
 
-;; delete, kill, copy and paste
-;(setq kill-whole-line t) ; kill whole line if point at beginning of line
+(use-package expand-region
+  :ensure t
+  :config
+  (define-key my-mode-map (kbd "C-=") 'er/expand-region))
 
+;; delete, kill, copy and paste
 (defun backward-kill-word-or-kill-region(&optional arg)
   "backward kill word if region is not active, otherwise kill region"
   (interactive "p")
@@ -199,25 +211,24 @@
       (kill-region (mark) (point) 'region)
       (backward-kill-word arg)))
  
-(define-key my-mode-map (kbd "C-w") 'backward-kill-word-or-kill-region)
+(defun copy-symbol-or-copy-region (&optional arg)
+  "copy symbol if region is not active, otherwise copy region"
+  (interactive "p")
+  (if (region-active-p)
+      (kill-ring-save (mark) (point) 'region)
+    (save-excursion (er/mark-symbol)
+		    (kill-ring-save (mark) (point) 'region)
+		    (message "symbol copied"))))
 
 (bind-keys :map my-mode-map
 	   ("C-w" . backward-kill-word-or-kill-region)
+	   ("M-w" . copy-symbol-or-copy-region)
 	   ("M-k" . kill-whole-line)
 	   ("C-<backspace>" . (lambda () (interactive) (message "use M-k"))))
 
 
 (bind-keys :map my-mode-map
 	   ("C-z d" . prelude-duplicate-current-line-or-region))
-
-(defadvice kill-ring-save (before slick-copy activate compile)
-  "When called interactively with no active region, copy a single
-line instead."
-  (interactive
-   (if mark-active (list (region-beginning) (region-end))
-     (message "Copied line")
-     (list (line-beginning-position)
-           (line-beginning-position 2)))))
 
 (delete-selection-mode) ; using C-d to delete a selected region
 (setq delete-active-region 'kill) ; kill the selected region while using delete and backspace. Note that you can still use C-d to delete a region.
@@ -283,67 +294,16 @@ line instead."
   (advice-remove 'delete-backward-char #'ad-Advice-delete-backward-char) ;prevent smartparens from deleting the whole \right) when using backspace
   :diminish smartparens-mode)
 
-(define-key my-mode-map (kbd "C-z M-s") (defhydra hydra-smartparens (:hint nil)
-				      ;; https://github-wiki-see.page/m/abo-abo/hydra/wiki/Smartparens
-				      ;;  Moving^^^^                       Slurp & Barf^^   Wrapping^^            Sexp juggling^^^^               Destructive
-				      ;;------------------------------------------------------------------------------------------------------------------------				      
-				      "
- [_a_] beginning  [_n_] down      [_h_] bw slurp   [_R_]   rewrap        [_S_] split   [_t_] transpose   [_c_] change inner  [_w_] copy
- [_e_] end        [_N_] bw down   [_H_] bw barf    [_u_]   unwrap        [_s_] kill-symbol  [_A_] absorb      [_C_] change outer
- [_f_] forward    [_p_] up        [_l_] slurp      [_U_]   bw unwrap     [_r_] raise   [_E_] emit        [_k_] kill          [_g_] quit
- [_b_] backward   [_P_] bw up     [_L_] barf       [_(__{__[_] wrap (){}[]   [_j_] join    [_o_] convolute   [_K_] bw kill       [_q_] quit"
-				      ;; Moving
-				      ("a" sp-beginning-of-sexp)
-				      ("e" sp-end-of-sexp)
-				      ("f" sp-forward-symbol)
-				      ("b" sp-backward-symbol)
-				      ("n" sp-down-sexp)
-				      ("N" sp-backward-down-sexp)
-				      ("p" sp-up-sexp)
-				      ("P" sp-backward-up-sexp)
-  
-				      ;; Slurping & barfing
-				      ("h" sp-backward-slurp-sexp)
-				      ("H" sp-backward-barf-sexp)
-				      ("l" sp-forward-slurp-sexp)
-				      ("L" sp-forward-barf-sexp)
-  
-				      ;; Wrapping
-				      ("R" sp-rewrap-sexp)
-				      ("u" sp-unwrap-sexp)
-				      ("U" sp-backward-unwrap-sexp)
-				      ("(" sp-wrap-round)
-				      ("{" sp-wrap-curly)
-				      ("[" sp-wrap-square)
-  
-				      ;; Sexp juggling
-				      ("S" sp-split-sexp)
-				      ("s" sp-kill-symbol :exit t)
-				      ("r" sp-raise-sexp)
-				      ("j" sp-join-sexp)
-				      ("t" sp-transpose-sexp)
-				      ("A" sp-absorb-sexp)
-				      ("E" sp-emit-sexp)
-				      ("o" sp-convolute-sexp)
-  
-				      ;; Destructive editing
-				      ("c" sp-change-inner :exit t)
-				      ("C" sp-change-enclosing :exit t)
-				      ("k" sp-kill-sexp)
-				      ("K" sp-backward-kill-sexp)
-				      ("w" sp-copy-sexp)
-
-				      ("q" nil)
-				      ("g" nil)))
+(define-key my-mode-map (kbd "C-z s") (defhydra hydra-smartparens (:hint nil)
+  ("f" sp-forward-symbol)
+  ("b" sp-backward-symbol)
+  ("n" sp-down-sexp)
+  ("q" nil)
+  ("g" nil)))
 
 ;;; region
 (bind-keys :map global-map
 	   ("C-z w" . widen))
-
-(use-package expand-region
-  :ensure t
-  :config
-  (define-key my-mode-map (kbd "C-=") 'er/expand-region))
 
 (use-package wrap-region
   :ensure t
@@ -544,7 +504,7 @@ line instead."
   (interactive)
   (switch-to-buffer
    "*scratch*"))
-(global-set-key (kbd "C-z s") 'find-scratch)
+(global-set-key (kbd "C-z C-x s") 'find-scratch)
 (global-set-key (kbd "C-z N") 'make-frame)
 
 
@@ -740,12 +700,9 @@ line instead."
   (unless (eq system-type 'windows-nt)
     (exec-path-from-shell-initialize)	;get $PATH from shell
     ))
-;; (use-package disable-mouse
-;; :ensure t
-;; :diminish disable-mouse-global-mode
-;; :config
-;; (global-disable-mouse-mode) ; in case I move the mouse accidentally
-;; )
+
+;; mouse
+(setq mouse-yank-at-point t) ; paste at the cursor instead of where you click when using middle button of the mouse
 
 ;; interacting with the world outside emacs
 
