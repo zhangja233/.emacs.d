@@ -99,12 +99,12 @@
       ;; Point should not end up in the middle of nowhere if the search fails.
       (save-excursion
 	(dotimes (_ count) (LaTeX-find-matching-end))
-	(previous-line)
+	(forward-line -1)
 	(end-of-line)
 	(setq end (line-beginning-position 2))
 	(goto-char cur)
 	(dotimes (_ count) (LaTeX-find-matching-begin))
-	(next-line)
+	(forward-line)
 	(beginning-of-line)
 	(setq beg (point)))
       (push-mark end)
@@ -272,7 +272,7 @@
        (newline-and-indent)
        (newline)
        (insert (concat "\\end{" env-name "}"))
-       (previous-line)
+       (forward-line -1)
        (indent-for-tab-command))
  
      (defun insert-equation()

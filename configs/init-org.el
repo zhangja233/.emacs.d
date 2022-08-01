@@ -97,14 +97,14 @@
    above where it was"
   (interactive)
   (save-excursion (org-table-insert-row))
-  (previous-line))
+  (forward-line -1))
 
 (defun org-table-insert-row-below()
   "Insert a new row below, and also make the point be at the cell
    below where it was"
   (interactive)
   (save-excursion (org-table-insert-row t))
-  (next-line))
+  (forward-line))
 
 (eval-after-load "org-agenda"
   '(progn
@@ -124,7 +124,7 @@
 (defun my-org-previous-row(&optional arg)
     (interactive)
   (org-table-align)
-  (previous-line))
+  (forward-line -1))
 
 (defun my-org-shiftreturn (&optional arg)
   "Act on the current element according to context.
