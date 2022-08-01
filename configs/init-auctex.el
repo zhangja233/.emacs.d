@@ -344,4 +344,12 @@
 (setq TeX-engine 'xetex)
 ;(setq TeX-engine 'default)
 
+(custom-set-faces
+ '(font-latex-sectioning-0-face ((t :height 301 :foreground "red" :weight bold)))
+ '(font-latex-sectioning-1-face ((t (:height 301 :foreground "red" :weight bold))))
+ '(font-latex-sectioning-2-face ((t (:height 281 :foreground "RoyalBlue4" :weight bold))))
+ '(font-latex-sectioning-3-face ((t (:height 261 :foreground "orange" :weight bold))))
+ '(font-latex-sectioning-4-face ((t (:height 241 :foreground "green" :weight bold))))
+ '(font-latex-sectioning-5-face ((t (:height 221 :foreground "purple" :weight bold)))))
+
 (provide 'init-auctex)
